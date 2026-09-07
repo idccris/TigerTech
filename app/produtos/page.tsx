@@ -7,7 +7,6 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Produtos | Tiger Tech",
   description: "Catálogo completo de impressoras 3D, filamentos e acessórios.",
-  alternates: { canonical: "/produtos" },
 };
 
 export default async function Page() {

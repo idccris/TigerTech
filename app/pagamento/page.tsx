@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Pagamento | Tiger Tech 3D",
   description:
     "Conheça as formas e condições de pagamento oferecidas pela Tiger Tech 3D.",
-  alternates: { canonical: "/pagamento" },
 };
 
 function PaymentIcon() {

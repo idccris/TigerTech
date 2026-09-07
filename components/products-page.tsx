@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import type { Product } from "../lib/products";
-import { PrinterVisual } from "./catalog";
+import { groupProducts, productGroupKey, productMatches } from "../lib/product-variants";
+import ProductCard from "./product-card";
 import SiteHeader from "./site-header";
 import SiteFooter from "./site-footer";
 
@@ -14,11 +14,6 @@ const categories = [
   "Acessórios",
 ] as const;
 
-const formatMoney = (cents: number) =>
-  new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format((cents || 0) / 100);
 
 export default function ProductsPage({ initialProducts }: { initialProducts: Product[] }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
@@ -27,13 +22,11 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
     useState<(typeof categories)[number]>("Todos");
   const filtered = useMemo(
     () =>
-      products.filter(
+      groupProducts(products).filter(
         (product) =>
           (product.stock || 0) > 0 &&
           (category === "Todos" || product.category === category) &&
-          `${product.name} ${product.description}`
-            .toLowerCase()
-            .includes(query.toLowerCase()),
+          productMatches(product, query),
       ),
     [products, category, query],
   );
@@ -94,44 +87,7 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
         </div>
         <div className="store-grid">
           {filtered.map((product) => (
-            <article className="product-card" key={product.slug}>
-              <div className="product-image">
-                <span className="product-tag">
-                  {product.brand || product.tag}
-                </span>
-                {product.imageUrl ? (
-                  <div
-                    className="uploaded-product-photo"
-                    style={{ backgroundImage: `url(${product.imageUrl})` }}
-                  />
-                ) : (
-                  <PrinterVisual tone={product.tone} />
-                )}
-              </div>
-              <div className="product-content">
-                <span className="product-category">{product.category}</span>
-                <h3>
-                  <Link href={`/produto/${product.slug}`}>{product.name}</Link>
-                </h3>
-                <p>{product.description}</p>
-                <div className="featured-price">
-                  <span>NO PIX</span>
-                  <strong>
-                    <Link href={`/produto/${product.slug}`}>
-                      {formatMoney(product.priceCents || 0)}
-                    </Link>
-                  </strong>
-                </div>
-                <ul>
-                  {product.specs.map((spec) => (
-                    <li key={spec}>{spec}</li>
-                  ))}
-                </ul>
-                <Link href={`/produto/${product.slug}`}>
-                  Ver produto <span>→</span>
-                </Link>
-              </div>
-            </article>
+            <ProductCard key={productGroupKey(product)} product={product} />
           ))}
         </div>
         {filtered.length === 0 && (

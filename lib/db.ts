@@ -1,8 +1,10 @@
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
 import { products as defaults, type Product } from "./products";
+import { groupProducts } from "./product-variants";
+import { applyFilamentContents, parseFilamentContents } from "./filament-content";
 
-const SCHEMA_VERSION = "2026-08-31-security-v4";
+const SCHEMA_VERSION = "2026-08-30-security-v2";
 function sql() {
   if (!process.env.DATABASE_URL)
     throw new Error("DATABASE_URL não configurado");
@@ -39,8 +41,7 @@ async function initializeDb() {
   await db`ALTER TABLE admins ADD COLUMN IF NOT EXISTS display_name TEXT NOT NULL DEFAULT ''`;
   await db`ALTER TABLE admins ADD COLUMN IF NOT EXISTS active BOOLEAN NOT NULL DEFAULT true`;
   await db`CREATE TABLE IF NOT EXISTS admin_sessions (token_hash TEXT PRIMARY KEY, username TEXT NOT NULL, expires_at TIMESTAMPTZ NOT NULL)`;
-  await db`DROP TABLE IF EXISTS security_rate_limits`;
-  await db`CREATE TABLE security_rate_limits (key_hash TEXT PRIMARY KEY, attempt_count INTEGER NOT NULL DEFAULT 0, window_started_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+  await db`CREATE TABLE IF NOT EXISTS security_rate_limits (key_hash TEXT PRIMARY KEY, attempt_count INTEGER NOT NULL DEFAULT 0, window_started_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
   await db`CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL DEFAULT '', updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
   await db`CREATE TABLE IF NOT EXISTS orders (id TEXT PRIMARY KEY, customer_name TEXT NOT NULL, customer_email TEXT NOT NULL, customer_phone TEXT NOT NULL, customer_document TEXT NOT NULL DEFAULT '', customer_address TEXT NOT NULL DEFAULT '', items JSONB NOT NULL, total_cents INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'Recebido', created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
   await db`ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_method TEXT NOT NULL DEFAULT ''`;
@@ -66,7 +67,18 @@ async function initializeDb() {
 
 export async function ensureDb() {
   if (!databaseReady) {
-    databaseReady = initializeDb().catch((error) => {
+    databaseReady = initializeDb().then(async () => {
+      const db = sql();
+      const version = await db`SELECT value FROM site_settings WHERE key='filament_variants_schema' LIMIT 1`;
+      if (version[0]?.value === "2") return;
+      await db.transaction([
+        db`ALTER TABLE products ADD COLUMN IF NOT EXISTS filament_model TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_name TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_hex TEXT NOT NULL DEFAULT ''`,
+        db`CREATE TABLE IF NOT EXISTS filament_types (name TEXT PRIMARY KEY, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+        db`INSERT INTO filament_types(name) VALUES ('BASIC'),('MATTE'),('SILK') ON CONFLICT DO NOTHING`,
+        db`INSERT INTO filament_types(name) SELECT DISTINCT filament_model FROM products WHERE filament_model<>'' ON CONFLICT DO NOTHING`,
+        db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_variants_schema','2',NOW()) ON CONFLICT(key) DO UPDATE SET value='2',updated_at=NOW()`,
+      ]);
+    }).catch((error) => {
       databaseReady = null;
       throw error;
     });
@@ -78,19 +90,32 @@ export async function listProducts(includeHidden = false) {
   await ensureDb();
   const rows = includeHidden
     ? await sql()`SELECT * FROM products ORDER BY updated_at DESC`
-    : await sql()`SELECT * FROM products WHERE visible=true AND stock>0 ORDER BY updated_at DESC`;
-  return rows.map(rowToProduct);
+    : await sql()`SELECT * FROM products WHERE visible=true AND (stock>0 OR filament_model<>'') ORDER BY updated_at DESC`;
+  const contentRows = await sql()`SELECT value FROM site_settings WHERE key='filament_type_content' LIMIT 1`;
+  return applyFilamentContents(rows.map(rowToProduct), parseFilamentContents(String(contentRows[0]?.value || "")));
 }
 export async function listFeaturedProducts() {
-  await ensureDb();
-  const rows =
-    await sql()`SELECT * FROM products WHERE visible=true AND featured=true AND stock>0 ORDER BY featured_at DESC NULLS LAST LIMIT 6`;
-  return rows.map(rowToProduct);
+  const products = await listProducts(false);
+  return groupProducts(products)
+    .filter((product) => (product.variants || [product]).some((variant) => variant.featured))
+    .sort((a, b) => {
+      const date = (p: Product) => Math.max(0, ...(p.variants || [p]).filter((v) => v.featured).map((v) => Date.parse(v.featuredAt || "") || 0));
+      return date(b) - date(a);
+    })
+    .slice(0, 6)
+    .flatMap((product) => product.variants || [product]);
 }
 export async function findProduct(slug: string) {
   await ensureDb();
-  const rows = await sql()`SELECT * FROM products WHERE slug=${slug} AND visible=true AND stock>0 LIMIT 1`;
-  return rows[0] ? rowToProduct(rows[0]) : null;
+  const rows = await sql()`SELECT * FROM products WHERE slug=${slug} AND visible=true AND (stock>0 OR filament_model<>'') LIMIT 1`;
+  if (!rows[0]) return null;
+  const contentRows = await sql()`SELECT value FROM site_settings WHERE key='filament_type_content' LIMIT 1`;
+  return applyFilamentContents([rowToProduct(rows[0])], parseFilamentContents(String(contentRows[0]?.value || "")))[0];
+}
+export async function listFilamentTypes() {
+  await ensureDb();
+  const rows = await sql()`SELECT name FROM filament_types ORDER BY name`;
+  return rows.map((row) => String(row.name));
 }
 function rowToProduct(r: any): Product & {
   stock: number;
@@ -104,6 +129,9 @@ function rowToProduct(r: any): Product & {
   return {
     slug: r.slug,
     name: r.name,
+    filamentModel: r.filament_model || "",
+    colorName: r.color_name || "",
+    colorHex: r.color_hex || "",
     category: r.category,
     tag: r.tag,
     description: r.description,

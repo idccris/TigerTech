@@ -10,7 +10,7 @@ export default function BrandLogo({
   return (
     <Image
       className="brand-logo-image"
-      src="/tiger-tech-logo-small.svg"
+      src="/tiger-tech-logo.png"
       width={size}
       height={size}
       alt=""

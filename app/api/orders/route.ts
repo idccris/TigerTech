@@ -38,9 +38,9 @@ export async function POST(req: Request) {
     const requested = [...quantities].map(([slug, quantity]) => ({ slug, quantity }));
     const paymentMethod = body.paymentMethod === "card" ? "card" : body.paymentMethod === "pix" ? "pix" : "";
 
-    if (!name || !email || !phone || !document || !address)
+    if (!name || !email || !phone)
       return Response.json(
-        { error: "Preencha todos os dados do cliente." },
+        { error: "Preencha nome, e-mail e telefone." },
         { status: 400 },
       );
     if (!/^\S+@\S+\.\S+$/.test(email))
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       if (quantity > 99)
         return Response.json({ error: "A quantidade máxima por produto é 99." }, { status: 400 });
       const rows =
-        await sql()`SELECT slug,name,sku,price_cents,card_price_cents,stock,visible FROM products WHERE slug=${slug} LIMIT 1`;
+        await sql()`SELECT slug,name,sku,category,filament_model,color_name,price_cents,card_price_cents,stock,visible FROM products WHERE slug=${slug} LIMIT 1`;
       const product = rows[0];
       if (!product || !product.visible)
         return Response.json(
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       items.push({
         slug: product.slug,
         sku: product.sku,
-        name: product.name,
+        name: product.color_name && product.category.toLowerCase() === "filamentos" ? `${product.filament_model || product.name} — ${product.color_name}` : product.name,
         quantity,
         unitPriceCents,
         subtotalCents,

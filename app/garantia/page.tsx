@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Garantia | Tiger Tech 3D",
   description:
     "Conheça as condições de garantia e suporte dos produtos Tiger Tech 3D.",
-  alternates: { canonical: "/garantia" },
 };
 
 function WarrantyIcon() {

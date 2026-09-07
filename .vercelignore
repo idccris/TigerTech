@@ -1,2 +1,11 @@
 downloads/
 working/
+.git/
+.next/
+.next-corrupt-20260906/
+.next-variant-check-dev-cache/
+node_modules/
+upload/
+filament-checkpoint-xfzEH3/
+*.zip
+*.tsbuildinfo

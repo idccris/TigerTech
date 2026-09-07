@@ -6,5 +6,5 @@ export const dynamic = "force-dynamic";
 export default async function Page() {
   const user = await requireUser();
   if (user?.role === "operator") redirect("/admin/catalogo");
-  return <AdminPanel />;
+  return <AdminPanel initialLogged={Boolean(user)} />;
 }

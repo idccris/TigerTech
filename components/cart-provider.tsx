@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Product } from "../lib/products";
+import { cartProductName } from "../lib/product-variants";
 
 type CartItem = Pick<Product, "slug" | "name" | "tone" | "category"> & {
   quantity: number;
@@ -49,7 +50,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (response.ok) {
           const products = (await response.json()) as Product[];
           const prices = new Map(
-            products.map((product) => [product.slug, {
+            products.filter((product) => (product.stock || 0) > 0).map((product) => [product.slug, {
+              name: cartProductName(product),
               pixPriceCents: product.priceCents || 0,
               cardPriceCents: product.cardPriceCents || product.priceCents || 0,
             }]),
@@ -58,6 +60,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             .filter((item) => prices.has(item.slug))
             .map((item) => ({
               ...item,
+              name: prices.get(item.slug)?.name || item.name,
               pixPriceCents: prices.get(item.slug)?.pixPriceCents ?? item.pixPriceCents ?? 0,
               cardPriceCents: prices.get(item.slug)?.cardPriceCents ?? item.cardPriceCents ?? item.pixPriceCents ?? 0,
             }));
@@ -80,6 +83,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       items,
       count: items.reduce((total, item) => total + item.quantity, 0),
       add: (product) => {
+        if ((product.stock || 0) <= 0) return;
         setItems((current) => {
           const found = current.find((item) => item.slug === product.slug);
           return found
@@ -87,7 +91,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 item.slug === product.slug
                   ? {
                       ...item,
-                      quantity: item.quantity + 1,
+                      quantity: Math.min(item.quantity + 1, product.stock || 0),
                       pixPriceCents: product.priceCents || 0,
                       cardPriceCents: product.cardPriceCents || product.priceCents || 0,
                     }
@@ -97,7 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 ...current,
                 {
                   slug: product.slug,
-                  name: product.name,
+                  name: cartProductName(product),
                   tone: product.tone,
                   category: product.category,
                   quantity: 1,
@@ -188,11 +192,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               <div className="cart-success">
                 <span>✓</span>
                 <strong>Pedido recebido!</strong>
-                <p>
-                  Seu pedido foi registrado em nosso sistema e dentro de alguns
-                  instantes nosso time comercial entrará em contato para
-                  finalizar.
-                </p>
+                <p>Seu pedido foi registrado com o número:</p>
                 <b>{orderSuccess}</b>
                 <button
                   onClick={() => {
@@ -283,12 +283,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                       </label>
                     </div>
                     <label>
-                      CPF ou CNPJ
-                      <input name="document" required maxLength={40} />
+                      CPF ou CNPJ <small>(opcional)</small>
+                      <input name="document" maxLength={40} />
                     </label>
                     <label>
-                      Endereço
-                      <textarea name="address" required rows={2} maxLength={300} />
+                      Endereço <small>(opcional)</small>
+                      <textarea name="address" rows={2} maxLength={300} />
                     </label>
                     <fieldset className="payment-options">
                       <legend>Forma de pagamento</legend>

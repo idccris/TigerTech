@@ -6,7 +6,6 @@ import SiteFooter from "../../components/site-footer";
 export const metadata: Metadata = {
   title: "Sobre | Tiger Tech",
   description: "Conheça nossa história e compromisso com a tecnologia 3D.",
-  alternates: { canonical: "/sobre" },
 };
 
 export default function AboutPage() {

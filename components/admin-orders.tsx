@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AdminNavbar from "./admin-navbar";
-import PasswordInput from "./password-input";
 
 type OrderItem = {
   slug: string;
@@ -308,8 +307,9 @@ export default function AdminOrders({
             <label htmlFor="order-delete-password">
               Senha do administrador
             </label>
-            <PasswordInput
+            <input
               id="order-delete-password"
+              type="password"
               autoComplete="current-password"
               autoFocus
               value={deletePassword}

@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { PrinterVisual } from "./catalog";
 import AdminNavbar from "./admin-navbar";
+import FilamentFields from "./filament-fields";
+import { isFilament } from "../lib/product-variants";
 import BrandLogo from "./brand-logo";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
-import PasswordInput from "./password-input";
 const formatBRLInputFromText = (value: string) => formatBRLInput(parseBRLToCents(value));
 const iconOptions = [
   "✦",
@@ -56,10 +57,37 @@ const blank = {
   featured: false,
   benefits: defaultBenefits,
 };
-export default function AdminPanel() {
-  const [logged, setLogged] = useState(false),
+const productFilters = [
+  { value: "Todos", label: "Todos" },
+  { value: "Impressoras 3D", label: "Impressoras 3D" },
+  { value: "Filamentos", label: "Filamentos" },
+  { value: "Acessórios", label: "Acessórios" },
+] as const;
+
+type ProductFilter = (typeof productFilters)[number]["value"];
+
+const normalizeCategory = (value: string) =>
+  value
+    .trim()
+    .toLocaleLowerCase("pt-BR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+function matchesProductFilter(category: string, filter: ProductFilter) {
+  if (filter === "Todos") return true;
+  const normalized = normalizeCategory(category);
+  if (filter === "Impressoras 3D")
+    return normalized === "impressora 3d" || normalized === "impressoras 3d";
+  if (filter === "Filamentos")
+    return normalized === "filamento" || normalized === "filamentos";
+  return normalized === "acessorio" || normalized === "acessorios";
+}
+
+export default function AdminPanel({ initialLogged = false }: { initialLogged?: boolean }) {
+  const [logged, setLogged] = useState(initialLogged),
     [error, setError] = useState(""),
     [items, setItems] = useState<any[]>([]),
+    [productFilter, setProductFilter] = useState<ProductFilter>("Todos"),
     [edit, setEdit] = useState<any>(blank),
     [editorOpen, setEditorOpen] = useState(false),
     [categories, setCategories] = useState<string[]>([
@@ -68,14 +96,25 @@ export default function AdminPanel() {
       "Acessórios",
     ]),
     [newCategory, setNewCategory] = useState("");
+  const filteredItems = items.filter((product) =>
+    matchesProductFilter(String(product.category || ""), productFilter),
+  );
   async function load() {
-    const r = await fetch("/api/admin/products");
-    if (r.ok) {
-      setLogged(true);
-      setItems(await r.json());
-      fetch("/api/admin/categories")
-        .then((x) => (x.ok ? x.json() : []))
-        .then((x) => x.length && setCategories(x));
+    try {
+      const r = await fetch("/api/admin/products");
+      if (r.ok) {
+        setLogged(true);
+        setItems(await r.json());
+        fetch("/api/admin/categories")
+          .then((x) => (x.ok ? x.json() : []))
+          .then((x) => x.length && setCategories(x));
+      } else if (r.status === 401 || r.status === 403) {
+        setLogged(false);
+      } else {
+        setError("Não foi possível atualizar os produtos. Tente novamente.");
+      }
+    } catch {
+      setError("Não foi possível atualizar os produtos. Tente novamente.");
     }
   }
   async function addCategory() {
@@ -183,7 +222,7 @@ export default function AdminPanel() {
           <h1>Área do administrador</h1>
           <p>Entre para gerenciar os produtos da loja.</p>
           <input name="username" placeholder="Usuário" autoComplete="off" required />
-          <PasswordInput name="password" placeholder="Senha" autoComplete="current-password" required />
+          <input name="password" type="password" placeholder="Senha" autoComplete="new-password" required />
           <button>Entrar</button>
           {error && <small>{error}</small>}
         </form>
@@ -209,11 +248,29 @@ export default function AdminPanel() {
           </button>
         </div>
       </header>
+      <nav className="admin-product-filters" aria-label="Filtrar produtos por categoria">
+        {productFilters.map((filter) => {
+          const count = items.filter((product) =>
+            matchesProductFilter(String(product.category || ""), filter.value),
+          ).length;
+          return (
+            <button
+              type="button"
+              key={filter.value}
+              className={productFilter === filter.value ? "active" : ""}
+              aria-pressed={productFilter === filter.value}
+              onClick={() => setProductFilter(filter.value)}
+            >
+              {filter.label} <span>{count}</span>
+            </button>
+          );
+        })}
+      </nav>
       <section
         className={`admin-layout ${editorOpen ? "editor-open" : ""}`}
       >
         <div className="admin-list">
-          {items.map((p) => (
+          {filteredItems.map((p) => (
             <article key={p.slug}>
               <div
                 className={`admin-product-image ${p.tone}`}
@@ -230,7 +287,7 @@ export default function AdminPanel() {
                 <span>
                   {p.category} · Estoque {p.stock}
                 </span>
-                <strong>{p.name}</strong>
+                <strong>{p.name}{p.colorName ? ` — ${p.colorName}` : ""}</strong>
                 <small>{p.visible ? "Visível na loja" : "Oculto"}</small>
               </div>
               <button
@@ -250,6 +307,12 @@ export default function AdminPanel() {
               <button onClick={() => del(p.slug)}>Excluir</button>
             </article>
           ))}
+          {filteredItems.length === 0 ? (
+            <div className="admin-products-empty">
+              <strong>Nenhum produto nesta categoria.</strong>
+              <span>Escolha outro filtro ou cadastre um novo produto.</span>
+            </div>
+          ) : null}
         </div>
         {editorOpen ? (
           <form className="admin-form" onSubmit={save}>
@@ -267,6 +330,28 @@ export default function AdminPanel() {
                 ×
               </button>
             </div>
+            <label>
+              Categoria
+              <select
+                value={edit.category}
+                onChange={(e) => setEdit({ ...edit, category: e.target.value })}
+              >
+                {categories.map((category) => (
+                  <option key={category}>{category}</option>
+                ))}
+              </select>
+              <span className="add-category">
+                <input
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="Nova categoria"
+                />
+                <button type="button" onClick={addCategory}>
+                  + Adicionar
+                </button>
+              </span>
+            </label>
+            <FilamentFields value={edit} onChange={(fields) => setEdit({ ...edit, ...fields })} />
             <label>
               Nome
               <input
@@ -290,27 +375,6 @@ export default function AdminPanel() {
               <small className="field-note">SKU único: é ele que diferencia cada produto no sistema.</small>
             </label>
             <label>
-              Categoria
-              <select
-                value={edit.category}
-                onChange={(e) => setEdit({ ...edit, category: e.target.value })}
-              >
-                {categories.map((category) => (
-                  <option key={category}>{category}</option>
-                ))}
-              </select>
-              <span className="add-category">
-                <input
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
-                  placeholder="Nova categoria"
-                />
-                <button type="button" onClick={addCategory}>
-                  + Adicionar
-                </button>
-              </span>
-            </label>
-            <label>
               Marca
               <input
                 value={edit.brand || ""}
@@ -318,6 +382,7 @@ export default function AdminPanel() {
                 placeholder="Ex.: Bambu Lab"
               />
             </label>
+            {!isFilament(edit) ? <>
             <label>
               Descrição curta
               <textarea
@@ -421,6 +486,7 @@ export default function AdminPanel() {
                 página do produto.
               </small>
             </label>
+            </> : <p className="filament-shared-note">As descrições, especificações e os benefícios deste filamento são compartilhados por tipo. Edite esse conteúdo na página Design.</p>}
             <label>
               Imagem do produto
               <span

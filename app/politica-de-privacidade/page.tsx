@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: "Política de Privacidade | Tiger Tech 3D",
   description:
     "Saiba como a Tiger Tech 3D coleta, utiliza, armazena e protege seus dados pessoais.",
-  alternates: { canonical: "/politica-de-privacidade" },
 };
 
 const index = [

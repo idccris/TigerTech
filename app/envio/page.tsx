@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Envio | Tiger Tech 3D",
   description:
     "Entenda os prazos, o processamento e o rastreamento dos envios da Tiger Tech 3D.",
-  alternates: { canonical: "/envio" },
 };
 
 function PackageIcon() {

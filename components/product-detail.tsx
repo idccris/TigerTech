@@ -8,8 +8,13 @@ import { PrinterVisual } from "./catalog";
 import SiteFooter from "./site-footer";
 import ProductWarranty from "./product-warranty";
 import BrandLogo from "./brand-logo";
+import ColorSwatches from "./color-swatches";
+import { productTitle } from "../lib/product-variants";
 
-export default function ProductDetail({ product }: { product: Product }) {
+export default function ProductDetail({ product: initialProduct }: { product: Product }) {
+  const [selectedSlug, setSelectedSlug] = useState(initialProduct.slug);
+  const variants = initialProduct.variants || [];
+  const product = variants.find((variant) => variant.slug === selectedSlug) || initialProduct;
   const cart = useCart();
   const [specificationsOpen, setSpecificationsOpen] = useState(false);
   const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format((cents || 0) / 100);
@@ -47,8 +52,9 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
         <div className="detail-copy">
           <span className="product-category">{product.category}</span>
-          <h1>{product.name}</h1>
+          <h1>{productTitle(product)}</h1>
           <p>{product.longDescription}</p>
+          <ColorSwatches variants={variants} selected={product} onSelect={(variant) => setSelectedSlug(variant.slug)} />
           <div className="detail-specs">
             {product.specs.map((spec) => (
               <span key={spec}>{spec}</span>
@@ -77,8 +83,8 @@ export default function ProductDetail({ product }: { product: Product }) {
           >
             Especificações <span>+</span>
           </button>
-          <button className="buy-button" onClick={() => cart.add(product)}>
-            Adicionar ao carrinho <span>+</span>
+          <button className="buy-button" disabled={(product.stock || 0) <= 0} onClick={() => cart.add(product)}>
+            {(product.stock || 0) > 0 ? "Adicionar ao carrinho" : "Cor esgotada"} <span>+</span>
           </button>
           <small className="buy-note">
             A forma de fechamento do pedido será definida posteriormente.

@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: "Trocas e Devoluções | Tiger Tech 3D",
   description:
     "Consulte os prazos, condições e procedimentos para trocas, devoluções e reembolsos.",
-  alternates: { canonical: "/trocas-e-devolucoes" },
 };
 
 const index = [

@@ -6,7 +6,7 @@ import { CartButton } from "./cart-provider";
 import BrandLogo from "./brand-logo";
 
 export const whatsapp =
-  "https://wa.me/5500000000000?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20os%20produtos";
+  "https://wa.me/5541992133804?text=Ol%C3%A1%2C%20gostaria%20de%20conhecer%20os%20produtos";
 
 export default function SiteHeader({ solid = false }: { solid?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);

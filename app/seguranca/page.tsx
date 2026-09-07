@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Segurança | Tiger Tech 3D",
   description:
     "Conheça as medidas adotadas pela Tiger Tech 3D para proteger seus dados e proporcionar uma compra segura.",
-  alternates: { canonical: "/seguranca" },
 };
 
 function ShieldIcon() {
