@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "../lib/products";
+import { groupProducts, productGroupKey, productMatches } from "../lib/product-variants";
+import ProductCard from "./product-card";
 import SiteHeader, { whatsapp } from "./site-header";
 import { defaultHomeContent, type HomeContent } from "../lib/site-content";
+import { defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
 import SiteFooter from "./site-footer";
 
 const categories = [
@@ -13,56 +17,40 @@ const categories = [
   "Filamentos",
   "Acessórios",
 ] as const;
-const formatMoney = (cents: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format((cents || 0) / 100);
 
-export function PrinterVisual({ tone }: { tone: string }) {
-  return (
-    <div className={`product-visual ${tone}`} aria-hidden="true">
-      <div className="orbit orbit-one" />
-      <div className="orbit orbit-two" />
-      <div className="machine">
-        <div className="machine-top">
-          <span />
-        </div>
-        <div className="machine-window">
-          <div className="printed-shape" />
-        </div>
-        <div className="machine-base" />
-      </div>
-    </div>
-  );
-}
+export { default as PrinterVisual } from "./printer-visual";
 
 export default function Catalog({
   initialProducts,
   initialHeroImage,
   initialHomeContent,
+  initialSlideshow,
+  initialSlideshowImages,
 }: {
   initialProducts: Product[];
   initialHeroImage: string;
   initialHomeContent: HomeContent;
+  initialSlideshow: SlideshowContent;
+  initialSlideshowImages: string[];
 }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [heroImage, setHeroImage] = useState(initialHeroImage);
-  const [homeContent, setHomeContent] = useState<HomeContent>({
-    ...defaultHomeContent,
-    ...initialHomeContent,
-    faqs: Array.isArray(initialHomeContent?.faqs) ? initialHomeContent.faqs : defaultHomeContent.faqs,
-  });
+  const [homeContent, setHomeContent] = useState<HomeContent>(initialHomeContent);
+  const [slideshow, setSlideshow] = useState<SlideshowContent>(initialSlideshow);
+  const [slideshowImages, setSlideshowImages] = useState(initialSlideshowImages);
   const [query, setQuery] = useState("");
+  const [ctaSlide, setCtaSlide] = useState(0);
+  const [ctaPaused, setCtaPaused] = useState(false);
   const [category, setCategory] =
     useState<(typeof categories)[number]>("Todos");
   const featuredGridRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(
     () =>
-      products.filter((product) => {
+      groupProducts(products).filter((product) => {
         const matchesCategory =
           category === "Todos" || product.category === category;
-        const searchable =
-          `${product.name} ${product.description} ${product.category}`.toLowerCase();
-        return matchesCategory && searchable.includes(query.toLowerCase());
+        return matchesCategory && productMatches(product, query);
       }),
     [products, category, query],
   );
@@ -130,13 +118,11 @@ export default function Catalog({
     const refreshCover = (bust = false) =>
       fetch(`/api/settings${bust ? `?t=${Date.now()}` : ""}`)
         .then((response) => (response.ok ? response.json() : {}))
-        .then((data: { heroImage?: string; homeContent?: HomeContent }) => {
+        .then((data: { heroImage?: string; homeContent?: HomeContent; slideshowContent?: SlideshowContent; slideshowImages?: string[] }) => {
           setHeroImage(String(data.heroImage || ""));
-          setHomeContent({
-            ...defaultHomeContent,
-            ...(data.homeContent || {}),
-            faqs: Array.isArray(data.homeContent?.faqs) ? data.homeContent.faqs : defaultHomeContent.faqs,
-          });
+          setHomeContent({ ...defaultHomeContent, ...(data.homeContent || {}) });
+          setSlideshow(data.slideshowContent || defaultSlideshowContent);
+          setSlideshowImages(Array.isArray(data.slideshowImages) ? data.slideshowImages : defaultSlideshowContent.slides.map((slide) => slide.defaultImage));
         })
         .catch(() => setHeroImage(""));
     const onFocus = () => refreshCover();
@@ -151,6 +137,15 @@ export default function Catalog({
       channel?.close();
     };
   }, []);
+  useEffect(() => {
+    if (ctaPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
+    const interval = window.setInterval(
+      () => setCtaSlide((current) => (current + 1) % 2),
+      6500,
+    );
+    return () => window.clearInterval(interval);
+  }, [ctaPaused]);
 
   return (
     <main>
@@ -161,10 +156,9 @@ export default function Catalog({
         id="inicio"
         style={
           heroImage
-            ? ({
+            ? {
                 backgroundImage: `url(${heroImage})`,
-                "--hero-image": `url(${heroImage})`,
-              } as CSSProperties)
+              }
             : undefined
         }
       >
@@ -208,13 +202,6 @@ export default function Catalog({
             </div>
           </div>
         </div>
-        {heroImage ? (
-          <div
-            className="hero-mobile-visual"
-            aria-hidden="true"
-            style={{ backgroundImage: `url(${heroImage})` }}
-          />
-        ) : null}
         <div className="hero-art">
           <span className="floating-label label-one">
             Precisão
@@ -268,44 +255,7 @@ export default function Catalog({
           aria-label="Produtos em destaque"
         >
           {filtered.map((product) => (
-            <article className="product-card" key={product.slug}>
-              <div className="product-image">
-                <span className="product-tag">
-                  {product.brand || product.tag}
-                </span>
-                {product.imageUrl ? (
-                  <div
-                    className="uploaded-product-photo"
-                    style={{ backgroundImage: `url(${product.imageUrl})` }}
-                  />
-                ) : (
-                  <PrinterVisual tone={product.tone} />
-                )}
-              </div>
-              <div className="product-content">
-                <span className="product-category">{product.category}</span>
-                <h3>
-                  <Link href={`/produto/${product.slug}`}>{product.name}</Link>
-                </h3>
-                <p>{product.description}</p>
-                <div className="featured-price">
-                  <span>NO PIX</span>
-                  <strong>
-                    <Link href={`/produto/${product.slug}`}>
-                      {formatMoney(product.priceCents || 0)}
-                    </Link>
-                  </strong>
-                </div>
-                <ul>
-                  {product.specs.map((spec) => (
-                    <li key={spec}>{spec}</li>
-                  ))}
-                </ul>
-                <Link href={`/produto/${product.slug}`}>
-                  Ver produto <span>→</span>
-                </Link>
-              </div>
-            </article>
+            <ProductCard key={productGroupKey(product)} product={product} />
           ))}
         </div>
         {filtered.length === 0 && (
@@ -346,6 +296,72 @@ export default function Catalog({
         </div>
       </section>
 
+      <section
+        className="cta-slider"
+        aria-roledescription="carousel"
+        aria-label="Destaques Tiger Tech"
+        onMouseEnter={() => setCtaPaused(true)}
+        onMouseLeave={() => setCtaPaused(false)}
+        onFocusCapture={() => setCtaPaused(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget))
+            setCtaPaused(false);
+        }}
+      >
+        <div className="cta-slides" aria-live="polite">
+          {slideshow.slides.map((slide, index) => <article
+            className={`cta-slide cta-product-slide ${index === 0 ? "cta-slide-snapmaker" : "cta-slide-a1"} ${ctaSlide === index ? "active" : ""}`}
+            aria-hidden={ctaSlide !== index}
+            key={index}
+          >
+            <Image
+              className={`cta-slide-background ${index === 1 ? "cta-a1-background" : ""}`}
+              src={slideshowImages[index] || slide.defaultImage}
+              alt=""
+              fill
+              sizes="100vw"
+              unoptimized
+              aria-hidden="true"
+            />
+            <div className="cta-slide-shade" aria-hidden="true" />
+            <div className="cta-slide-content">
+              <span className="section-kicker">{slide.eyebrow}</span>
+              <h2>{slide.title}</h2>
+              <p>{slide.description}</p>
+              <Link className="primary-button" href={slide.href} tabIndex={ctaSlide === index ? 0 : -1}>
+                {slide.buttonLabel} <span>↗</span>
+              </Link>
+            </div>
+          </article>)}
+        </div>
+
+        <div className="cta-slider-controls" aria-label="Controles do slideshow">
+          <button
+            type="button"
+            onClick={() => setCtaSlide((current) => (current + 1) % 2)}
+            aria-label="Destaque anterior"
+          >
+            ←
+          </button>
+          {slideshow.slides.map((_, slide) => (
+            <button
+              type="button"
+              key={slide}
+              className={ctaSlide === slide ? "active" : ""}
+              onClick={() => setCtaSlide(slide)}
+              aria-label={`Mostrar destaque ${slide + 1}`}
+              aria-current={ctaSlide === slide ? "true" : undefined}
+            />
+          ))}
+          <button
+            type="button"
+            onClick={() => setCtaSlide((current) => (current + 1) % 2)}
+            aria-label="Próximo destaque"
+          >
+            →
+          </button>
+        </div>
+      </section>
       {homeContent.faqs.length > 0 ? <section className="home-faq" id="perguntas-frequentes">
         <div className="home-faq-intro">
           <span className="section-kicker">{homeContent.faqEyebrow}</span>
@@ -364,27 +380,6 @@ export default function Catalog({
           mainEntity: homeContent.faqs.map((faq) => ({ "@type": "Question", name: faq.question, acceptedAnswer: { "@type": "Answer", text: faq.answer } })),
         }).replace(/</g, "\\u003c") }} />
       </section> : null}
-
-      <section className="cta-section">
-        <span className="section-kicker">VAMOS COMEÇAR?</span>
-        <h2>
-          Sua próxima ideia
-          <br />
-          começa aqui.
-        </h2>
-        <p>
-          Converse com um especialista e descubra a solução ideal para o seu
-          projeto.
-        </p>
-        <a
-          className="primary-button"
-          href={whatsapp}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Chamar no WhatsApp <span>↗</span>
-        </a>
-      </section>
       <SiteFooter />
       <a
         className="whatsapp-float"
