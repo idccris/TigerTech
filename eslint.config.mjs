@@ -12,5 +12,11 @@ export default defineConfig([
       "@next/next/no-location-assign-relative-destination": "off",
     },
   },
+  {
+    files: ["tests/**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);

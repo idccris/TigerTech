@@ -9,14 +9,13 @@ import {
 import { defaultHomeContent, parseHomeContent } from "./site-content";
 import { defaultSlideshowContent, parseSlideshowContent } from "./slideshow-content";
 import type { Product } from "./products";
-import { groupProducts, isFilament, productGroupKey } from "./product-variants";
+import { groupProducts } from "./product-variants";
+import { storefrontProductImage } from "./product-images";
 
 function publicProduct(product: Product) {
   return {
     ...product,
-    imageUrl: product.imageUrl
-      ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}`
-      : "",
+    imageUrl: storefrontProductImage(product),
   };
 }
 
@@ -26,9 +25,8 @@ function publicProduct(product: Product) {
 function publicVariant(product: Product) {
   return {
     slug: product.slug,
-    imageUrl: product.imageUrl
-      ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}`
-      : "",
+    sku: product.sku,
+    imageUrl: storefrontProductImage(product),
     priceCents: product.priceCents,
     cardPriceCents: product.cardPriceCents,
     stock: product.stock,
@@ -102,14 +100,11 @@ export const getCachedPublicProduct = unstable_cache(
     if (!process.env.DATABASE_URL) return null;
     const product = await findProduct(slug);
     if (!product) return null;
-    if (isFilament(product) && product.filamentModel) {
-      const variants = (await listProducts(false))
-        .filter((variant) => productGroupKey(variant) === productGroupKey(product))
-        .sort((a, b) => (a.colorName || "").localeCompare(b.colorName || "", "pt-BR"));
-      return { ...publicProduct(product), variants: variants.map(publicVariant) };
-    }
-    return publicProduct(product);
+    return {
+      ...publicProduct(product),
+      variants: product.variants?.map(publicVariant),
+    };
   },
-  ["public-product-variants-v2"],
+  ["public-product-groups-v1"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );

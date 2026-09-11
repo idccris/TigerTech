@@ -1,7 +1,8 @@
 import { isTrustedMutation, requireUser, verifyAdminPassword } from "../../../../lib/admin-auth";
-import { listProducts, sql } from "../../../../lib/db";
-import { isFilament } from "../../../../lib/product-variants";
+import { ensureDb, listProducts, sql } from "../../../../lib/db";
+import { filamentGroupSlug, isFilament } from "../../../../lib/product-variants";
 import { parseBRLToCents } from "../../../../lib/money";
+import { storefrontProductImage } from "../../../../lib/product-images";
 import { revalidatePath, revalidateTag } from "next/cache";
 export async function GET() {
   if (!(await requireUser()))
@@ -9,7 +10,7 @@ export async function GET() {
   const products = await listProducts(true);
   return Response.json(products.map((product: any) => ({
     ...product,
-    imageUrl: product.imageUrl ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}` : "",
+    imageUrl: storefrontProductImage(product),
   })), { headers: { "Cache-Control": "private, max-age=15" } });
 }
 export async function POST(req: Request) {
@@ -18,6 +19,7 @@ export async function POST(req: Request) {
   const user = await requireUser();
   if (!user)
     return Response.json({ error: "Não autorizado" }, { status: 401 });
+  await ensureDb();
   const p = await req.json();
   const sku = String(p.sku || "").trim();
   if (!sku)
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
   const filamentModel = filament ? String(p.filamentModel || "").trim().replace(/\s+/g, " ").slice(0, 160) : "";
   const colorName = filament ? String(p.colorName || "").trim().slice(0, 60) : "";
   const colorHex = filament ? String(p.colorHex || "").trim() : "";
+  const groupSlug = filament ? filamentGroupSlug(String(p.brand || "").trim(), filamentModel) : "";
   if (filament && (!filamentModel || !colorName || !/^#[0-9a-f]{6}$/i.test(colorHex)))
     return Response.json({ error: "Para cadastrar um filamento, selecione o tipo/modelo, informe o nome da cor e escolha a cor da bolinha." }, { status: 400 });
   const benefits = Array.from({ length: 3 }, (_, index) => ({
@@ -60,7 +63,7 @@ export async function POST(req: Request) {
   }));
   const priceCents = parseBRLToCents(p.pixPrice ?? p.price);
   const cardPriceCents = parseBRLToCents(p.cardPrice ?? p.pixPrice ?? p.price);
-  await sql()`INSERT INTO products(slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at) VALUES(${slug},${sku},${name},${filamentModel},${colorName},${colorHex},${category},${String(p.brand || "").slice(0, 80)},${String(p.brand || "").slice(0, 80)},${String(p.description || "").slice(0, 500)},${String(p.longDescription || "").slice(0, 10000)},${String(p.specificationsText || "").slice(0, 10000)},${JSON.stringify(Array.isArray(p.specs) ? p.specs.slice(0, 100) : [])},${JSON.stringify(benefits)},${p.tone || "orange"},${submittedImage},${Math.max(0, Math.min(1_000_000, Math.floor(Number(p.stock) || 0)))},${priceCents},${cardPriceCents},${p.visible !== false},${p.featured === true},CASE WHEN ${p.featured === true} THEN NOW() ELSE NULL END,NOW()) ON CONFLICT(slug) DO UPDATE SET sku=EXCLUDED.sku,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=CASE WHEN ${keepStoredImage} THEN products.image_url ELSE EXCLUDED.image_url END,stock=EXCLUDED.stock,price_cents=EXCLUDED.price_cents,card_price_cents=EXCLUDED.card_price_cents,visible=EXCLUDED.visible,featured=EXCLUDED.featured,featured_at=CASE WHEN EXCLUDED.featured=true AND products.featured=false THEN NOW() WHEN EXCLUDED.featured=false THEN NULL ELSE products.featured_at END,updated_at=NOW()`;
+  await sql()`INSERT INTO products(slug,group_slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at) VALUES(${slug},${groupSlug},${sku},${name},${filamentModel},${colorName},${colorHex},${category},${String(p.brand || "").slice(0, 80)},${String(p.brand || "").slice(0, 80)},${String(p.description || "").slice(0, 500)},${String(p.longDescription || "").slice(0, 10000)},${String(p.specificationsText || "").slice(0, 10000)},${JSON.stringify(Array.isArray(p.specs) ? p.specs.slice(0, 100) : [])},${JSON.stringify(benefits)},${p.tone || "orange"},${submittedImage},${Math.max(0, Math.min(1_000_000, Math.floor(Number(p.stock) || 0)))},${priceCents},${cardPriceCents},${p.visible !== false},${p.featured === true},CASE WHEN ${p.featured === true} THEN NOW() ELSE NULL END,NOW()) ON CONFLICT(slug) DO UPDATE SET group_slug=EXCLUDED.group_slug,sku=EXCLUDED.sku,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=CASE WHEN ${keepStoredImage} THEN products.image_url ELSE EXCLUDED.image_url END,stock=EXCLUDED.stock,price_cents=EXCLUDED.price_cents,card_price_cents=EXCLUDED.card_price_cents,visible=EXCLUDED.visible,featured=EXCLUDED.featured,featured_at=CASE WHEN EXCLUDED.featured=true AND products.featured=false THEN NOW() WHEN EXCLUDED.featured=false THEN NULL ELSE products.featured_at END,updated_at=NOW()`;
   if (p.featured === true)
     await sql()`UPDATE products SET featured=false,featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
   revalidateTag("catalog-products", { expire: 0 });

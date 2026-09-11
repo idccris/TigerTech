@@ -20,9 +20,11 @@ export type Product = {
   stock?: number;
   visible?: boolean;
   filamentModel?: string;
+  groupSlug?: string;
   colorName?: string;
   colorHex?: string;
   variants?: Product[];
+  selectedVariantSlug?: string;
 };
 
 const standardBenefits = [

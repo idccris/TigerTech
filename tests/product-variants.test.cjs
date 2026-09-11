@@ -13,12 +13,14 @@ for (const extension of ['.ts', '.tsx']) {
 }
 const React = require('react');
 const { renderToStaticMarkup } = require('react-dom/server');
-const { groupProducts, productGroupKey, cartProductName, productMatches } = require('../lib/product-variants.ts');
+const { filamentGroupSlug, groupProducts, groupProductsForAdmin, productGroupKey, cartProductName, productMatches } = require('../lib/product-variants.ts');
 const ColorSwatches = require('../components/color-swatches.tsx').default;
 const ProductCard = require('../components/product-card.tsx').default;
 const FilamentFields = require('../components/filament-fields.tsx').default;
 const { CartProvider } = require('../components/cart-provider.tsx');
 const ProductDetail = require('../components/product-detail.tsx').default;
+const { filamentCatalogRows } = require('../lib/filament-catalog.ts');
+const { storefrontProductImage } = require('../lib/product-images.ts');
 const { applyFilamentContents, completeFilamentContents, parseFilamentContents } = require('../lib/filament-content.ts');
 
 const blue = { slug: 'pla-blue', sku: 'PLA-BL', name: 'PLA Azul', category: 'Filamentos', filamentModel: 'PLA Basic 1 kg', brand: 'Maker', colorName: 'Azul', colorHex: '#2563eb', stock: 3, visible: true, priceCents: 9000, cardPriceCents: 10000, description: 'Filamento', longDescription: 'Filamento de teste', specs: [], benefits: [], tone: 'blue' };
@@ -27,9 +29,30 @@ const red = { ...blue, slug: 'pla-red', sku: 'PLA-RD', name: 'PLA Vermelho', col
 test('one card per model, including sold-out color; inputs remain unchanged', () => {
   const grouped = groupProducts([red, blue]);
   assert.equal(grouped.length, 1);
-  assert.equal(grouped[0].slug, blue.slug);
+  assert.equal(grouped[0].slug, 'filamento-maker-pla-basic-1-kg');
+  assert.equal(grouped[0].selectedVariantSlug, blue.slug);
   assert.deepEqual(grouped[0].variants.map(v => v.slug), ['pla-blue', 'pla-red']);
   assert.equal(blue.variants, undefined);
+});
+test('admin groups all colors while preserving stock by SKU', () => {
+  const grouped = groupProductsForAdmin([blue, red]);
+  assert.equal(grouped.length, 1);
+  assert.equal(grouped[0].stock, 3);
+  assert.equal(grouped[0].variants.length, 2);
+  assert.equal(grouped[0].variants[1].sku, 'PLA-RD');
+});
+test('filament group URLs are stable and accent safe', () => {
+  assert.equal(filamentGroupSlug('Bambu Lab', 'PETG Translucent'), 'filamento-bambu-lab-petg-translucent');
+  assert.equal(filamentGroupSlug('Marca Açúcar', 'PLA Coração'), 'filamento-marca-acucar-pla-coracao');
+});
+test('the imported catalog becomes one page per filament model', () => {
+  const rows = filamentCatalogRows();
+  assert.equal(rows.length, 614);
+  assert.equal(new Set(rows.map((row) => row.group_slug)).size, 77);
+});
+test('official remote images avoid an extra database proxy request', () => {
+  assert.equal(storefrontProductImage({ slug: 'blue', imageUrl: 'https://store.bblcdn.com/sample.webp' }), 'https://store.bblcdn.com/sample.webp');
+  assert.equal(storefrontProductImage({ slug: 'custom', imageUrl: 'data:image/png;base64,AA==', updatedAt: '2' }), '/api/products/image?slug=custom&v=2');
 });
 test('different materials, weights and brands remain separate', () => {
   assert.equal(groupProducts([blue, { ...blue, slug: 'petg', filamentModel: 'PETG 1 kg' }, { ...blue, slug: 'pla2', filamentModel: 'PLA Basic 2 kg' }, { ...blue, slug: 'other', brand: 'Other' }]).length, 4);

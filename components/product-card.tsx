@@ -11,7 +11,7 @@ import PrinterVisual from "./printer-visual";
 const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 
 export default function ProductCard({ product: initialProduct }: { product: Product }) {
-  const [selectedSlug, setSelectedSlug] = useState(initialProduct.slug);
+  const [selectedSlug, setSelectedSlug] = useState(initialProduct.selectedVariantSlug || initialProduct.slug);
   const variants = initialProduct.variants || [];
   const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
   const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;
@@ -32,7 +32,7 @@ export default function ProductCard({ product: initialProduct }: { product: Prod
         </> : <><span>VALOR</span><strong>Consulte o preço</strong></>}
       </div>
       <ul>{product.specs.map((spec) => <li key={spec}>{spec}</li>)}</ul>
-      <Link href={`/produto/${product.slug}`}>Ver produto <span>→</span></Link>
+      <Link href={{ pathname: `/produto/${initialProduct.slug}`, query: selectedVariant ? { cor: selectedVariant.slug } : undefined }}>Ver produto <span>→</span></Link>
     </div>
   </article>;
 }

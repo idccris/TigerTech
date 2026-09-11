@@ -7,7 +7,8 @@ import AdminNavbar from "./admin-navbar";
 import FilamentFields from "./filament-fields";
 import { PrinterVisual } from "./catalog";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
-import { isFilament } from "../lib/product-variants";
+import { groupProductsForAdmin, isFilament, productTitle } from "../lib/product-variants";
+import FilamentVariantManager from "./filament-variant-manager";
 
 type InventoryProduct = Product & {
   stock: number;
@@ -26,6 +27,7 @@ export default function AdminCatalog({
   const router = useRouter();
   const [selectedFilter, setSelectedFilter] = useState("Todas");
   const [editing, setEditing] = useState<any>(null);
+  const [activeFilamentGroup, setActiveFilamentGroup] = useState<Product | null>(null);
   const [adminPassword, setAdminPassword] = useState("");
   const [error, setError] = useState("");
   const blank = { slug: "", sku: "", name: "", category: "Impressoras 3D", brand: "", description: "", longDescription: "", specificationsText: "", specs: [], benefits: [], tone: "orange", imageUrl: "", stock: 0, pixPrice: "0,00", cardPrice: "0,00", visible: true, featured: false };
@@ -44,23 +46,24 @@ export default function AdminCatalog({
     if (!response.ok) setError((await response.json()).error || "Não foi possível excluir.");
     else router.refresh();
   }
+  const groupedProducts = useMemo(() => groupProductsForAdmin(products), [products]);
   const brands = useMemo(
     () =>
       Array.from(
-        new Set(products.map((product) => product.brand || "Sem marca")),
+        new Set(groupedProducts.map((product) => product.brand || "Sem marca")),
       ).sort(),
-    [products],
+    [groupedProducts],
   );
   const filters = ["Todas", ...brands, "Filamento"];
   const visibleProducts =
     selectedFilter === "Todas"
-      ? products
+      ? groupedProducts
       : selectedFilter === "Filamento"
-        ? products.filter(isFilament)
-      : products.filter(
+        ? groupedProducts.filter(isFilament)
+      : groupedProducts.filter(
           (product) => (product.brand || "Sem marca") === selectedFilter,
         );
-  const grouped = visibleProducts.reduce<Record<string, InventoryProduct[]>>(
+  const grouped = visibleProducts.reduce<Record<string, Product[]>>(
     (groups, product) => {
       const brand = product.brand || "Sem marca";
       (groups[brand] ||= []).push(product);
@@ -84,7 +87,7 @@ export default function AdminCatalog({
         </div>
         <div className="inventory-summary">
           <article>
-            <strong>{products.length}</strong>
+            <strong>{groupedProducts.length}</strong>
             <small>modelos cadastrados</small>
           </article>
           <article>
@@ -144,8 +147,8 @@ export default function AdminCatalog({
                       </div>
                       <div className="inventory-card-copy">
                         <span>{product.category}</span>
-                        <h3>{product.name}{product.colorName ? ` — ${product.colorName}` : ""}</h3>
-                        <small>SKU: {product.sku || "Não informado"}</small>
+                        <h3>{isFilament(product) ? `${product.brand} ${productTitle(product)}` : product.name}</h3>
+                        <small>{product.variants ? `${product.variants.length} cores cadastradas` : `SKU: ${product.sku || "Não informado"}`}</small>
                         <div className="inventory-stock">
                           <strong>{product.stock || 0}</strong>
                           <span>unidades</span>
@@ -157,7 +160,7 @@ export default function AdminCatalog({
                             ? "Visível na loja"
                             : "Oculto na loja"}
                         </small>
-                        {role === "operator" ? <div className="operator-product-actions"><button onClick={() => setEditing({ ...product, pixPrice: formatBRLInput(product.priceCents || 0), cardPrice: formatBRLInput(product.cardPriceCents || product.priceCents || 0) })}>Editar</button><button onClick={() => deleteProduct(product)}>Excluir</button></div> : null}
+                        {role === "operator" ? <div className="operator-product-actions">{product.variants ? <button onClick={() => setActiveFilamentGroup(product)}>Gerenciar cores</button> : <><button onClick={() => setEditing({ ...product, pixPrice: formatBRLInput(product.priceCents || 0), cardPrice: formatBRLInput(product.cardPriceCents || product.priceCents || 0) })}>Editar</button><button onClick={() => deleteProduct(product as InventoryProduct)}>Excluir</button></>}</div> : null}
                       </div>
                     </article>
                   ))}
@@ -166,7 +169,14 @@ export default function AdminCatalog({
             );
           })}
       </div>
-      {editing ? <div className="operator-editor"><form onSubmit={saveProduct}><div className="admin-form-head"><h2>{editing.slug ? "Editar produto" : "Novo produto"}</h2><button type="button" onClick={() => setEditing(null)}>×</button></div>
+      {activeFilamentGroup ? <div className="operator-editor"><FilamentVariantManager
+        group={activeFilamentGroup}
+        onClose={() => setActiveFilamentGroup(null)}
+        onEdit={(variant) => { setActiveFilamentGroup(null); setEditing({ ...variant, pixPrice: formatBRLInput(variant.priceCents || 0), cardPrice: formatBRLInput(variant.cardPriceCents || variant.priceCents || 0) }); }}
+        onAdd={(group) => { const source = group.variants?.[0] || group; setActiveFilamentGroup(null); setEditing({ ...source, slug: "", sku: "", colorName: "", colorHex: "#777777", imageUrl: "", stock: 0, visible: true, featured: false, pixPrice: formatBRLInput(source.priceCents || 0), cardPrice: formatBRLInput(source.cardPriceCents || source.priceCents || 0) }); }}
+        onDelete={(variant) => deleteProduct(variant as InventoryProduct)}
+      /></div> : null}
+      {editing ? <div className="operator-editor"><form onSubmit={saveProduct}><div className="admin-form-head"><h2>{isFilament(editing) ? (editing.slug ? "Editar cor" : "Adicionar cor") : (editing.slug ? "Editar produto" : "Novo produto")}</h2><button type="button" onClick={() => setEditing(null)}>×</button></div>
         <label>Categoria<select value={editing.category || "Impressoras 3D"} onChange={(e) => setEditing({ ...editing, category: e.target.value })}><option>Impressoras 3D</option><option>Filamentos</option><option>Acessórios</option>{!["Impressoras 3D", "Filamentos", "Acessórios"].includes(editing.category) ? <option>{editing.category}</option> : null}</select></label>
         <FilamentFields value={editing} adminPassword={adminPassword} onChange={(fields) => setEditing({ ...editing, ...fields })} />
         <label>Nome<input required value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} /></label>

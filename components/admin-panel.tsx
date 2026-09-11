@@ -1,9 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PrinterVisual } from "./catalog";
 import AdminNavbar from "./admin-navbar";
 import FilamentFields from "./filament-fields";
-import { isFilament } from "../lib/product-variants";
+import { groupProductsForAdmin, isFilament, productTitle } from "../lib/product-variants";
+import type { Product } from "../lib/products";
+import FilamentVariantManager from "./filament-variant-manager";
 import BrandLogo from "./brand-logo";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
 const formatBRLInputFromText = (value: string) => formatBRLInput(parseBRLToCents(value));
@@ -58,7 +60,6 @@ const blank = {
   benefits: defaultBenefits,
 };
 const productFilters = [
-  { value: "Todos", label: "Todos" },
   { value: "Impressoras 3D", label: "Impressoras 3D" },
   { value: "Filamentos", label: "Filamentos" },
   { value: "Acessórios", label: "Acessórios" },
@@ -74,7 +75,6 @@ const normalizeCategory = (value: string) =>
     .replace(/[\u0300-\u036f]/g, "");
 
 function matchesProductFilter(category: string, filter: ProductFilter) {
-  if (filter === "Todos") return true;
   const normalized = normalizeCategory(category);
   if (filter === "Impressoras 3D")
     return normalized === "impressora 3d" || normalized === "impressoras 3d";
@@ -87,18 +87,22 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
   const [logged, setLogged] = useState(initialLogged),
     [error, setError] = useState(""),
     [items, setItems] = useState<any[]>([]),
-    [productFilter, setProductFilter] = useState<ProductFilter>("Todos"),
+    [productFilter, setProductFilter] = useState<ProductFilter | null>(null),
     [edit, setEdit] = useState<any>(blank),
     [editorOpen, setEditorOpen] = useState(false),
+    [activeFilamentGroup, setActiveFilamentGroup] = useState<Product | null>(null),
     [categories, setCategories] = useState<string[]>([
       "Impressoras 3D",
       "Filamentos",
       "Acessórios",
     ]),
     [newCategory, setNewCategory] = useState("");
-  const filteredItems = items.filter((product) =>
-    matchesProductFilter(String(product.category || ""), productFilter),
-  );
+  const groupedItems = useMemo(() => groupProductsForAdmin(items), [items]);
+  const filteredItems = productFilter
+    ? groupedItems.filter((product) => matchesProductFilter(String(product.category || ""), productFilter))
+    : [];
+  const categoryCount = (filter: ProductFilter) =>
+    groupedItems.filter((product) => matchesProductFilter(String(product.category || ""), filter)).length;
   async function load() {
     try {
       const r = await fetch("/api/admin/products");
@@ -194,6 +198,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
     if (r.ok) {
       setEdit(blank);
       setEditorOpen(false);
+      setActiveFilamentGroup(null);
       setError("");
       load();
       localStorage.setItem("catalog-updated", String(Date.now()));
@@ -212,7 +217,39 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
         body: JSON.stringify({ slug }),
       });
       load();
+      setActiveFilamentGroup(null);
     }
+  }
+
+  function editProduct(product: Product) {
+    setEdit({
+      ...product,
+      specs: product.specs.join(", "),
+      pixPrice: formatBRLInput(product.priceCents || 0),
+      cardPrice: formatBRLInput(product.cardPriceCents || product.priceCents || 0),
+    });
+    setError("");
+    setActiveFilamentGroup(null);
+    setEditorOpen(true);
+  }
+
+  function addFilamentColor(group: Product) {
+    const source = group.variants?.[0] || group;
+    setEdit({
+      ...source,
+      slug: "",
+      sku: "",
+      colorName: "",
+      colorHex: "#777777",
+      imageUrl: "",
+      stock: 0,
+      visible: true,
+      featured: false,
+      pixPrice: formatBRLInput(source.priceCents || 0),
+      cardPrice: formatBRLInput(source.cardPriceCents || source.priceCents || 0),
+    });
+    setActiveFilamentGroup(null);
+    setEditorOpen(true);
   }
   if (!logged)
     return (
@@ -234,25 +271,52 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       <header>
         <div>
           <span>PAINEL ADMINISTRATIVO</span>
-          <h1>Produtos</h1>
+          <h1>{productFilter || "Produtos"}</h1>
         </div>
-        <div className="admin-header-actions">
+        {productFilter ? <div className="admin-header-actions">
+          <button className="secondary" type="button" onClick={() => { setProductFilter(null); setEditorOpen(false); setActiveFilamentGroup(null); }}>
+            ← Categorias
+          </button>
           <button
             onClick={() => {
-              setEdit(blank);
+              setEdit({ ...blank, category: productFilter });
               setError("");
+              setActiveFilamentGroup(null);
               setEditorOpen(true);
             }}
           >
-            + Novo produto
+            + {productFilter === "Filamentos" ? "Novo filamento" : "Novo produto"}
           </button>
-        </div>
+        </div> : null}
       </header>
-      <nav className="admin-product-filters" aria-label="Filtrar produtos por categoria">
+      {!productFilter ? (
+        <section className="admin-category-home" aria-label="Escolha uma categoria de produtos">
+          <div>
+            <span>ESCOLHA O QUE DESEJA GERENCIAR</span>
+            <h2>Selecione uma categoria</h2>
+            <p>Os produtos ficam organizados por tipo para facilitar o cadastro e o controle de estoque.</p>
+          </div>
+          <div className="admin-category-grid">
+            {productFilters.map((filter) => {
+              const count = categoryCount(filter.value);
+              const variantCount = filter.value === "Filamentos"
+                ? items.filter((product) => matchesProductFilter(String(product.category || ""), filter.value)).length
+                : count;
+              return (
+                <button type="button" key={filter.value} onClick={() => setProductFilter(filter.value)}>
+                  <span>{filter.value === "Impressoras 3D" ? "3D" : filter.value === "Filamentos" ? "◉" : "+"}</span>
+                  <strong>{filter.label}</strong>
+                  <small>{count} {count === 1 ? "modelo" : "modelos"}{filter.value === "Filamentos" ? ` · ${variantCount} cores` : ""}</small>
+                  <b>Gerenciar <i>→</i></b>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ) : <>
+      <nav className="admin-product-filters" aria-label="Trocar categoria de produtos">
         {productFilters.map((filter) => {
-          const count = items.filter((product) =>
-            matchesProductFilter(String(product.category || ""), filter.value),
-          ).length;
+          const count = categoryCount(filter.value);
           return (
             <button
               type="button"
@@ -267,7 +331,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
         })}
       </nav>
       <section
-        className={`admin-layout ${editorOpen ? "editor-open" : ""}`}
+        className={`admin-layout ${editorOpen || activeFilamentGroup ? "editor-open" : ""}`}
       >
         <div className="admin-list">
           {filteredItems.map((p) => (
@@ -285,26 +349,22 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
               </div>
               <div>
                 <span>
-                  {p.category} · Estoque {p.stock}
+                  {p.category} · Estoque {p.stock}{p.variants ? ` · ${p.variants.length} cores` : ""}
                 </span>
-                <strong>{p.name}{p.colorName ? ` — ${p.colorName}` : ""}</strong>
+                <strong>{isFilament(p) ? `${p.brand} ${productTitle(p)}` : p.name}</strong>
                 <small>{p.visible ? "Visível na loja" : "Oculto"}</small>
               </div>
               <button
                 onClick={() => {
-                  setEdit({
-                    ...p,
-                    specs: p.specs.join(", "),
-                    pixPrice: formatBRLInput(p.priceCents || 0),
-                    cardPrice: formatBRLInput(p.cardPriceCents || p.priceCents || 0),
-                  });
-                  setError("");
-                  setEditorOpen(true);
+                  if (isFilament(p) && p.variants) {
+                    setEditorOpen(false);
+                    setActiveFilamentGroup(p);
+                  } else editProduct(p);
                 }}
               >
-                Editar
+                {p.variants ? "Gerenciar cores" : "Editar"}
               </button>
-              <button onClick={() => del(p.slug)}>Excluir</button>
+              {!p.variants ? <button onClick={() => del(p.slug)}>Excluir</button> : null}
             </article>
           ))}
           {filteredItems.length === 0 ? (
@@ -314,10 +374,18 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
             </div>
           ) : null}
         </div>
-        {editorOpen ? (
+        {activeFilamentGroup ? (
+          <FilamentVariantManager
+            group={activeFilamentGroup}
+            onClose={() => setActiveFilamentGroup(null)}
+            onEdit={editProduct}
+            onAdd={addFilamentColor}
+            onDelete={(variant) => del(variant.slug)}
+          />
+        ) : editorOpen ? (
           <form className="admin-form" onSubmit={save}>
             <div className="admin-form-head">
-              <h2>{edit.slug ? "Editar produto" : "Novo produto"}</h2>
+              <h2>{isFilament(edit) ? (edit.slug ? "Editar cor" : "Adicionar cor") : (edit.slug ? "Editar produto" : "Novo produto")}</h2>
               <button
                 type="button"
                 aria-label="Fechar editor"
@@ -488,7 +556,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
             </label>
             </> : <p className="filament-shared-note">As descrições, especificações e os benefícios deste filamento são compartilhados por tipo. Edite esse conteúdo na página Design.</p>}
             <label>
-              Imagem do produto
+              {isFilament(edit) ? "Foto correspondente à cor" : "Imagem do produto"}
               <span
                 className={`image-upload ${edit.imageUrl ? "has-image" : ""}`}
                 style={
@@ -573,11 +641,12 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                 <small>Exibe este produto na seção de destaques.</small>
               </span>
             </label>
-            <button type="submit">Confirmar e publicar</button>
+            <button type="submit">{isFilament(edit) ? "Salvar cor do filamento" : "Confirmar e publicar"}</button>
             {error && <small>{error}</small>}
           </form>
         ) : null}
       </section>
+      </>}
     </main>
   );
 }

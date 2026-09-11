@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { getProductImage } from "../../../../lib/db";
+import { isAllowedRemoteProductImage } from "../../../../lib/product-images";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +16,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const imageUrl = new URL(value);
-    const allowedHosts = new Set(["store.bblcdn.com", "cdn.shopify.com"]);
-    if (imageUrl.protocol !== "https:" || !allowedHosts.has(imageUrl.hostname))
+    if (!isAllowedRemoteProductImage(value))
       return new Response(null, { status: 404 });
     const response = await fetch(imageUrl, { next: { revalidate: 604800 } });
     const contentType = response.headers.get("content-type") || "";

@@ -45,6 +45,7 @@ const colorHex = (name: string) => {
 
 export type FilamentCatalogRow = {
   slug: string;
+  group_slug: string;
   sku: string;
   name: string;
   filament_model: string;
@@ -69,6 +70,7 @@ export function filamentCatalogRows(): FilamentCatalogRow[] {
       const identity = `${normalize(card.brand)}-${normalize(card.model)}-${normalize(color.name)}`;
       rows.push({
         slug: `fil-${identity}-${String(colorIndex + 1).padStart(2, "0")}`,
+        group_slug: `filamento-${normalize(card.brand)}-${normalize(card.model)}`,
         sku: `FIL-${normalize(card.brand).slice(0, 3).toUpperCase()}-${String(rows.length + 1).padStart(4, "0")}`,
         name: `${card.brand} ${card.model}`,
         filament_model: card.model.replace(/\s+/g, " ").trim(),

@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
 import { products as defaults, type Product } from "./products";
-import { groupProducts } from "./product-variants";
+import { filamentGroupSlug, groupProducts } from "./product-variants";
 import { applyFilamentContents, parseFilamentContents } from "./filament-content";
 import { FILAMENT_CATALOG_VERSION, filamentCatalogRows } from "./filament-catalog";
 
@@ -81,6 +81,19 @@ export async function ensureDb() {
         ]);
       }
 
+      const groupingVersion = await db`SELECT value FROM site_settings WHERE key='filament_grouping_schema' LIMIT 1`;
+      if (groupingVersion[0]?.value !== "1") {
+        const groupingPayload = JSON.stringify(filamentCatalogRows().map((row) => ({ slug: row.slug, group_slug: row.group_slug })));
+        await db.transaction([
+          db`ALTER TABLE products ADD COLUMN IF NOT EXISTS group_slug TEXT NOT NULL DEFAULT ''`,
+          db`CREATE INDEX IF NOT EXISTS products_group_slug_idx ON products(group_slug) WHERE group_slug<>''`,
+          db`UPDATE products SET group_slug=source.group_slug
+             FROM jsonb_to_recordset(${groupingPayload}::jsonb) AS source(slug TEXT,group_slug TEXT)
+             WHERE products.slug=source.slug AND products.group_slug<>source.group_slug`,
+          db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_grouping_schema','1',NOW()) ON CONFLICT(key) DO UPDATE SET value='1',updated_at=NOW()`,
+        ]);
+      }
+
       const imported = await db`SELECT value FROM site_settings WHERE key='filament_catalog_version' LIMIT 1`;
       if (imported[0]?.value !== FILAMENT_CATALOG_VERSION) {
         const rows = filamentCatalogRows();
@@ -90,10 +103,10 @@ export async function ensureDb() {
              SELECT DISTINCT filament_model
              FROM jsonb_to_recordset(${payload}::jsonb) AS source(filament_model TEXT)
              WHERE filament_model<>'' ON CONFLICT DO NOTHING`,
-          db`INSERT INTO products(slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at)
-             SELECT source.slug,source.sku,source.name,source.filament_model,source.color_name,source.color_hex,source.category,source.tag,source.brand,source.description,source.long_description,source.specifications_text,source.specs,source.benefits,source.tone,source.image_url,999,0,0,true,false,NULL,NOW()
-             FROM jsonb_to_recordset(${payload}::jsonb) AS source(slug TEXT,sku TEXT,name TEXT,filament_model TEXT,color_name TEXT,color_hex TEXT,category TEXT,tag TEXT,brand TEXT,description TEXT,long_description TEXT,specifications_text TEXT,specs JSONB,benefits JSONB,tone TEXT,image_url TEXT)
-             ON CONFLICT(slug) DO UPDATE SET name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=EXCLUDED.image_url,updated_at=NOW()`,
+          db`INSERT INTO products(slug,group_slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at)
+             SELECT source.slug,source.group_slug,source.sku,source.name,source.filament_model,source.color_name,source.color_hex,source.category,source.tag,source.brand,source.description,source.long_description,source.specifications_text,source.specs,source.benefits,source.tone,source.image_url,999,0,0,true,false,NULL,NOW()
+             FROM jsonb_to_recordset(${payload}::jsonb) AS source(slug TEXT,group_slug TEXT,sku TEXT,name TEXT,filament_model TEXT,color_name TEXT,color_hex TEXT,category TEXT,tag TEXT,brand TEXT,description TEXT,long_description TEXT,specifications_text TEXT,specs JSONB,benefits JSONB,tone TEXT,image_url TEXT)
+             ON CONFLICT(slug) DO UPDATE SET group_slug=EXCLUDED.group_slug,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=EXCLUDED.image_url,updated_at=NOW()`,
           db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_catalog_version',${FILAMENT_CATALOG_VERSION},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`,
         ]);
       }
@@ -126,10 +139,23 @@ export async function listFeaturedProducts() {
 }
 export async function findProduct(slug: string) {
   await ensureDb();
-  const rows = await sql()`SELECT * FROM products WHERE slug=${slug} AND visible=true AND (stock>0 OR filament_model<>'') LIMIT 1`;
-  if (!rows[0]) return null;
+  const seedRows = await sql()`SELECT * FROM products WHERE (slug=${slug} OR group_slug=${slug}) AND visible=true AND (stock>0 OR filament_model<>'') ORDER BY CASE WHEN group_slug=${slug} THEN 0 ELSE 1 END LIMIT 1`;
+  if (!seedRows[0]) return null;
+  const seed = rowToProduct(seedRows[0]);
+  const rows = seed.groupSlug
+    ? await sql()`SELECT * FROM products WHERE group_slug=${seed.groupSlug} AND visible=true ORDER BY color_name`
+    : seedRows;
   const contentRows = await sql()`SELECT value FROM site_settings WHERE key='filament_type_content' LIMIT 1`;
-  return applyFilamentContents([rowToProduct(rows[0])], parseFilamentContents(String(contentRows[0]?.value || "")))[0];
+  const products = applyFilamentContents(rows.map(rowToProduct), parseFilamentContents(String(contentRows[0]?.value || "")));
+  if (!seed.groupSlug) return products[0];
+  const available = products.find((product) => (product.stock || 0) > 0) || products[0];
+  return {
+    ...available,
+    slug: seed.groupSlug,
+    groupSlug: seed.groupSlug,
+    selectedVariantSlug: seed.slug,
+    variants: products,
+  };
 }
 export async function listFilamentTypes() {
   await ensureDb();
@@ -147,6 +173,7 @@ function rowToProduct(r: any): Product & {
 } {
   return {
     slug: r.slug,
+    groupSlug: r.group_slug || (r.filament_model ? filamentGroupSlug(r.brand || r.tag || "", r.filament_model) : ""),
     name: r.name,
     filamentModel: r.filament_model || "",
     colorName: r.color_name || "",
