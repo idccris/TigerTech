@@ -1494,6 +1494,9 @@ footer > a:last-child {
 .users-list article em { width: fit-content; padding: 7px 10px; border-radius: 100px; background: #eee; font-size: 9px; font-style: normal; font-weight: 800; }
 .users-list article em.admin { background: var(--ink); color: white; }
 .users-list article button { border: 1px solid var(--line); border-radius: 100px; padding: 9px 13px; background: white; cursor: pointer; }
+.user-account { min-width: 0; }
+.user-account strong,
+.user-account span { overflow-wrap: anywhere; }
 .users-message { margin-top: 15px; color: #a22; font-size: 11px; }
 .user-modal,
 .operator-editor { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(0,0,0,.55); }
@@ -1772,7 +1775,27 @@ footer > a:last-child {
   top: 20px;
   background: white;
   border-radius: 16px;
-  padding: 22px;
+  padding: 22px 22px 92px;
+}
+.admin-form > .admin-form-submit {
+  position: fixed;
+  z-index: 90;
+  right: calc(5vw + 22px);
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: 346px;
+  margin: 0;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .24);
+}
+.operator-editor form { padding-bottom: 92px; }
+.operator-editor form > .admin-form-submit {
+  position: fixed;
+  z-index: 110;
+  right: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: min(436px, calc(100vw - 64px));
+  margin: 0;
+  transform: translateX(50%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .24);
 }
 .filament-variant-manager {
   position: sticky;
@@ -3607,6 +3630,11 @@ footer > a:last-child {
   .admin-form {
     position: static;
   }
+  .admin-form > .admin-form-submit {
+    left: calc(5vw + 22px);
+    right: calc(5vw + 22px);
+    width: auto;
+  }
 }
 @media (min-width: 701px) and (max-width: 980px) {
   .site-header {
@@ -3959,6 +3987,10 @@ footer > a:last-child {
   .admin-page {
     padding: 28px 4vw 60px;
   }
+  .admin-form > .admin-form-submit {
+    left: calc(4vw + 22px);
+    right: calc(4vw + 22px);
+  }
   .admin-page > header {
     align-items: flex-start;
     flex-direction: column;
@@ -4295,4 +4327,38 @@ footer > a:last-child {
   .faq-editor-fields { min-width: 0; }
   .faq-editor-actions { display: grid; grid-template-columns: 44px 44px minmax(0, 1fr); gap: 8px; padding-top: 4px; }
   .faq-editor-actions button { min-width: 0; min-height: 44px; }
+}
+
+@media (max-width: 760px) {
+  .users-hero {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .users-hero button { width: 100%; min-height: 48px; }
+  .users-list article {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 18px;
+  }
+  .user-account { grid-column: 1 / -1; padding-bottom: 3px; }
+  .user-role { grid-column: 1; }
+  .user-status { grid-column: 2; align-self: center; text-align: right; }
+  .users-list article .user-toggle {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 3px;
+  }
+  .user-modal { align-items: end; padding: 10px; }
+  .user-modal form {
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    padding: 22px 18px max(22px, env(safe-area-inset-bottom));
+    border-radius: 20px;
+  }
+  .user-modal form > div:first-child button { width: 44px; height: 44px; }
+  .user-modal input,
+  .user-modal select { min-height: 48px; font-size: 16px; }
+  .user-modal form > button { width: 100%; min-height: 48px; }
 }
