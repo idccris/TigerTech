@@ -641,7 +641,9 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                 <small>Exibe este produto na seção de destaques.</small>
               </span>
             </label>
-            <button type="submit">{isFilament(edit) ? "Salvar cor do filamento" : "Confirmar e publicar"}</button>
+            <button className="admin-form-submit" type="submit">
+              {isFilament(edit) ? "Salvar cor do filamento" : "Confirmar e publicar"}
+            </button>
             {error && <small>{error}</small>}
           </form>
         ) : null}
