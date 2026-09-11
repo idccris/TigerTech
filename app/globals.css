@@ -987,6 +987,7 @@ p {
   min-height: 690px;
   overflow: hidden;
   background: #080808;
+  touch-action: pan-y;
 }
 .cta-slides {
   min-height: 690px;
@@ -1057,10 +1058,10 @@ p {
 }
 .cta-slide-shade {
   z-index: 1;
-  background: linear-gradient(90deg, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .7) 38%, rgba(0, 0, 0, .16) 72%, rgba(0, 0, 0, .08) 100%);
+  background: rgba(0, 0, 0, .6);
 }
 .cta-slide-a1 .cta-slide-shade {
-  background: linear-gradient(90deg, rgba(0, 0, 0, .94) 0%, rgba(0, 0, 0, .78) 38%, rgba(0, 0, 0, .22) 67%, rgba(0, 0, 0, .08) 100%);
+  background: rgba(0, 0, 0, .6);
 }
 .cta-slide-content {
   position: relative;
@@ -3940,8 +3941,9 @@ footer > a:last-child {
   }
   .cta-slide-shade,
   .cta-slide-a1 .cta-slide-shade {
-    background: linear-gradient(0deg, rgba(0, 0, 0, .96) 0%, rgba(0, 0, 0, .82) 42%, rgba(0, 0, 0, .12) 80%, rgba(0, 0, 0, .05) 100%);
+    background: rgba(0, 0, 0, .6);
   }
+  .cta-slider-controls { display: none; }
   footer {
     align-items: flex-start;
     flex-direction: column;

@@ -44,6 +44,28 @@ export default function Catalog({
   const [category, setCategory] =
     useState<(typeof categories)[number]>("Todos");
   const featuredGridRef = useRef<HTMLDivElement>(null);
+  const ctaSwipeRef = useRef<{ x: number; y: number } | null>(null);
+
+  function startCtaSwipe(event: React.PointerEvent<HTMLElement>) {
+    if (event.pointerType === "mouse" || !window.matchMedia("(max-width: 700px)").matches) return;
+    ctaSwipeRef.current = { x: event.clientX, y: event.clientY };
+    setCtaPaused(true);
+  }
+
+  function finishCtaSwipe(event: React.PointerEvent<HTMLElement>) {
+    const start = ctaSwipeRef.current;
+    ctaSwipeRef.current = null;
+    setCtaPaused(false);
+    if (!start) return;
+    const distanceX = event.clientX - start.x;
+    const distanceY = event.clientY - start.y;
+    if (Math.abs(distanceX) < 45 || Math.abs(distanceX) <= Math.abs(distanceY) * 1.2) return;
+    setCtaSlide((current) =>
+      distanceX < 0
+        ? (current + 1) % slideshow.slides.length
+        : (current - 1 + slideshow.slides.length) % slideshow.slides.length,
+    );
+  }
 
   const filtered = useMemo(
     () =>
@@ -141,11 +163,11 @@ export default function Catalog({
     if (ctaPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return;
     const interval = window.setInterval(
-      () => setCtaSlide((current) => (current + 1) % 2),
+      () => setCtaSlide((current) => (current + 1) % slideshow.slides.length),
       6500,
     );
     return () => window.clearInterval(interval);
-  }, [ctaPaused]);
+  }, [ctaPaused, slideshow.slides.length]);
 
   return (
     <main>
@@ -300,6 +322,12 @@ export default function Catalog({
         className="cta-slider"
         aria-roledescription="carousel"
         aria-label="Destaques Tiger Tech"
+        onPointerDown={startCtaSwipe}
+        onPointerUp={finishCtaSwipe}
+        onPointerCancel={() => {
+          ctaSwipeRef.current = null;
+          setCtaPaused(false);
+        }}
         onMouseEnter={() => setCtaPaused(true)}
         onMouseLeave={() => setCtaPaused(false)}
         onFocusCapture={() => setCtaPaused(true)}
@@ -338,7 +366,7 @@ export default function Catalog({
         <div className="cta-slider-controls" aria-label="Controles do slideshow">
           <button
             type="button"
-            onClick={() => setCtaSlide((current) => (current + 1) % 2)}
+            onClick={() => setCtaSlide((current) => (current - 1 + slideshow.slides.length) % slideshow.slides.length)}
             aria-label="Destaque anterior"
           >
             ←
@@ -355,7 +383,7 @@ export default function Catalog({
           ))}
           <button
             type="button"
-            onClick={() => setCtaSlide((current) => (current + 1) % 2)}
+            onClick={() => setCtaSlide((current) => (current + 1) % slideshow.slides.length)}
             aria-label="Próximo destaque"
           >
             →

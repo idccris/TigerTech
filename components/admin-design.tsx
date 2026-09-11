@@ -265,7 +265,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         {slideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={index}>
           <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Destaque {index + 1} do slideshow</p></div></div>
           <label className="slideshow-image-field">
-            <span className="slideshow-image-preview" style={{ backgroundImage: `linear-gradient(90deg, rgba(0,0,0,.62), rgba(0,0,0,.08)), url(${slideshowImages[index]})` }}>
+            <span className="slideshow-image-preview" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${slideshowImages[index]})` }}>
               <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickSlideshowImage(index, event.target.files?.[0])} />
               <span><strong>Trocar imagem</strong><small>1920 × 760 px recomendado</small></span>
             </span>
