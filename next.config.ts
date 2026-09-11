@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   images: {
     localPatterns: [
       {
+        pathname: "/tiger-tech-logo.png",
+      },
+      {
         pathname: "/api/products/image",
       },
     ],
