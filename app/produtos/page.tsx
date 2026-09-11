@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ProductsPage from "../../components/products-page";
-import { getCachedPublicProducts } from "../../lib/public-data";
+import { getCachedPublicCatalogProducts } from "../../lib/public-data";
 
 export const revalidate = 3600;
 
@@ -10,6 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const products = await getCachedPublicProducts();
+  const products = await getCachedPublicCatalogProducts();
   return <ProductsPage initialProducts={products} />;
 }

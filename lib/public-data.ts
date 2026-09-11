@@ -9,7 +9,7 @@ import {
 import { defaultHomeContent, parseHomeContent } from "./site-content";
 import { defaultSlideshowContent, parseSlideshowContent } from "./slideshow-content";
 import type { Product } from "./products";
-import { isFilament, productGroupKey } from "./product-variants";
+import { groupProducts, isFilament, productGroupKey } from "./product-variants";
 
 function publicProduct(product: Product) {
   return {
@@ -18,6 +18,38 @@ function publicProduct(product: Product) {
       ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}`
       : "",
   };
+}
+
+// Cards share their commercial copy and specifications. Keep only the fields
+// that actually change per color so hundreds of variants are not serialized
+// with the same long content on every storefront request.
+function publicVariant(product: Product) {
+  return {
+    slug: product.slug,
+    name: product.name,
+    category: product.category,
+    tag: product.tag,
+    tone: product.tone,
+    sku: product.sku,
+    brand: product.brand,
+    imageUrl: product.imageUrl
+      ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}`
+      : "",
+    priceCents: product.priceCents,
+    cardPriceCents: product.cardPriceCents,
+    stock: product.stock,
+    visible: product.visible,
+    filamentModel: product.filamentModel,
+    colorName: product.colorName,
+    colorHex: product.colorHex,
+  } as Product;
+}
+
+export function publicCatalogProducts(products: Product[]) {
+  return groupProducts(products).map((product) => ({
+    ...publicProduct(product),
+    variants: product.variants?.map(publicVariant),
+  }));
 }
 
 export const getCachedHomeData = unstable_cache(
@@ -64,6 +96,15 @@ export const getCachedPublicProducts = unstable_cache(
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
+export const getCachedPublicCatalogProducts = unstable_cache(
+  async () =>
+    process.env.DATABASE_URL
+      ? publicCatalogProducts(await listProducts(false))
+      : [],
+  ["public-catalog-products-v1"],
+  { revalidate: 3600, tags: ["catalog-products"] },
+);
+
 export const getCachedPublicProduct = unstable_cache(
   async (slug: string) => {
     if (!process.env.DATABASE_URL) return null;
@@ -73,7 +114,7 @@ export const getCachedPublicProduct = unstable_cache(
       const variants = (await listProducts(false))
         .filter((variant) => productGroupKey(variant) === productGroupKey(product))
         .sort((a, b) => (a.colorName || "").localeCompare(b.colorName || "", "pt-BR"));
-      return { ...publicProduct(product), variants: variants.map(publicProduct) };
+      return { ...publicProduct(product), variants: variants.map(publicVariant) };
     }
     return publicProduct(product);
   },

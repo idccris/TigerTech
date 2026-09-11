@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import type { Product } from "../lib/products";
-import { groupProducts, productGroupKey, productMatches } from "../lib/product-variants";
+import { productGroupKey, productMatches } from "../lib/product-variants";
 import ProductCard from "./product-card";
 import SiteHeader from "./site-header";
 import SiteFooter from "./site-footer";
@@ -14,25 +14,29 @@ const categories = [
   "Acessórios",
 ] as const;
 
+const PRODUCTS_PER_BATCH = 24;
+
 
 export default function ProductsPage({ initialProducts }: { initialProducts: Product[] }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [query, setQuery] = useState("");
   const [category, setCategory] =
     useState<(typeof categories)[number]>("Todos");
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_BATCH);
+  const deferredQuery = useDeferredValue(query);
   const filtered = useMemo(
     () =>
-      groupProducts(products).filter(
+      products.filter(
         (product) =>
           (product.stock || 0) > 0 &&
           (category === "Todos" || product.category === category) &&
-          productMatches(product, query),
+          productMatches(product, deferredQuery),
       ),
-    [products, category, query],
+    [products, category, deferredQuery],
   );
   useEffect(() => {
     const refresh = () =>
-      fetch(`/api/products?t=${Date.now()}`, { cache: "no-store" })
+      fetch(`/api/products?catalog=true&t=${Date.now()}`, { cache: "no-store" })
         .then((response) => {
           if (!response.ok) throw new Error("Falha ao carregar produtos");
           return response.json();
@@ -51,6 +55,7 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
       channel?.close();
     };
   }, []);
+  const visibleProducts = filtered.slice(0, visibleCount);
   return (
     <main className="store-page">
       <SiteHeader solid />
@@ -69,7 +74,10 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
               <button
                 key={item}
                 className={category === item ? "active" : ""}
-                onClick={() => setCategory(item)}
+                onClick={() => {
+                  setCategory(item);
+                  setVisibleCount(PRODUCTS_PER_BATCH);
+                }}
               >
                 {item}
               </button>
@@ -79,17 +87,28 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
             <span>⌕</span>
             <input
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setVisibleCount(PRODUCTS_PER_BATCH);
+              }}
               placeholder="Buscar produto..."
               aria-label="Buscar produto"
             />
           </label>
         </div>
         <div className="store-grid">
-          {filtered.map((product) => (
+          {visibleProducts.map((product) => (
             <ProductCard key={productGroupKey(product)} product={product} />
           ))}
         </div>
+        {visibleCount < filtered.length && (
+          <div className="store-load-more">
+            <button type="button" className="primary-button" onClick={() => setVisibleCount((count) => count + PRODUCTS_PER_BATCH)}>
+              Carregar mais produtos
+            </button>
+            <span>Exibindo {visibleProducts.length} de {filtered.length}</span>
+          </div>
+        )}
         {filtered.length === 0 && (
           <div className="empty">
             <strong>Nenhum produto encontrado.</strong>

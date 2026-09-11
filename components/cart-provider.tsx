@@ -46,7 +46,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           setLoaded(true);
           return;
         }
-        const response = await fetch("/api/products", { cache: "no-store" });
+        const cartSlugs = savedItems.map((item) => item.slug).join(",");
+        const response = await fetch(`/api/products?slugs=${encodeURIComponent(cartSlugs)}`, { cache: "no-store" });
         if (response.ok) {
           const products = (await response.json()) as Product[];
           const prices = new Map(

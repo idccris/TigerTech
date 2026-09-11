@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import type { Product } from "../lib/products";
 import { productTitle } from "../lib/product-variants";
@@ -12,11 +13,12 @@ const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "curren
 export default function ProductCard({ product: initialProduct }: { product: Product }) {
   const [selectedSlug, setSelectedSlug] = useState(initialProduct.slug);
   const variants = initialProduct.variants || [];
-  const product = variants.find((variant) => variant.slug === selectedSlug) || initialProduct;
+  const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
+  const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;
   return <article className="product-card">
     <div className="product-image">
       <span className="product-tag">{product.brand || product.tag}</span>
-      {product.imageUrl ? <div className="uploaded-product-photo" role="img" aria-label={product.colorName ? `${productTitle(product)} — ${product.colorName}` : product.name} style={{ backgroundImage: `url(${product.imageUrl})` }} /> : <PrinterVisual tone={product.tone} />}
+      {product.imageUrl ? <Image className="uploaded-product-photo" src={product.imageUrl} alt={product.colorName ? `${productTitle(product)} — ${product.colorName}` : product.name} fill sizes="(max-width: 700px) 88vw, (max-width: 1100px) 44vw, 30vw" /> : <PrinterVisual tone={product.tone} />}
     </div>
     <div className="product-content">
       <span className="product-category">{product.category}</span>

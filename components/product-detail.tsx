@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { Product } from "../lib/products";
 import { useCart } from "./cart-provider";
@@ -14,7 +15,8 @@ import { productTitle } from "../lib/product-variants";
 export default function ProductDetail({ product: initialProduct }: { product: Product }) {
   const [selectedSlug, setSelectedSlug] = useState(initialProduct.slug);
   const variants = initialProduct.variants || [];
-  const product = variants.find((variant) => variant.slug === selectedSlug) || initialProduct;
+  const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
+  const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;
   const cart = useCart();
   const [specificationsOpen, setSpecificationsOpen] = useState(false);
   const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format((cents || 0) / 100);
@@ -42,9 +44,13 @@ export default function ProductDetail({ product: initialProduct }: { product: Pr
         <div className={`detail-visual ${product.tone}`}>
           <span className="product-tag">{product.brand || product.tag}</span>
           {product.imageUrl ? (
-            <div
+            <Image
               className="uploaded-product-photo"
-              style={{ backgroundImage: `url(${product.imageUrl})` }}
+              src={product.imageUrl}
+              alt={product.colorName ? `${productTitle(product)} — ${product.colorName}` : product.name}
+              fill
+              sizes="(max-width: 900px) 100vw, 50vw"
+              priority
             />
           ) : (
             <PrinterVisual tone={product.tone} />
