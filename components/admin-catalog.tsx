@@ -187,7 +187,7 @@ export default function AdminCatalog({
         <div className="design-row"><label>Preço no Pix (R$)<input type="text" inputMode="decimal" value={editing.pixPrice || "0,00"} onChange={(e) => setEditing({ ...editing, pixPrice: e.target.value })} onBlur={(e) => setEditing({ ...editing, pixPrice: formatBRLInput(parseBRLToCents(e.target.value)) })} /></label><label>Preço no cartão (R$)<input type="text" inputMode="decimal" value={editing.cardPrice || "0,00"} onChange={(e) => setEditing({ ...editing, cardPrice: e.target.value })} onBlur={(e) => setEditing({ ...editing, cardPrice: formatBRLInput(parseBRLToCents(e.target.value)) })} /></label></div>
         <label className="check"><input type="checkbox" checked={editing.visible !== false} onChange={(e) => setEditing({ ...editing, visible: e.target.checked })} /> Produto visível na loja</label>
         <label>Senha do administrador<input type="password" required value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder="Obrigatória para confirmar" /></label>
-        <button>Confirmar com senha administrativa</button>{error ? <small>{error}</small> : null}
+        <button className="admin-form-submit" type="submit">Confirmar com senha administrativa</button>{error ? <small>{error}</small> : null}
       </form></div> : null}
       {!editing && error ? <p className="users-message">{error}</p> : null}
     </main>
