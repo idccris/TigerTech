@@ -2,11 +2,6 @@ import { notFound, permanentRedirect } from "next/navigation";
 import ProductDetail from "../../../components/product-detail";
 import { getCachedPublicProduct } from "../../../lib/public-data";
 export const revalidate = 3600;
-export const dynamicParams = true;
-
-export function generateStaticParams() {
-  return [];
-}
 
 export default async function ProductPage({
   params,
