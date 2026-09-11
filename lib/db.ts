@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { products as defaults, type Product } from "./products";
 import { groupProducts } from "./product-variants";
 import { applyFilamentContents, parseFilamentContents } from "./filament-content";
+import { FILAMENT_CATALOG_VERSION, filamentCatalogRows } from "./filament-catalog";
 
 const SCHEMA_VERSION = "2026-08-30-security-v2";
 function sql() {
@@ -70,14 +71,32 @@ export async function ensureDb() {
     databaseReady = initializeDb().then(async () => {
       const db = sql();
       const version = await db`SELECT value FROM site_settings WHERE key='filament_variants_schema' LIMIT 1`;
-      if (version[0]?.value === "2") return;
-      await db.transaction([
-        db`ALTER TABLE products ADD COLUMN IF NOT EXISTS filament_model TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_name TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_hex TEXT NOT NULL DEFAULT ''`,
-        db`CREATE TABLE IF NOT EXISTS filament_types (name TEXT PRIMARY KEY, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
-        db`INSERT INTO filament_types(name) VALUES ('BASIC'),('MATTE'),('SILK') ON CONFLICT DO NOTHING`,
-        db`INSERT INTO filament_types(name) SELECT DISTINCT filament_model FROM products WHERE filament_model<>'' ON CONFLICT DO NOTHING`,
-        db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_variants_schema','2',NOW()) ON CONFLICT(key) DO UPDATE SET value='2',updated_at=NOW()`,
-      ]);
+      if (version[0]?.value !== "2") {
+        await db.transaction([
+          db`ALTER TABLE products ADD COLUMN IF NOT EXISTS filament_model TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_name TEXT NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS color_hex TEXT NOT NULL DEFAULT ''`,
+          db`CREATE TABLE IF NOT EXISTS filament_types (name TEXT PRIMARY KEY, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`,
+          db`INSERT INTO filament_types(name) VALUES ('BASIC'),('MATTE'),('SILK') ON CONFLICT DO NOTHING`,
+          db`INSERT INTO filament_types(name) SELECT DISTINCT filament_model FROM products WHERE filament_model<>'' ON CONFLICT DO NOTHING`,
+          db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_variants_schema','2',NOW()) ON CONFLICT(key) DO UPDATE SET value='2',updated_at=NOW()`,
+        ]);
+      }
+
+      const imported = await db`SELECT value FROM site_settings WHERE key='filament_catalog_version' LIMIT 1`;
+      if (imported[0]?.value !== FILAMENT_CATALOG_VERSION) {
+        const rows = filamentCatalogRows();
+        const payload = JSON.stringify(rows);
+        await db.transaction([
+          db`INSERT INTO filament_types(name)
+             SELECT DISTINCT filament_model
+             FROM jsonb_to_recordset(${payload}::jsonb) AS source(filament_model TEXT)
+             WHERE filament_model<>'' ON CONFLICT DO NOTHING`,
+          db`INSERT INTO products(slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at)
+             SELECT source.slug,source.sku,source.name,source.filament_model,source.color_name,source.color_hex,source.category,source.tag,source.brand,source.description,source.long_description,source.specifications_text,source.specs,source.benefits,source.tone,source.image_url,999,0,0,true,false,NULL,NOW()
+             FROM jsonb_to_recordset(${payload}::jsonb) AS source(slug TEXT,sku TEXT,name TEXT,filament_model TEXT,color_name TEXT,color_hex TEXT,category TEXT,tag TEXT,brand TEXT,description TEXT,long_description TEXT,specifications_text TEXT,specs JSONB,benefits JSONB,tone TEXT,image_url TEXT)
+             ON CONFLICT(slug) DO UPDATE SET name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=EXCLUDED.image_url,updated_at=NOW()`,
+          db`INSERT INTO site_settings(key,value,updated_at) VALUES ('filament_catalog_version',${FILAMENT_CATALOG_VERSION},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`,
+        ]);
+      }
     }).catch((error) => {
       databaseReady = null;
       throw error;

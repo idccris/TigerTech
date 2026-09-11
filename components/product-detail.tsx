@@ -61,9 +61,11 @@ export default function ProductDetail({ product: initialProduct }: { product: Pr
             ))}
           </div>
           <div className="product-pricing">
-            <span>NO PIX</span>
-            <strong className="product-price">{money(product.priceCents || 0)}</strong>
-            <small>No cartão: {money(product.cardPriceCents || product.priceCents || 0)}</small>
+            {(product.priceCents || 0) > 0 ? <>
+              <span>NO PIX</span>
+              <strong className="product-price">{money(product.priceCents || 0)}</strong>
+              <small>No cartão: {money(product.cardPriceCents || product.priceCents || 0)}</small>
+            </> : <><span>VALOR</span><strong className="product-price">Consulte o preço</strong></>}
           </div>
           <div className="benefit-list">
             {product.benefits.map((benefit) => (
@@ -83,9 +85,11 @@ export default function ProductDetail({ product: initialProduct }: { product: Pr
           >
             Especificações <span>+</span>
           </button>
-          <button className="buy-button" disabled={(product.stock || 0) <= 0} onClick={() => cart.add(product)}>
+          {(product.priceCents || 0) > 0 ? <button className="buy-button" disabled={(product.stock || 0) <= 0} onClick={() => cart.add(product)}>
             {(product.stock || 0) > 0 ? "Adicionar ao carrinho" : "Cor esgotada"} <span>+</span>
-          </button>
+          </button> : <a className="buy-button" href={`https://wa.me/5541992133804?text=${encodeURIComponent(`Olá, gostaria de consultar o preço do ${productTitle(product)} — ${product.colorName || "produto"}.`)}`} target="_blank" rel="noreferrer">
+            Consultar pelo WhatsApp <span>↗</span>
+          </a>}
           <small className="buy-note">
             A forma de fechamento do pedido será definida posteriormente.
           </small>

@@ -23,9 +23,11 @@ export default function ProductCard({ product: initialProduct }: { product: Prod
       <h3>{productTitle(product)}</h3><p>{product.description}</p>
       <ColorSwatches variants={variants} selected={product} onSelect={(variant) => setSelectedSlug(variant.slug)} />
       <div className="featured-price">
-        <span>NO PIX</span><strong>{money(product.priceCents || 0)}</strong>
-        <span className="installment-label">10X NO CARTÃO</span>
-        <strong className="installment-value">{money(product.cardPriceCents || product.priceCents || 0)}</strong>
+        {(product.priceCents || 0) > 0 ? <>
+          <span>NO PIX</span><strong>{money(product.priceCents || 0)}</strong>
+          <span className="installment-label">10X NO CARTÃO</span>
+          <strong className="installment-value">{money(product.cardPriceCents || product.priceCents || 0)}</strong>
+        </> : <><span>VALOR</span><strong>Consulte o preço</strong></>}
       </div>
       <ul>{product.specs.map((spec) => <li key={spec}>{spec}</li>)}</ul>
       <Link href={`/produto/${product.slug}`}>Ver produto <span>→</span></Link>

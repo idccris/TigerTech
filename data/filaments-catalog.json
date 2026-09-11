@@ -1,0 +1,3078 @@
+{
+  "source": "https://3dtouch.com.br/filamentos",
+  "extractedAt": "2026-09-11T14:48:35.972Z",
+  "cards": [
+    {
+      "brand": "Bambu Lab",
+      "material": "ABS",
+      "model": "ABS",
+      "description": "Plástico de engenharia resistente ao calor e ao impacto. Indicado para peças mecânicas e de uso técnico (recomenda-se câmara fechada para melhores resultados).",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/cfdefec225e6430c82cbe2f8766b6f70/ABS_Black.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/1ad485ff4a72413b90e944ffde4fa861/ABS_White.png"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/95bd38c6dc604bdab7b3d2fc7b67e0ee/ABS_Red.png"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/3b2f526b80734e429d9a424e07f3c36b/ABS_Blue.png"
+        },
+        {
+          "name": "Silver",
+          "image": "https://store.bblcdn.com/s7/default/69834a7536c540e489913a0f8e707e5e/ABSsilver.png"
+        },
+        {
+          "name": "Bambu Green",
+          "image": "https://store.bblcdn.com/s7/default/910be80e4fcf43ddbd66c40773ecce0f/ABSbambugreen.png"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/25d7b833bf694c70b9ef3cd649f3cf36/ABSorange.png"
+        },
+        {
+          "name": "Navy Blue",
+          "image": "https://store.bblcdn.com/s7/default/1de0e532e21642e1a4a857c6e01fa1d3/0be9a584b30358020d8706f2aa8ec9c2.jpg"
+        },
+        {
+          "name": "Azure",
+          "image": "https://store.bblcdn.com/s7/default/a840092ea2804025a123e115128c1299/000878ce6144c05ffac949f66b05a18b.jpg"
+        },
+        {
+          "name": "Olive",
+          "image": "https://store.bblcdn.com/s7/default/e45f66c840c7454b860b0ffb17787dda/80cf6768c03d129dfa6a01ac67a5b402.jpg"
+        },
+        {
+          "name": "Tangerine Yellow",
+          "image": "https://store.bblcdn.com/s7/default/599d443346194649beee96e12f32d074/7376d19b161f2a93a4051e47289d0505.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "ABS",
+      "model": "ABS-GF",
+      "description": "ABS reforçado com fibra de vidro: mais rígido e estável dimensionalmente que o ABS comum. Para peças técnicas.",
+      "colors": [
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/e70d8b312066450f97e6d5a73de59c8d/JP36183.png"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/fd0846e0906a4ef2b53cc3e571a0d8b1/JP36182.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/ff5a72e17f034d02ba2c168309ed6239/JP36193.png"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/7d2061d5dec745b9975fbb9b89fa7423/JP36190.png"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/bc29069d5de746feb4fca56e2871a53a/JP36181.png"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/d74ee2f3e3044fb89d4f5d7122aa2529/ABSgfblue.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "ASA",
+      "model": "ASA",
+      "description": "Semelhante ao ABS, porém com ótima resistência a UV e intempéries. Ideal para peças de uso externo que não desbotam ao sol.",
+      "colors": [
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/cd9e457c7fb14dd7be4443336a1542eb/RED.png"
+        },
+        {
+          "name": "Green",
+          "image": "https://store.bblcdn.com/s7/default/b354737985754345846640b7fe49668a/ab6743fac3b96abc3a53833a12993981.png"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/5bd780d0213340049ba2a737bfe13c5e/ASABlue.jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/596088848a2b4665853f66fdaec41da1/black.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/064eb368ba6e494f97c74b73e3f6c6ca/ASA_White.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/969e2bd5b33c47fd9aeba00f7d81fd32/gray.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "ASA",
+      "model": "ASA-CF",
+      "description": "ASA com fibra de carbono: resistente a UV e intempéries, rígido e com acabamento fosco. Ideal para peças externas de alto desempenho.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/b2bb49f62dbe4dc79e3d9492f7fc938f/1_d66cf8d1-086a-454f-a80f-a6e380cc0129.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PA",
+      "model": "PA6-CF",
+      "description": "Nylon (PA6) com fibra de carbono: alta resistência e rigidez, para peças mecânicas e de engenharia de alto desempenho.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/14012cf051a54fa6965d28c55b73fff9/PA6-CF.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PA",
+      "model": "PA6-GF",
+      "description": "Nylon (PA6) com fibra de vidro: alta rigidez e resistência ao desgaste, para peças estruturais e funcionais.",
+      "colors": [
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/ddd1982caff84b0a87a3f7fa1aca75f1/JP35952.jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/65c048cb25d149759aa3ed41d65447d0/JP35945.jpg"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/c7320a70b8a243d0bd3b8d6da6ca0955/JP35967.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/661271645488441c99345d734a8aa554/JP35971c.jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/fdf8e820af5a4be6803a9c814c7d9821/JP35970c.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PA",
+      "model": "PAHT-CF",
+      "description": "Nylon de alta temperatura com fibra de carbono: alta resistência mecânica e térmica. Para peças de engenharia exigentes.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/8d726ef8d4e143f5a517589b0e3631d5/PAHTCFORIGINAL.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PC",
+      "model": "PC",
+      "description": "Policarbonato: altíssima resistência ao impacto e ao calor. Para peças técnicas que exigem durabilidade extrema.",
+      "colors": [
+        {
+          "name": "Clear Black",
+          "image": "https://store.bblcdn.com/s7/default/7297d5068f8d4e5eb71209d98587ed00/PC_Clear-Black_v2.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/2eb4d1c56d2c4692a19a14ede0879962/PC_White_1.jpg"
+        },
+        {
+          "name": "Transparent",
+          "image": "https://store.bblcdn.com/s7/default/2164536e3f5140ef972c23a6ab0558ec/C00-C1-1.75-1000-spl.png"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/5194f6fdb8d7429cbd00c5e46037fcd9/PCBlack.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PET",
+      "model": "PET-CF",
+      "description": "PET reforçado com fibra de carbono: rígido, resistente ao calor e dimensionalmente estável. Para peças de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/f4fee29534da4743a02a1c350a8d661c/pet-cr.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PETG",
+      "model": "PETG Basic",
+      "description": "PETG resistente e levemente flexível, com boa resistência química e à umidade. Bom para peças funcionais, uso externo e itens sujeitos a impacto.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/07333e2d8fdc4ffeb69193e6e0d68244/Black.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/9ce3105406e7462e89d0b156807aceb2/WHITE.png"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/9c0843dc40074977a1243d7d9bb9099f/GRAY.png"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/d9df54b7b3224ac6817df71a011a3a91/RED.png"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/c15330f41aac4b78806c166529186d88/YELLOW.png"
+        },
+        {
+          "name": "Reflex Blue",
+          "image": "https://store.bblcdn.com/s7/default/62d518c8bceb406c9992bddc7017b0ea/REFLEX_BLUE.png"
+        },
+        {
+          "name": "Dark Brown",
+          "image": "https://store.bblcdn.com/s7/default/a1d3176e1fb04539aaae24d9db9c84c2/BARK_BROWN.png"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/19d781e6d97d49b9952e787f95eef2bf/PETG_Basic_Orange.jpg"
+        },
+        {
+          "name": "Green",
+          "image": "https://store.bblcdn.com/s7/default/d416a6fb03a64622a25db77375e73f3c/Green_1.jpg"
+        },
+        {
+          "name": "Navy Blue",
+          "image": "https://store.bblcdn.com/s7/default/ce3cd27c867f4562be72819f9c22e008/Navy_Blue_1.jpg"
+        },
+        {
+          "name": "Dark Beige",
+          "image": "https://store.bblcdn.com/s7/default/42fc09d906a541fa87edb9ba2e506568/Dark_Beige_1.jpg"
+        },
+        {
+          "name": "Misty Blue",
+          "image": "https://store.bblcdn.com/s7/default/215c54a3a32f4de2a741abed19ee62c7/Misty_Blue_1.jpg"
+        },
+        {
+          "name": "Pine Green",
+          "image": "https://store.bblcdn.com/s7/default/1e95f501235e410b9ca559c858be3cee/Pine_Green_1.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PETG",
+      "model": "PETG HF",
+      "description": "PETG de alta vazão (High Flow), feito para impressão rápida sem perder resistência. Ideal para produção em velocidade.",
+      "colors": [
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/74a83c3b90a94a438ba1012d99405751/PETGHF_5.jpg"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/2167472e11724b8bb44afcc2e365a703/5_86b594d6-b4dd-498d-8adc-51ca350410e3.jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/834a8ad1816747b290e1d6c0ea018942/PETGHF_6.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/b63d30f16c0746abba10d7ea131b3227/PETGHF_1.jpg"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/7c949a22d4fb484da7aefd5d2abed7b0/PETGHF_7.jpg"
+        },
+        {
+          "name": "Dark Gray",
+          "image": "https://store.bblcdn.com/s7/default/d7a3410895784371a81c014019dd5c63/PETGHFNEWCOLOR_3.jpg"
+        },
+        {
+          "name": "Cream",
+          "image": "https://store.bblcdn.com/s7/default/dafd5b1c76024c6d8ee05be7f56886b7/PETGHFNEWCOLOR_5.jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/d8d6f7ca45704fc09849fca8dc510c75/PETGHF_4.jpg"
+        },
+        {
+          "name": "Green",
+          "image": "https://store.bblcdn.com/s7/default/f6fd695db6484056b39eec780eaec2f2/PETGHF_3.jpg"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/e6e2585de3cf45bdafcdc906b5c30e78/PETGHF_2.jpg"
+        },
+        {
+          "name": "Lime Green",
+          "image": "https://store.bblcdn.com/s7/default/f61a217d0fbf4926b7c7ee89db2d9e97/PETGHFNEWCOLOR_4.jpg"
+        },
+        {
+          "name": "Forest Green",
+          "image": "https://store.bblcdn.com/s7/default/6bebbfff173047e591f6cb045d259283/PETGHFNEWCOLOR_6.jpg"
+        },
+        {
+          "name": "Lake Blue",
+          "image": "https://store.bblcdn.com/s7/default/9e720394f3014a2784fd7992d6c49ec1/PETGHFNEWCOLOR_2.jpg"
+        },
+        {
+          "name": "Peanut Brown",
+          "image": "https://store.bblcdn.com/s7/default/8462f8d707ff46b697da7361c2cdb6e7/PETGHFNEWCOLOR_1.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PETG",
+      "model": "PETG Translucent",
+      "description": "PETG translúcido, unindo o efeito de transparência à resistência do PETG. Bom para peças funcionais com apelo visual.",
+      "colors": [
+        {
+          "name": "Light Blue",
+          "image": "https://store.bblcdn.com/s7/default/1d517c39b3074e7c979abfec8f13b68c/JP34971_66ae3280-57b6-4733-8831-9f628c89b352.jpg"
+        },
+        {
+          "name": "Teal",
+          "image": "https://store.bblcdn.com/s7/default/9d6c7b93cef74230a6075b81df079696/JP34951_360f550d-25f1-4d47-84cb-0212d548652d.jpg"
+        },
+        {
+          "name": "Clear",
+          "image": "https://store.bblcdn.com/s7/default/4a76b13107454bc2ba9631f40880ac2e/3d4408c8738e6ed420e7e514a97a8bf9.png"
+        },
+        {
+          "name": "Olive",
+          "image": "https://store.bblcdn.com/s7/default/5a8c094b5123420294abc7eafaf29e18/JP34954_1d062b61-68e2-4f22-9aca-8c03ba869506.jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/2c444a016f9444a4a87a609a8e3f1537/JP34975_37d31da8-f534-4cb0-838e-a02630ef2dcc.jpg"
+        },
+        {
+          "name": "Purple",
+          "image": "https://store.bblcdn.com/s7/default/f34eb5c43a3d4700ab5c342f85232b2d/JP34969_bb22cf73-c280-4b3b-b43e-1ffaa97bad8d.jpg"
+        },
+        {
+          "name": "Pink",
+          "image": "https://store.bblcdn.com/s7/default/b61ed7bbc23e4f41a0d2fa872821bdab/JP34961_15c864bc-53b4-40cd-b707-d9a750cef236.jpg"
+        },
+        {
+          "name": "Brown",
+          "image": "https://store.bblcdn.com/s7/default/460724d326864d70a179f10c9b30e90d/JP34965_72cab014-4ff2-4be4-b30a-284a5ea7b2d4.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/9282e0339ded472b884b8c9252852851/JP34968_eb46aef1-f085-4e36-9e09-45e25fb87b79.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PETG",
+      "model": "PETG-CF",
+      "description": "PETG reforçado com fibra de carbono: rígido, resistente e com acabamento fosco. Ideal para peças funcionais e estruturais.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/9b2c4be00adb4d01a6790d7e89cc6c26/PETG-CF.png"
+        },
+        {
+          "name": "Violet Purple",
+          "image": "https://store.bblcdn.com/s7/default/528be7fe6a2c4cd9a10713ef2d2002a6/PETG-CFpurp_4608ff17-99e8-4aec-a822-26b4d3188af1.png"
+        },
+        {
+          "name": "Brick Red",
+          "image": "https://store.bblcdn.com/s7/default/391c13326e1a4ef4b3b6c2474598aa9e/PETG-CFred.png"
+        },
+        {
+          "name": "Indigo Blue",
+          "image": "https://store.bblcdn.com/s7/default/31093e7d52524e169c240afed3aeb603/PETG-CFblue.png"
+        },
+        {
+          "name": "Malachite Green",
+          "image": "https://store.bblcdn.com/s7/default/a79d223f175342ef90cd845eaa610c28/PETG-CFgreen.png"
+        },
+        {
+          "name": "Titan Gray",
+          "image": "https://store.bblcdn.com/s7/default/7be1dcc6c83d46b59865dbca05013d59/20231023-105314.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Basic",
+      "description": "PLA de uso geral, fácil de imprimir e econômico. Ótimo custo-benefício para prototipagem, peças decorativas e o dia a dia, com ampla variedade de cores.",
+      "colors": [
+        {
+          "name": "Jade White",
+          "image": "https://store.bblcdn.com/s7/default/18de47bcc5d9405596014400afd8a661/PLA_Basic_White.jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/9be8ee6d2e094072ab781d45ae24c2e8/Orange.jpg"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/d9f20007e8074789926e6d09db4a98fa/PLABasicBlue.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/87769b450c3741df8c6ea30506aca96f/PLA-Basic_Gray.png"
+        },
+        {
+          "name": "Beige",
+          "image": "https://store.bblcdn.com/s7/default/976faf2e1ea24428aaacd7ec37e2a170/Beige.jpg"
+        },
+        {
+          "name": "Silver",
+          "image": "https://store.bblcdn.com/s7/default/04c182e9baf840be8573ec644e309479/Sliver.jpg"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/5728a39780844f06a9dc4bf3c3907a15/Yellow.jpg"
+        },
+        {
+          "name": "Blue Grey",
+          "image": "https://store.bblcdn.com/s7/default/3ca4bd461d744e84bf7432439236edf9/PLA-Basic_Blue-Gray.png"
+        },
+        {
+          "name": "Pink",
+          "image": "https://store.bblcdn.com/s7/default/e0b16d45e5d64df88f8bca8609f9a0d2/Pink.jpg"
+        },
+        {
+          "name": "Brown",
+          "image": "https://store.bblcdn.com/s7/default/67403fbe583b4c2888272b874789ba57/PLA-Basic_Brown.png"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/c93d0a825f094387a61ba3d5ae0499c7/Red.jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/d9f087ffd3ae4283893f8a07d6b7e42a/PLA-Basic_Black_e33768fd-c87a-4b2d-a3f7-0b3afc81f13f.png"
+        },
+        {
+          "name": "Bambu Green",
+          "image": "https://store.bblcdn.com/s7/default/dd18e1115a7e444396617a3a884aa091/Bambu_Green.jpg"
+        },
+        {
+          "name": "Bronze",
+          "image": "https://store.bblcdn.com/s7/default/ff1f58a232db4b8ba8ed85da1698d1bb/Bronze.jpg"
+        },
+        {
+          "name": "Gold",
+          "image": "https://store.bblcdn.com/s7/default/b8f76cac43b94ef18c4d3801f2bd3856/Gold.jpg"
+        },
+        {
+          "name": "Purple",
+          "image": "https://store.bblcdn.com/s7/default/b4c16fb72f544e998b098ce854772e81/PLAPurple.jpg"
+        },
+        {
+          "name": "Magenta",
+          "image": "https://store.bblcdn.com/s7/default/9b179992f52643b2b91c213d86a0c5e1/Magenta.jpg"
+        },
+        {
+          "name": "Cyan",
+          "image": "https://store.bblcdn.com/s7/default/beb1e91ec6f44fa7a12e0793337d7c52/CMYK-Cyan-1.png"
+        },
+        {
+          "name": "Mistletoe Green",
+          "image": "https://store.bblcdn.com/s7/default/2483d6189ae94ee9971c38363bbce6e5/063c3c25cb6510ea2566af540e5e3c99_287359af-ac7d-4683-ad97-25e7a1f420f3.png"
+        },
+        {
+          "name": "Light Gray",
+          "image": "https://store.bblcdn.com/s7/default/d9b993d99ef54581968a5711269f2be2/light_gray_25c0c41d-107b-4d05-96d1-3de1efb728d9.jpg"
+        },
+        {
+          "name": "Dark Gray",
+          "image": "https://store.bblcdn.com/s7/default/f19847c3b512400588d34b27434a01ad/pla_basic_dark_gray.jpg"
+        },
+        {
+          "name": "Maroon Red",
+          "image": "https://store.bblcdn.com/s7/default/ee52b43861ef45849965b6dcdd87b617/MaroonRed.jpg"
+        },
+        {
+          "name": "Sunflower Yellow",
+          "image": "https://store.bblcdn.com/s7/default/dcc368a07e73489da62a8cceb29e31a2/SunflowerYellow.jpg"
+        },
+        {
+          "name": "Turquoise",
+          "image": "https://store.bblcdn.com/s7/default/0301553043e245e1b4f280abaf00fcfd/Turquoise.jpg"
+        },
+        {
+          "name": "Indigo Purple",
+          "image": "https://store.bblcdn.com/s7/default/db7a279375f049dfab2036d8bd8fcac7/IndigoPurple.jpg"
+        },
+        {
+          "name": "Bright Green",
+          "image": "https://store.bblcdn.com/s7/default/20fb60d009c8414f95caed07a4705de4/BrightGreen.jpg"
+        },
+        {
+          "name": "Cocoa Brown",
+          "image": "https://store.bblcdn.com/s7/default/ac639216989444d4b065ae5017ab8c80/CocoaBrown.jpg"
+        },
+        {
+          "name": "Hot Pink",
+          "image": "https://store.bblcdn.com/s7/default/cda8ef4f247943c6934ff1d3a9eef195/HotPink.jpg"
+        },
+        {
+          "name": "Cobalt Blue",
+          "image": "https://store.bblcdn.com/s7/default/b4ed2e8a24f344538d73ce44069dc17c/CobaltBlue.jpg"
+        },
+        {
+          "name": "Pumpkin Orange",
+          "image": "https://store.bblcdn.com/s7/default/d5ba9b091d33481fa397bab61034f031/PumpkinOrange.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Basic Gradient",
+      "description": "PLA com transição suave de cores ao longo da impressão, gerando um efeito degradê único em cada peça.",
+      "colors": [
+        {
+          "name": "Arctic Whisper",
+          "image": "https://store.bblcdn.com/s7/default/7a38823d7ef9411ab6a75d57bb0d6816/5a241ce2f6c79abb9cfe3cb1414f1bf1.png"
+        },
+        {
+          "name": "Solar Breeze",
+          "image": "https://store.bblcdn.com/s7/default/111fcc16896f423bacb79cf63d072fed/e40cbbf6e7fed96557d8e2be99e4b9cf.png"
+        },
+        {
+          "name": "Ocean to Meadow",
+          "image": "https://store.bblcdn.com/s7/default/ca79bc3acdc34f788b74396041433274/A00-M2-1.75-1000-spl.png"
+        },
+        {
+          "name": "Cotton Candy Cloud",
+          "image": "https://store.bblcdn.com/s7/default/622e092ce0da4d9fa493358d3c1c11a7/pink_blue.jpg"
+        },
+        {
+          "name": "Blueberry Bubblegum",
+          "image": "https://store.bblcdn.com/s7/default/6e672e33123544e0b24d4ccbde560196/bluebuble.jpg"
+        },
+        {
+          "name": "Mint Lime",
+          "image": "https://store.bblcdn.com/s7/default/e01c8001e6bd42e18f32791d98265b72/gradient_green.jpg"
+        },
+        {
+          "name": "Pink Citrus",
+          "image": "https://store.bblcdn.com/s7/default/2649c99415e04813a3284b71162a1709/pink_gradient.jpg"
+        },
+        {
+          "name": "Dusk Glare",
+          "image": "https://store.bblcdn.com/s7/default/eeea9a912b1d463f841b645647126dd0/sunset_orange.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Galaxy",
+      "description": "PLA com brilho e partículas que lembram um céu estrelado. Ótimo para peças decorativas de efeito marcante.",
+      "colors": [
+        {
+          "name": "Brown",
+          "image": "https://store.bblcdn.com/s7/default/f023cc08dbfb4c9884604590a5c5e889/brown.jpg"
+        },
+        {
+          "name": "Green",
+          "image": "https://store.bblcdn.com/s7/default/dc4dfa369250448c971b044d75fd45d7/green.jpg"
+        },
+        {
+          "name": "Nebulae",
+          "image": "https://store.bblcdn.com/s7/default/6ad5ef324c17401cad3fb35572b14919/Nublae.jpg"
+        },
+        {
+          "name": "Purple",
+          "image": "https://store.bblcdn.com/s7/default/4660ca267dad46fe865a4c17d4b095a5/purle.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Glow",
+      "description": "PLA que brilha no escuro após exposição à luz. Divertido para brinquedos, decoração e projetos criativos.",
+      "colors": [
+        {
+          "name": "Glow Orange",
+          "image": "https://store.bblcdn.com/s7/default/b852ee64945540208e55b588ee6e8e26/e40cbbf6e7fed96557d8e2be99e4b9cf_874f9392-3fe3-4c65-87cc-91b158674eb3.png"
+        },
+        {
+          "name": "Glow Blue",
+          "image": "https://store.bblcdn.com/s7/default/62abf450b2a743a88c4108f520d44a23/697ef5c2066bf49f4df46a227b1a93c1_f2cca2e1-43ba-4d4d-b20c-832cfa099659.png"
+        },
+        {
+          "name": "Glow Green",
+          "image": "https://store.bblcdn.com/s7/default/3ae3b1c1bd254058bf08b79f3ee815b3/PLA_Glow.jpg"
+        },
+        {
+          "name": "Glow Pink",
+          "image": "https://store.bblcdn.com/s7/default/8ea96321809b43e18d06d1b13dba3371/5d4ad98b7e6fd7642323ef49163d8697_dc0d9844-1668-4026-b430-b3be661988d3.png"
+        },
+        {
+          "name": "Glow Yellow",
+          "image": "https://store.bblcdn.com/s7/default/712a995a9cf94a76b1ec22d5c06378fb/6fdaecdc33b9371fb7c326d4bd52932b.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Marble",
+      "description": "PLA com efeito mármore, com veios que imitam pedra natural. Ideal para vasos, esculturas e peças de decoração.",
+      "colors": [
+        {
+          "name": "White Marble",
+          "image": "https://store.bblcdn.com/s7/default/1e17851f21c4410b9f49f9ca007be2ae/PLA-Marble_White.png"
+        },
+        {
+          "name": "Red Granite",
+          "image": "https://store.bblcdn.com/s7/default/4b3c4976913b4183a66b085472307137/A07-R5-1.75-1000-spl.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Matte",
+      "description": "PLA com acabamento fosco que disfarça as linhas de camada e elimina o brilho. Ideal para modelos, maquetes e peças com visual elegante e uniforme.",
+      "colors": [
+        {
+          "name": "Ivory White",
+          "image": "https://store.bblcdn.com/s7/default/2ada3acd0e9b45d08469531d61a98bc8/PLA_Matte_white.jpg"
+        },
+        {
+          "name": "Ash Gray",
+          "image": "https://store.bblcdn.com/s7/default/502359426c1c4e9687a7f921f741b623/Matte-Ash-Grey.png"
+        },
+        {
+          "name": "Mandarin Orange",
+          "image": "https://store.bblcdn.com/s7/default/9d9735b366524d0e82bf75672a00b7c8/Matte-Mandarin-Orange.png"
+        },
+        {
+          "name": "Sakura Pink",
+          "image": "https://store.bblcdn.com/s7/default/c3e803a11302443a91a30ced332a899a/Matte-Sakura-Pink.png"
+        },
+        {
+          "name": "Lemon Yellow",
+          "image": "https://store.bblcdn.com/s7/default/448b397cc5084c3984eb8b20fe20ebfa/Matte-Lemon-Yellow.png"
+        },
+        {
+          "name": "Charcoal",
+          "image": "https://store.bblcdn.com/s7/default/3b7c97df9bab4d498df93a569dfb51e7/PLA-Matte_Charcoal.png"
+        },
+        {
+          "name": "Grass Green",
+          "image": "https://store.bblcdn.com/s7/default/6c96a163eb264bdca7d0bacee1b677ae/Matte_Grass_Green.png"
+        },
+        {
+          "name": "Latte Brown",
+          "image": "https://store.bblcdn.com/s7/default/c9ce1efb045a4a7da9503173533e7a35/Matte-Latte-Brown.png"
+        },
+        {
+          "name": "Scarlet Red",
+          "image": "https://store.bblcdn.com/s7/default/237a34473c55494694240accd4f9af78/Matte-Scarlet-Red.png"
+        },
+        {
+          "name": "Ice Blue",
+          "image": "https://store.bblcdn.com/s7/default/4c3e25c5c5f647b4881dc19f64648636/Matte-Ice-Blue.png"
+        },
+        {
+          "name": "Lilac purple",
+          "image": "https://store.bblcdn.com/s7/default/49fb500f50284142a42a44598e6aeffd/Matte-Lilac-purple.png"
+        },
+        {
+          "name": "Marine Blue",
+          "image": "https://store.bblcdn.com/s7/default/51f640a9628b4dd2a675f4d9e16a0aab/Matte-Marine-Blue.png"
+        },
+        {
+          "name": "Dark Red",
+          "image": "https://store.bblcdn.com/s7/default/a1c43bea2e2f477ba06266dce33a7afe/Matte-Dark-Red.png"
+        },
+        {
+          "name": "Dark Blue",
+          "image": "https://store.bblcdn.com/s7/default/8001cdb3f2594745b624bdcd73f88f3e/Matte-Dark-Blue.png"
+        },
+        {
+          "name": "Dark Brown",
+          "image": "https://store.bblcdn.com/s7/default/dd5636bd8bb942b39192b42010360582/Matte-Dark-Brown.png"
+        },
+        {
+          "name": "Dark Green",
+          "image": "https://store.bblcdn.com/s7/default/a9b6a4050cd049deb14284169f6f827d/Matte-Dark-Green.png"
+        },
+        {
+          "name": "Desert Tan",
+          "image": "https://store.bblcdn.com/s7/default/893bb9133a4c48d7a08749defd9070d5/Matte_Desert_Tan.png"
+        },
+        {
+          "name": "Bone White",
+          "image": "https://store.bblcdn.com/s7/default/1f628abee56742aba4d870cad67a1110/7_fea42c37-c6dc-4588-8778-162cf2ee8ab4.jpg"
+        },
+        {
+          "name": "Plum",
+          "image": "https://store.bblcdn.com/s7/default/ac4928805ccd40c2a167bc0a04c5d097/6_0286362c-590b-41c0-9e4a-aca6b18fa243.jpg"
+        },
+        {
+          "name": "Sky Blue",
+          "image": "https://store.bblcdn.com/s7/default/6baaa9f5ba7846bb96099fe3a48ba450/4_4a4fd3a0-98d8-4b9a-bda7-6f5189657201.jpg"
+        },
+        {
+          "name": "Apple Green",
+          "image": "https://store.bblcdn.com/s7/default/81e34ffe42eb46709c9f316abaa77b72/2_390d401c-b7da-4498-aa98-737072ead278.jpg"
+        },
+        {
+          "name": "Dark Chocolate",
+          "image": "https://store.bblcdn.com/s7/default/6b302b424d0c48c9a6bfbbe63452068d/3_93657f2f-ee90-45bc-84ce-14e92a2bc418.jpg"
+        },
+        {
+          "name": "Caramel",
+          "image": "https://store.bblcdn.com/s7/default/ba706aef96514617abe191d4c7899b3d/8_eeebfc86-28d0-479a-b66e-38945e18ca66.jpg"
+        },
+        {
+          "name": "Terracotta",
+          "image": "https://store.bblcdn.com/s7/default/51bf56e467dc47aa903b8e2401487983/5_8b99d140-c6bc-4480-a228-37f7a6932ecc.jpg"
+        },
+        {
+          "name": "Nardo Gray",
+          "image": "https://store.bblcdn.com/s7/default/e74f729fcece40f7a2a70ca79d6e6728/1_9c798ba9-3e86-490d-9894-78ec03e3465a.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Metal",
+      "description": "PLA com aparência metálica, imitando metais como ouro, cobre e aço. Excelente para peças decorativas com visual sofisticado.",
+      "colors": [
+        {
+          "name": "Iridium Gold Metallic",
+          "image": "https://store.bblcdn.com/s7/default/0c79ba89e4e04353a6d26cf60184c5fe/PLA-Metal_Iridium-Gold-Metallic.png"
+        },
+        {
+          "name": "Cobalt Blue Metallic",
+          "image": "https://store.bblcdn.com/s7/default/5b1cc1cda03f45f5b00efa0685bda6a2/A02-B2-1.75-1000-spl.png"
+        },
+        {
+          "name": "Oxide Green Metallic",
+          "image": "https://store.bblcdn.com/s7/default/551d9cdff334407d90849756f5f23239/PLA-Metal_Oxide-Green-Metallic.png"
+        },
+        {
+          "name": "Copper Brown Metallic",
+          "image": "https://store.bblcdn.com/s7/default/6acfd79595b24fef825ef92a848388dd/PLAMetalcopperbrown.png"
+        },
+        {
+          "name": "Iron Gray Metallic",
+          "image": "https://store.bblcdn.com/s7/default/ab8283e3f0d74864a2fb0957cba91b48/PLAMetalIrongray.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Pure",
+      "description": "PLA de alta pureza e baixíssima emissão, certificado para segurança em ambientes internos, brinquedos e contato com alimentos. Perfeito para peças que exigem segurança.",
+      "colors": [
+        {
+          "name": "Milky Pink",
+          "image": "https://store.bblcdn.com/s7/default/89d4327b95e945dd848fb22d441151c8/PLA_purePLA_pure.jpg"
+        },
+        {
+          "name": "Baby Blue",
+          "image": "https://store.bblcdn.com/s7/default/76d34194fbca4f8a95b22cc52d361057/4.jpg"
+        },
+        {
+          "name": "Apricot",
+          "image": "https://store.bblcdn.com/s7/default/2ed553b2cd3847b29cd0906f9631e6e8/5.jpg"
+        },
+        {
+          "name": "Pure White",
+          "image": "https://store.bblcdn.com/s7/default/dbe2d59d8abc4e7399d9a082a621216a/2.jpg"
+        },
+        {
+          "name": "Absolute Black",
+          "image": "https://store.bblcdn.com/s7/default/34bb14fa75464b2d865936ccd3f71dd7/3.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Silk Multi-Color",
+      "description": "PLA seda com transição de várias cores no mesmo filamento, criando degradês vibrantes. Perfeito para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Gilded Rose",
+          "image": "https://store.bblcdn.com/s7/default/2c917dd7e2c24b30a8df5a2020273b2d/glidedrose.png"
+        },
+        {
+          "name": "Midnight Blaze",
+          "image": "https://store.bblcdn.com/s7/default/25ca55ad4b9c452c99a9207b376073ef/midnightblaze2.png"
+        },
+        {
+          "name": "Neon City",
+          "image": "https://store.bblcdn.com/s7/default/0374f54572e247d3892882ac449f5fa3/neoncity.png"
+        },
+        {
+          "name": "Blue Hawaii",
+          "image": "https://store.bblcdn.com/s7/default/51f424f1500f4a9eb10b8275afe6b685/blueHawaii.png"
+        },
+        {
+          "name": "Velvet Eclipse",
+          "image": "https://store.bblcdn.com/s7/default/0c3f407f484d4b2593bf9caf885766ba/Silk_Dual_Color_Black-red.jpg"
+        },
+        {
+          "name": "Dawn Radiance",
+          "image": "https://store.bblcdn.com/s7/default/ea5b14159996424eb6deb780bc2e12cc/Dawn_Radiance.jpg"
+        },
+        {
+          "name": "Aurora Purple",
+          "image": "https://store.bblcdn.com/s7/default/992ea00dc72342828d2ff2ea1e2c4795/Aurora_Purple_(1).jpg"
+        },
+        {
+          "name": "South Beach",
+          "image": "https://store.bblcdn.com/s7/default/db176223df5241238f5b1e498a2c61fe/South_Beach.jpg"
+        },
+        {
+          "name": "Mystic Magenta",
+          "image": "https://store.bblcdn.com/s7/default/3ebcda27e2dc4acda9fa3b929be59d61/Mystic_Magenta.jpg"
+        },
+        {
+          "name": "Phantom Blue",
+          "image": "https://store.bblcdn.com/s7/default/068bab95664f4495b896de08da80f5d7/Phantom_Blue.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Silk+",
+      "description": "PLA com brilho acetinado (efeito seda) e cores vibrantes. Excelente para peças decorativas e presentes com acabamento premium.",
+      "colors": [
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/5f3e5ce01de7453a9ceb39837a2574b1/PLA_Silk_4.jpg"
+        },
+        {
+          "name": "Purple",
+          "image": "https://store.bblcdn.com/s7/default/a20bb5bfc489456895f3d594efc256d9/PLA_Silk_9.jpg"
+        },
+        {
+          "name": "Pink",
+          "image": "https://store.bblcdn.com/s7/default/f1c6753f09b6462e81452926a8360c94/PLA_Silk_1.jpg"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/c3d94745f6ea493d9c786497701a09b2/PLA_Silk_6.jpg"
+        },
+        {
+          "name": "Silver",
+          "image": "https://store.bblcdn.com/s7/default/0e3f181bc25342ca9c3a96fe019bb796/PLA_Silk_11.jpg"
+        },
+        {
+          "name": "Gold",
+          "image": "https://store.bblcdn.com/s7/default/8ffced148867425fb0d6d3fb59de0f37/PLA_Silk_8_d3d9592f-96fd-4456-8a9c-fbe9996b41ce.jpg"
+        },
+        {
+          "name": "Mint",
+          "image": "https://store.bblcdn.com/s7/default/c9d92c7ba5f34919a263318fb16852f0/PLA_Silk_2_58fea091-c6cb-45e3-95f0-3c9b11c57f89.jpg"
+        },
+        {
+          "name": "Titan Gray",
+          "image": "https://store.bblcdn.com/s7/default/7a8f7b8c0848412d90ea0f4594b897e1/PLA_Silk_13.jpg"
+        },
+        {
+          "name": "Rose Gold",
+          "image": "https://store.bblcdn.com/s7/default/913d068062cb4e2299f6d51238b611e2/PLA_Silk_10.jpg"
+        },
+        {
+          "name": "Champagne",
+          "image": "https://store.bblcdn.com/s7/default/02258af41f4048839e070cf2215ca724/PLA_Silk_3.jpg"
+        },
+        {
+          "name": "Baby Blue",
+          "image": "https://store.bblcdn.com/s7/default/2401f9efeeb9486a9a21dd02364a13a7/PLA_Silk_7.jpg"
+        },
+        {
+          "name": "Candy Green",
+          "image": "https://store.bblcdn.com/s7/default/b28f83dcbfaf45fe8f0dcf8e96559fb5/PLA_Silk_12.jpg"
+        },
+        {
+          "name": "Candy Red",
+          "image": "https://store.bblcdn.com/s7/default/dd7fc499e4144dd0a1826ca43f3dd4d0/PLA_Silk_5.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Sparkle",
+      "description": "PLA com partículas cintilantes que dão um efeito glitter à peça. Ótimo para decoração e projetos festivos.",
+      "colors": [
+        {
+          "name": "Alpine Green Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/49600549250e48c090ccdec0b1dd7061/Sparkle_green.png"
+        },
+        {
+          "name": "Crimson Red Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/f809b82a992647fb94cf34d2f2cd44ea/PLA-Sparkle_Crimson-Red-Sparkle.png"
+        },
+        {
+          "name": "Onyx Black Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/f97e08749626411f89ac590ecd696b74/PLA-Sparkle_Onyx-Black-Sparkle.png"
+        },
+        {
+          "name": "Slate Gray Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/715852b15d6a4342a0cbd7bb13fa7e6f/PLASparkle-SlateGray.png"
+        },
+        {
+          "name": "Royal Purple Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/d34f98f6d5fd4efcba3b675018392895/PLASparkle-RoyalPurpleSparkle.png"
+        },
+        {
+          "name": "Classic Gold Sparkle",
+          "image": "https://store.bblcdn.com/s7/default/6d253f46ee464ca2b75c6ea613efb05c/sparkle_gold.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Tough+",
+      "description": "PLA reforçado, com maior tenacidade e resistência ao impacto, mantendo a facilidade de impressão do PLA. Bom para peças funcionais leves.",
+      "colors": [
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/b31707785a5543f5b808c9772d4285b5/PLA_Tough_new.jpg"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/bf8ec2f9b63f4178b7b265fe6186511d/PLA_Tough_(3).jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/b4dc22d61a1c4658bb89899a2f2308cf/PLA_Tough_(5).jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/97120f6c0e31411bad7ebd94a1773531/PLA_Tough_(1).jpg"
+        },
+        {
+          "name": "Silver",
+          "image": "https://store.bblcdn.com/s7/default/f20e12b392aa4931854ee9f7773306d7/PLA_Tough_(2).jpg"
+        },
+        {
+          "name": "Cyan",
+          "image": "https://store.bblcdn.com/s7/default/87ee8467d1514baeb3e868280fb732ad/PLA_Tough_(4).jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/50dea15e68e94f0da6ccb2bc2e24e299/PLA_Tough_(2).jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Translucent",
+      "description": "PLA translúcido que deixa a luz passar. Ótimo para luminárias, peças com efeito de vidro e projetos que brincam com transparência.",
+      "colors": [
+        {
+          "name": "Teal",
+          "image": "https://store.bblcdn.com/s7/default/7a274c60cf77465295cb0ebbd5597668/teal.jpg"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/38803a9888d047619ec6fec250f8fa99/blue.jpg"
+        },
+        {
+          "name": "Purple",
+          "image": "https://store.bblcdn.com/s7/default/5b62331f74db41698e6159b071c635cc/purple.jpg"
+        },
+        {
+          "name": "Orange",
+          "image": "https://store.bblcdn.com/s7/default/89199c1d16cf434d8a60cd3d3c376ead/orange.jpg"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/fc112bd633b34efcaf106b5832801acf/red.jpg"
+        },
+        {
+          "name": "Light Jade",
+          "image": "https://store.bblcdn.com/s7/default/b25d0ca092ee4784a22ece2eccbeed06/Jade_green.jpg"
+        },
+        {
+          "name": "Mellow Yellow",
+          "image": "https://store.bblcdn.com/s7/default/5e6eb876f811436791130e24a3bab789/mellow_yellow.jpg"
+        },
+        {
+          "name": "Cherry Pink",
+          "image": "https://store.bblcdn.com/s7/default/f3214824ddf848ffb74689918501980d/pink.jpg"
+        },
+        {
+          "name": "Ice Blue",
+          "image": "https://store.bblcdn.com/s7/default/6378eaa8eb0040eaaf0c467d5d8e283f/light_blue.jpg"
+        },
+        {
+          "name": "Lavender",
+          "image": "https://store.bblcdn.com/s7/default/abe58fb0b2544300b78ca426ef95d5c2/lavender.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA Wood",
+      "description": "PLA com fibras de madeira, aparência e textura amadeiradas. Perfeito para peças rústicas e decorativas.",
+      "colors": [
+        {
+          "name": "Black Walnut",
+          "image": "https://store.bblcdn.com/s7/default/57618973443746d79aed97ca049f29f6/4_edf1bf62-74b1-4ae2-b03a-d66d6b475191.jpg"
+        },
+        {
+          "name": "Rosewood",
+          "image": "https://store.bblcdn.com/s7/default/4ec4e679110a4bddb7418dd80decc44a/2_1d60446b-f861-4001-9603-2ee01c41de2e.jpg"
+        },
+        {
+          "name": "Clay Brown",
+          "image": "https://store.bblcdn.com/s7/default/505123188aff40da9740a3abc6fa8233/3_0f370c26-1179-4126-8abf-9932a0a49fb3.jpg"
+        },
+        {
+          "name": "Classic Birch",
+          "image": "https://store.bblcdn.com/s7/default/fc44e40d2a43415aadf0de1aed68ea11/5_c19edc60-aae5-4a6d-ab98-f6d3280ad2bc.jpg"
+        },
+        {
+          "name": "White Oak",
+          "image": "https://store.bblcdn.com/s7/default/0b755a3ec3e643c08361f51ec04dbdd9/1_93ade14c-063a-45cb-9c67-1a526d886835.jpg"
+        },
+        {
+          "name": "Ochre Yellow",
+          "image": "https://store.bblcdn.com/s7/default/4e1abebdd5d44c3397e994b7f8603055/6_0db2ce18-ace0-462a-9b1e-2952d4f85b67.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PLA",
+      "model": "PLA-CF",
+      "description": "PLA reforçado com fibra de carbono: mais rígido, estável e com acabamento fosco texturizado. Ideal para protótipos e peças com visual técnico.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/b1948cb933824fd394e6071042ff6d00/PLA-CFBlack.jpg"
+        },
+        {
+          "name": "Jeans Blue",
+          "image": "https://store.bblcdn.com/s7/default/6fa666034cc043a0a323587d5aca64bc/5330081a75ef62e73afe0929195b72b8_e3169191-4769-42c4-9caa-6c68bf3ee57b.png"
+        },
+        {
+          "name": "Burgundy Red",
+          "image": "https://store.bblcdn.com/s7/default/1b92f2d8468940af912e3b693a2f1514/a607d88492630a4fc0e1169570fcd150_8739bab5-48f4-48a1-9471-199c1e334f3d.png"
+        },
+        {
+          "name": "Lava Gray",
+          "image": "https://store.bblcdn.com/s7/default/d31d066b74fe46f5a2650df891d25472/83c1bc164a2861ecc083568a0b017ba0_6703fb22-ad79-40f6-b4bf-6053c8d1d9ed.png"
+        },
+        {
+          "name": "Matcha Green",
+          "image": "https://store.bblcdn.com/s7/default/2bb97e74199a40799302931dc10646cc/c0f99c4f6c04f5422dcd8db2da060392.png"
+        },
+        {
+          "name": "Iris Purple",
+          "image": "https://store.bblcdn.com/s7/default/5e1c40f42cb04b09a052af4cb57dd4cb/PLA-CFIrisPurple.png"
+        },
+        {
+          "name": "Royal Blue",
+          "image": "https://store.bblcdn.com/s7/default/5d3e6d130d204874ab0597a696532885/20250710-180051.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PPA",
+      "model": "PPA-CF",
+      "description": "Poliamida de alta performance (PPA) com fibra de carbono: excelente resistência mecânica e térmica para aplicações industriais.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/eb0598bcb29342ad9a4c10d3b75ea8dc/6391ace427ade714b70fb966024ae804_ccd9809a-f71d-4cbf-92ad-f92bf73d28fc.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "PPS",
+      "model": "PPS-CF",
+      "description": "PPS com fibra de carbono: resistência química e térmica excepcionais. Para peças técnicas em ambientes agressivos.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/f2be3e9c0d3d411da026542ef29c0074/Mainimage.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "TPU",
+      "model": "TPU 85A / TPU 90A",
+      "description": "TPU bem flexível (durezas 85A/90A), para peças macias e elásticas como coxins, vedações e capas de proteção.",
+      "colors": [
+        {
+          "name": "TPU 85A",
+          "image": "https://store.bblcdn.com/s7/default/8875e6d5c4dd49f3993498f769718480/TPU_85_Cyan.jpg"
+        },
+        {
+          "name": "TPU 90A",
+          "image": "https://store.bblcdn.com/s7/default/e59836a84ce84a9fa863b4926b3c8977/TPU_90_Frozen.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "TPU",
+      "model": "TPU 95A HF",
+      "description": "TPU flexível de dureza 95A e alta vazão, para impressão rápida de peças emborrachadas resistentes. Ideal para peças flexíveis funcionais.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/a14122e8825044f4b976028fdfd5781c/TPUHF_2.png"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/681f386ccce64332b2eca2cab35dc75d/TPUHF_1.png"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/0e136af548474bbaa23252794d9735de/TPUHF_5.png"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/d5f858a8a60d456a8ff2a498cc925804/TPUHF_4.png"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/e08c4d516f3d41fbacb3e9eeaa1c04bd/TPUHF_6.png"
+        },
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/382af03dfdbd4aeeb73308d2ac502edc/TPUHF_3.png"
+        }
+      ]
+    },
+    {
+      "brand": "Bambu Lab",
+      "material": "TPU",
+      "model": "TPU for AMS",
+      "description": "TPU flexível compatível com o AMS, permitindo peças emborrachadas com troca automática de cor. Bom para capas, vedações e peças flexíveis.",
+      "colors": [
+        {
+          "name": "Red",
+          "image": "https://store.bblcdn.com/s7/default/72e5bca1a3b84aa29e7cd48171a88e55/2_161d5a21-7072-47ed-8e0b-7d59ab804a6e.jpg"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://store.bblcdn.com/s7/default/d59012b2c89d465cabfbb582af3e3149/3_9ac286e5-4bdf-4442-9e93-6940dda4effd.jpg"
+        },
+        {
+          "name": "Blue",
+          "image": "https://store.bblcdn.com/s7/default/7dffd33d182d4d799d49b182860c7851/d4fb1dd751904e1ea09d142c68d7ec36.jpg"
+        },
+        {
+          "name": "Neon Green",
+          "image": "https://store.bblcdn.com/s7/default/d7356521b96c4b2a951d76fa5057e257/5_6237fb8b-3406-49e1-993e-fee9ac0b72b9.jpg"
+        },
+        {
+          "name": "White",
+          "image": "https://store.bblcdn.com/s7/default/6aa999f5b742412c80ec80aac97e9be0/4_42c6b061-5aff-499a-b056-bab4995a11bc.jpg"
+        },
+        {
+          "name": "Gray",
+          "image": "https://store.bblcdn.com/s7/default/c3c88e504fa14bbd89421b3d28e25501/1_ac54b0c9-1351-4dba-b86f-679b08d4cc6b.jpg"
+        },
+        {
+          "name": "Black",
+          "image": "https://store.bblcdn.com/s7/default/1c900e3874b442e49abce39b3dc36bb1/7_503dcb38-75d8-47bb-ae48-238b1376ff62.jpg"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "ASA",
+      "model": "Fiberon ASA-CF08",
+      "description": "Filamento ASA reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Light Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02004_isometric_top.png?v=1767449016"
+        },
+        {
+          "name": "Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02005_isometric_top.png?v=1767449016"
+        },
+        {
+          "name": "Desert Sand",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02006_isometric_top.png?v=1756223314"
+        },
+        {
+          "name": "Dark Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02007_isometric_top.png?v=1767449016"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02001_isometric_top.png?v=1767449016"
+        },
+        {
+          "name": "Navy Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ff02003_isometric_top.png?v=1767449016"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PA",
+      "model": "Fiberon PA12-CF10",
+      "description": "Filamento PA reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FG04001_Isometric_Top.png?v=1731685900"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PA",
+      "model": "Fiberon PA6-CF20",
+      "description": "Filamento PA reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FG03001_Isometric_Top.png?v=1721220020"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PA",
+      "model": "Fiberon PA6-GF25",
+      "description": "Filamento PA reforçado com fibra de vidro: alta rigidez e estabilidade. Para peças estruturais.",
+      "colors": [
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FG02001_Isometric_Top.png?v=1721220001"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PA",
+      "model": "Fiberon PA612-CF15",
+      "description": "Filamento PA reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FG07001_Isometric_Top.png?v=1721220117"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PA",
+      "model": "Fiberon PA612-ESD",
+      "description": "Nylon (PA) de alta resistência mecânica e ao desgaste, para peças de engenharia exigentes.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FG08001_Isometric_Top.png?v=1741023904"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PET",
+      "model": "Fiberon PET-CF17",
+      "description": "Filamento PET reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FL01001_Isometric_Top.png?v=1721220229"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PETG",
+      "model": "Fiberon PETG-ESD",
+      "description": "Filamento PETG resistente e durável, com boa resistência química e à umidade. Bom para peças funcionais e de uso externo.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PETG-ESD_a0555e75-986b-4c03-b3a0-54da61c8c0a2.png?v=1731095809"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PETG",
+      "model": "Fiberon PETG-rCF08",
+      "description": "Filamento PETG resistente e durável, com boa resistência química e à umidade. Bom para peças funcionais e de uso externo.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FB04001_Isometric_Top_199b2b3c-5cee-4a95-8c40-d79ced66ad86.png?v=1721569410"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PPS",
+      "model": "Fiberon PPS-CF10",
+      "description": "Filamento PPS reforçado com fibra de carbono: mais rígido, resistente e com acabamento fosco. Para peças técnicas e de engenharia.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FM01001_Isometric_Top.png?v=1721220390"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PPS",
+      "model": "Fiberon PPS-GF20",
+      "description": "Filamento PPS reforçado com fibra de vidro: alta rigidez e estabilidade. Para peças estruturais.",
+      "colors": [
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/FM02001_Isometric_Top_b0083a4a-4814-409d-bab0-dacc6a9191ea.png?v=1752777285"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Basic PLA",
+      "description": "Filamento PLA fácil de imprimir, ótimo custo-benefício para protótipos, peças decorativas e uso do dia a dia.",
+      "colors": [
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19001_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Steel Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19003_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19010_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Jungle Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19013_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Beige",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19015_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Dark Olive Drab",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19026_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19032_Asymmetric.png?v=1786337896"
+        },
+        {
+          "name": "Polymaker Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19039_Asymmetric.png?v=1786337897"
+        },
+        {
+          "name": "Lemon Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19019_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19018_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Stone Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19017_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Aqua Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19016_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Olive Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19014_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Wine Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19012_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19011_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19009_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19008_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19007_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19006_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19005_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19004_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19002_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Polymaker Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19020_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Cold White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19040_Asymmetric.png?v=1786337897"
+        },
+        {
+          "name": "Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19038_Asymmetric.png?v=1786337897"
+        },
+        {
+          "name": "Steel Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19037_Asymmetric.png?v=1786337898"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19036_Asymmetric.png?v=1786337896"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19035_Asymmetric.png?v=1786337896"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19034_Asymmetric.png?v=1786337896"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19033_Asymmetric.png?v=1786337896"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19031_Asymmetric.png?v=1786337898"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19030_Asymmetric.png?v=1786337897"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19029_Asymmetric.png?v=1786337898"
+        },
+        {
+          "name": "Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19028_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Cold White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19027_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Tan",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19025_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Azure Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19024_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Magenta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19023_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Lime Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19022_Isometric_Top.png?v=1759767375"
+        },
+        {
+          "name": "Cream",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA19021_Isometric_Top.png?v=1759767375"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Dual Silk PLA",
+      "description": "PLA com brilho acetinado (efeito seda) e cores vibrantes. Ótimo para peças decorativas e presentes com acabamento premium.",
+      "colors": [
+        {
+          "name": "Dual Silk Aubergine (Lime-Magenta)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03022_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Banquet (Gold-Magenta)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03023_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Beluga (Silver-Blue)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03024_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Caribbean Sea (Blue-Green)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03025_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Chameleon (Yellow-Blue)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03025_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Crown (Gold-Silver)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03027_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Jadeite (Green-Chrome)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03028_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Sovereign (Gold-Purple)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03029_Isometric_Top.png?v=1721571240"
+        },
+        {
+          "name": "Dual Silk Sunset (Gold-Red)",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03030_Isometric_Top.png?v=1721571240"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Galaxy PLA",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Galaxy Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02013_Isometric_Top.png?v=1721571044"
+        },
+        {
+          "name": "Galaxy Dark Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02014_Isometric_Top.png?v=1721571044"
+        },
+        {
+          "name": "Galaxy Dark Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02015_Isometric_Top.png?v=1721571044"
+        },
+        {
+          "name": "Galaxy Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02099_Isometric_Top.png?v=1721571189"
+        },
+        {
+          "name": "Galaxy Dark Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02097_Isometric_Top.png?v=1721571189"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Gradient Galaxy",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Gradient Galaxy Black-Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09006_Isometric_Top.png?v=1764089181"
+        },
+        {
+          "name": "Gradient Galaxy Blue-Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09005_Isometric_Top.png?v=1764089181"
+        },
+        {
+          "name": "Gradient Galaxy Black-Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09004_Isometric_Top.png?v=1764089181"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Gradient Matte PLA",
+      "description": "Acabamento fosco que disfarça as linhas de camada e elimina o brilho. Ideal para modelos e peças com visual elegante.",
+      "colors": [
+        {
+          "name": "Gradient Matte Pastel Rainbow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/Matte_Pastel_rainbow_Asymmetric.png?v=1786336338"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Gradient Satin PLA",
+      "description": "Com transição de cores (degradê/multicolor) ao longo da peça, criando efeitos únicos.",
+      "colors": [
+        {
+          "name": "Gradient Satin Rainbow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA05001_Isometric_Top.png?v=1721222256"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Gradient Starlight",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Gradient Starlight Rainbow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09016_Isometric_Top.png?v=1764089082"
+        },
+        {
+          "name": "Gradient Starlight Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09017_Isometric_Top.png?v=1764089082"
+        },
+        {
+          "name": "Gradient Starlight Purple-Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09019_Isometric_Top.png?v=1764089082"
+        },
+        {
+          "name": "Gradient Starlight Blue-Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09020_Isometric_Top.png?v=1764089082"
+        },
+        {
+          "name": "Gradient Starlight Blue-Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA09018_Isometric_Top.png?v=1764089082"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Marble PLA",
+      "description": "Com efeito mármore, veios que imitam pedra natural. Ideal para vasos e peças de decoração.",
+      "colors": [
+        {
+          "name": "Marble White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70941_PDT_Isometric_Top.png?v=1737567397"
+        },
+        {
+          "name": "Marble Slate Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70942_PDT_Isometric_Top.png?v=1721572136"
+        },
+        {
+          "name": "Marble Brick",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04041_Isometric_Top.png?v=1751213716"
+        },
+        {
+          "name": "Marble Sandstone",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04042_Isometric_Top.png?v=1737567397"
+        },
+        {
+          "name": "Marble Limestone",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04043_Isometric_Top.png?v=1737567397"
+        },
+        {
+          "name": "Marble White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04087_Asymmetric.png?v=1786336908"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Matte PLA",
+      "description": "Acabamento fosco que disfarça as linhas de camada e elimina o brilho. Ideal para modelos e peças com visual elegante.",
+      "colors": [
+        {
+          "name": "Matte Sunshine Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04088_Isometric_Top_f979de8d-845f-45c0-9eae-383afcaf5ca8.png?v=1769551197"
+        },
+        {
+          "name": "Electric Magenta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PC1002022_Panchroma_Matte_Electric_Magenta_Hero.png?v=1785305473"
+        },
+        {
+          "name": "Matte Grass Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04090_Isometric_Top.png?v=1769551156"
+        },
+        {
+          "name": "Matte Seafoam Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04091_Isometric_Top_4a5b89da-1ee7-4bee-9b88-df0cdd9e5f87.png?v=1769551194"
+        },
+        {
+          "name": "Matte Raspberry Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04092_Isometric_Top_fe804945-2c64-44d4-bcc4-bd78abd625f4.png?v=1769551158"
+        },
+        {
+          "name": "Matte Emerald Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04094_Isometric_Top_82dba3d7-a5e9-461c-87c0-151183806feb.png?v=1769551190"
+        },
+        {
+          "name": "Matte Muted Moss",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04095_Isometric_Top_6b7018e3-1ecc-42d5-85d1-652522aa239a.png?v=1769551196"
+        },
+        {
+          "name": "Matte Muted Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04096_Isometric_Top_a694811e-5b53-4c58-baee-1e0309565038.png?v=1769551178"
+        },
+        {
+          "name": "Matte Muted Mauve",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04097_Isometric_Top_c190e7dc-ef02-490d-ad35-1de5fc93135f.png?v=1769551282"
+        },
+        {
+          "name": "Matte Pastel Coral",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04099_Isometric_Top_27ae0d22-5cfe-4e0f-8a7f-b2b1c8b18f42.png?v=1769551184"
+        },
+        {
+          "name": "Matte Pastel Beige",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04100_Isometric_Top_9d035233-beb0-49a0-9a4e-f652ee2dfa3f.png?v=1769551248"
+        },
+        {
+          "name": "Matte Charcoal Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04068_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Fossil Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04070_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Army Dark Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04071_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Sunrise Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04080_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Army Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04083_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Pastel Candy",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70867_pdt_isometric_top_0e0689f2-4152-4ce3-9c20-2e483c4e9b6b.png?v=1738687559"
+        },
+        {
+          "name": "Matte Army Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70955_pdt_isometric_top.png?v=1738687375"
+        },
+        {
+          "name": "Matte Army Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70956_pdt_isometric_top.png?v=1738687659"
+        },
+        {
+          "name": "Matte Army Dark Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70957_pdt_isometric_top.png?v=1738687858"
+        },
+        {
+          "name": "Matte Army Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70959_pdt_isometric_top.png?v=1738688236"
+        },
+        {
+          "name": "Matte Army Beige",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70980_pdt_isometric_top.png?v=1738688276"
+        },
+        {
+          "name": "Matte Lime Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04027_Isometric_Top.png?v=1721571355"
+        },
+        {
+          "name": "Matte Electric Indigo",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04039_Isometric_Top.png?v=1721571433"
+        },
+        {
+          "name": "Matte Pastel Periwinkle",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04040_Isometric_Top.png?v=1721571433"
+        },
+        {
+          "name": "Matte Army Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04032_isometric_top.png?v=1738687241"
+        },
+        {
+          "name": "Matte Wood Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70976_PDT_Isometric_Top.png?v=1721572234"
+        },
+        {
+          "name": "Matte Pastel Mint",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70869_pdt_isometric_top.png?v=1738687809"
+        },
+        {
+          "name": "Matte Earth Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70907_PDT_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Sakura Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70908_PDT_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Pastel Peanut",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70909_PDT_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Pastel Ice",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70910_pdt_isometric_top.png?v=1738688337"
+        },
+        {
+          "name": "Matte Pastel Peach",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70863_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Pastel Watermelon",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70943_PDT_Isometric_Top.png?v=1721572160"
+        },
+        {
+          "name": "Matte Muted White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04002_isometric_top_1.png?v=1738688192"
+        },
+        {
+          "name": "Matte Muted Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04006_isometric_top.png?v=1738687310"
+        },
+        {
+          "name": "Matte Muted Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04005_isometric_top.png?v=1738687607"
+        },
+        {
+          "name": "Matte Muted Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04003_isometric_top.png?v=1738687751"
+        },
+        {
+          "name": "Matte Muted Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pa04004_isometric_top.png?v=1738687709"
+        },
+        {
+          "name": "Matte Lotus Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04002_Isometric_Top.png?v=1721222170"
+        },
+        {
+          "name": "Matte Ash Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA04033_Isometric_Top.png?v=1721571399"
+        },
+        {
+          "name": "Matte Fossil Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70824_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Lava Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70826_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Sapphire Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70828_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Arctic Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70844_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Forest Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70846_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Sunrise Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70848_Isometric_Top.png?v=1721571564"
+        },
+        {
+          "name": "Matte Savannah Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70850_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Pastel Banana",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70865_isometric_top_9be13dd0-4758-44bb-b5f9-fa1dd7304c7a.png?v=1738688043"
+        },
+        {
+          "name": "Matte Lavender Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04085_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Army Beige",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04084_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Army Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04082_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Sakura Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04081_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Arctic Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04079_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Forest Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04078_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Wood Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04077_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Pastel Peanut",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04076_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Savannah Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04075_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Earth Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04074_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Lava Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04073_Asymmetric.png?v=1786339116"
+        },
+        {
+          "name": "Matte Sapphire Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04072_Asymmetric.png?v=1786339117"
+        },
+        {
+          "name": "Matte Cotton White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04069_Asymmetric.png?v=1786339118"
+        },
+        {
+          "name": "Matte Muted Terracotta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04098_Isometric_Top_ede0820d-a1ca-4912-9054-96ce0baf3caf.png?v=1769551280"
+        },
+        {
+          "name": "Matte Wine Burgundy",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04093_Isometric_Top_b0a06b78-3c3d-4456-8e79-a7d51862c62c.png?v=1769551165"
+        },
+        {
+          "name": "Matte Army Light Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pm70958_pdt_isometric_top.png?v=1738687994"
+        },
+        {
+          "name": "Matte Lavender Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70852_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Cotton White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70822_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Charcoal Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70820_Isometric_Top.png?v=1721571563"
+        },
+        {
+          "name": "Matte Sky Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA04001_Isometeic_Top.png?v=1721222160"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Metallic PLA",
+      "description": "Aparência metálica, imitando metais como ouro, bronze e aço. Excelente para peças decorativas sofisticadas.",
+      "colors": [
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02011_Isometric_Top.png?v=1721222030"
+        },
+        {
+          "name": "Metallic Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ca02036_metallic_blue_isometric_top.png?v=1737132184"
+        },
+        {
+          "name": "Metallic Bronze",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02013_Isometric_Top.png?v=1721222052"
+        },
+        {
+          "name": "Metallic Silver",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02012_Isometric_Top.png?v=1721222044"
+        },
+        {
+          "name": "Metallic Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02011_Isometric_Top.png?v=1721222030"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Satin PLA",
+      "description": "Acabamento acetinado suave, entre o fosco e o brilhante. Visual sofisticado para peças decorativas.",
+      "colors": [
+        {
+          "name": "Satin Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70977_PDT_Isometric_Top.png?v=1721572249"
+        },
+        {
+          "name": "Satin White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70946_PDT_Isometric_Top.png?v=1721572214"
+        },
+        {
+          "name": "Satin Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA05003_Isometric_Top.png?v=1721571513"
+        },
+        {
+          "name": "Satin Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA05002_Isometric_Top.png?v=1721571512"
+        },
+        {
+          "name": "Satin Polymaker Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA05004_Isometric_Top.png?v=1721571513"
+        },
+        {
+          "name": "Satin Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA05001_Isometric_Top.png?v=1721571512"
+        },
+        {
+          "name": "Satin Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70947_PDT_Isometric_Top.png?v=1721572215"
+        },
+        {
+          "name": "Satin Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70950_PDT_Isometric_Top.png?v=1721572214"
+        },
+        {
+          "name": "Satin Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70949_PDT_Isometric_Top.png?v=1721572214"
+        },
+        {
+          "name": "Satin Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PM70945_PDT_Isometric_Top.png?v=1721572215"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Silk PLA",
+      "description": "PLA com brilho acetinado (efeito seda) e cores vibrantes. Ótimo para peças decorativas e presentes com acabamento premium.",
+      "colors": [
+        {
+          "name": "Silk Silver",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03002_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03017_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Magenta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03004_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Bronze",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03003_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03001_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03005_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Bronze",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA03041_Asymmetric.png?v=1786337377"
+        },
+        {
+          "name": "Silk Silver",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA03040_Asymmetric.png?v=1786337378"
+        },
+        {
+          "name": "Silk Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA03039_Asymmetric.png?v=1786337377"
+        },
+        {
+          "name": "Silk Gunmetal Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/ca03032_silk_gunmetal_grey__v2_352942fc-df9f-4161-8586-8a7e3d4c9ac7.png?v=1746303967"
+        },
+        {
+          "name": "Silk Periwinkle",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03035_Isometric_Top.png?v=1721571262"
+        },
+        {
+          "name": "Silk Dark Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03034_Isometric_Top.png?v=1721571262"
+        },
+        {
+          "name": "Silk Peridot Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03032_Isometric_Top.png?v=1721571262"
+        },
+        {
+          "name": "Silk Brass",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03031_Isometric_Top.png?v=1721571262"
+        },
+        {
+          "name": "Silk Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03016_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03018_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Rose Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03020_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03019_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Light Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03021_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Quartz Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03014_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03015_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03010_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Rose",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03012_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03011_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Chrome",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03009_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03007_Isometric_Top.png?v=1721571219"
+        },
+        {
+          "name": "Silk Lime",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA03006_Isometric_Top.png?v=1721571219"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Starlight PLA",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Starlight Midnight",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02042_Isometric_Top.png?v=1756820580"
+        },
+        {
+          "name": "Starlight Pulsar",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02043_Isometric_Top.png?v=1756821390"
+        },
+        {
+          "name": "Starlight Mars",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02017_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Mercury",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02081_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Neptune",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02083_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Nebula",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02084_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Comet",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02085_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Meteor",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02086_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Aurora",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02087_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Twilight",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02088_Isometric_Top.png?v=1770395675"
+        },
+        {
+          "name": "Starlight Jupiter",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02082_Isometric_Top.png?v=1770395675"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PLA",
+      "model": "Panchroma Translucent PLA",
+      "description": "Translúcido, deixa a luz passar. Ótimo para luminárias e peças com efeito de vidro.",
+      "colors": [
+        {
+          "name": "Natural",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PA02011_Isometric_Top_72547a0d-1b13-437b-9c5c-4e7c4916601e.png?v=1736802765"
+        },
+        {
+          "name": "Translucent Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02004_Isometric_Top.png?v=1721221830"
+        },
+        {
+          "name": "Translucent Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02003_Isometric_Top.png?v=1721221821"
+        },
+        {
+          "name": "Translucent Magenta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02002_Isometric_Top.png?v=1721221813"
+        },
+        {
+          "name": "Translucent Cyan",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/CA02001_Isometric_Top_9ad5f0a0-b355-4884-82d4-f885b83a85fc.png?v=1736802825"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "TPU",
+      "model": "PolyFlex TPU90",
+      "description": "Filamento TPU flexível (emborrachado), para peças elásticas, capas, vedações e proteções.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/black_tpu90.png?v=1732035369"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/white_tpu_90.png?v=1732035370"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/grey_tpu90.png?v=1732035369"
+        },
+        {
+          "name": "Polymaker Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/teal_t_pu90.png?v=1732035369"
+        },
+        {
+          "name": "Clear",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/clear_tpu90.png?v=1732035370"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "TPU",
+      "model": "PolyFlex TPU95",
+      "description": "Filamento TPU flexível (emborrachado), para peças elásticas, capas, vedações e proteções.",
+      "colors": [
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PD01002_PDT_Isometric_Top.png?v=1691579069"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/black_3308aa0d-4ff4-49fc-ab2c-e37a5a686fbf.png?v=1732036044"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/orange_ed85a303-c065-443d-ac15-00f043765173.png?v=1732036043"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/yellow_c87d66ec-7818-4589-b227-054eed0cd5b2.png?v=1732036042"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/red_6942bb90-bbeb-44f9-a70b-1d11e119bee7.png?v=1732036043"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/blue_dad8ae89-4122-4319-953b-58025fd6ec3a.png?v=1732036044"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pd03001_pdt_isometric_top.png?v=1732036644"
+        },
+        {
+          "name": "Polymaker Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pd03001_pdt_isometric_top.png?v=1732036644"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "TPU",
+      "model": "PolyFlex TPU95-HF",
+      "description": "Filamento TPU flexível (emborrachado), para peças elásticas, capas, vedações e proteções.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pd03001_pdt_isometric_top.png?v=1732036644"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pd03002_pdt_isometric_top.png?v=1732036645"
+        },
+        {
+          "name": "Clear",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pd03006_pdt_isometric_top.png?v=1732036645"
+        },
+        {
+          "name": "Translucent Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PD03007_PDT_Asymmetric.png?v=1781609046"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "ABS",
+      "model": "PolyLite ABS",
+      "description": "Filamento ABS resistente ao calor e ao impacto, para peças mecânicas e técnicas (recomenda-se câmara fechada).",
+      "colors": [
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01024_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01033_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01043_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01039_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01040_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01006_pdt_isometric_top.png?v=1740166763"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01002_pdt_isometric_top.png?v=1740166765"
+        },
+        {
+          "name": "Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01031_pdt_isometric_top_1.png?v=1740166764"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01004_pdt_isometric_top.png?v=1740167676"
+        },
+        {
+          "name": "Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01008_pdt_isometric_top.png?v=1740166764"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01029_pdt_isometric_top.png?v=1740166761"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01009_pdt_isometric_top.png?v=1740166761"
+        },
+        {
+          "name": "Lulzbot Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01028_PDT_Isometric_Top.png?v=1732055482"
+        },
+        {
+          "name": "Lime",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01030_pdt_isometric_top.png?v=1740166761"
+        },
+        {
+          "name": "Light Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01031_pdt_isometric_top_1.png?v=1740166764"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01003_pdt_isometric_top.png?v=1740166764"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01005_pdt_isometric_top.png?v=1740166758"
+        },
+        {
+          "name": "Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01032_pdt_isometric_top.png?v=1740166759"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01007_pdt_isometric_top.png?v=1740166765"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01001_pdt_isometric_top.png?v=1740166763"
+        },
+        {
+          "name": "Dark Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01054_pdt_isometric_top.png?v=1696918696"
+        },
+        {
+          "name": "Natural",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01056_pdt_isometric_top.png?v=1740166760"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PE01045_PDT_Isometric_Top.png?v=1713307591"
+        },
+        {
+          "name": "Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/pe01028_pdt_isometric_top_b53c8f2a-a5c8-48cb-a2d4-e2cf02026b41.png?v=1740166762"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PETG",
+      "model": "PolyLite Translucent PETG",
+      "description": "Translúcido, deixa a luz passar. Ótimo para luminárias e peças com efeito de vidro.",
+      "colors": [
+        {
+          "name": "Translucent Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PolyLite-Translucent-PETG_1.75mm_1kg_Translucent-Red.png?v=1691584040"
+        },
+        {
+          "name": "Translucent Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PolyLite-Translucent-PETG_1.75mm_1kg_Translucent-Green.png?v=1691584040"
+        },
+        {
+          "name": "Translucent Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PolyLite-Translucent-PETG_1.75mm_1kg_Translucent-Blue.png?v=1685250113"
+        }
+      ]
+    },
+    {
+      "brand": "Polymaker",
+      "material": "PETG",
+      "model": "Polymaker PETG",
+      "description": "Filamento PETG resistente e durável, com boa resistência química e à umidade. Bom para peças funcionais e de uso externo.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05001_Isometric_Top_a0d11064-2148-43a9-8e17-7b77ce0f415e.png?v=1761151523"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05002_Isometric_Top_39081b84-719c-44b5-b39a-aa270422fa01.png?v=1761151520"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05003_Isometric_Top_04d62874-d23d-4220-a3f1-a3d424ed40ec.png?v=1761151520"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05004_Isometric_Top_1132180c-8c0d-4a03-a93d-e1f30890e5f5.png?v=1761151520"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05005_Isometric_Top_e0d6246a-4ccc-476e-babd-abb3ca01eb94.png?v=1761151520"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05006_Isometric_Top_b64b5730-4693-4dde-b6c3-b2cc856af724.png?v=1761151520"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05007_Isometric_Top_2c723000-4a14-4d05-a0b5-b853a86567ca.png?v=1761151521"
+        },
+        {
+          "name": "Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05008_Isometric_Top_7a2853eb-770c-4628-a469-8050f3c91454.png?v=1761151520"
+        },
+        {
+          "name": "Silver",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05010_Isometric_Top_1c6f0f47-ba41-4515-8b99-072aced0b7f6.png?v=1761151520"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05011_Isometric_Top_032aa0f5-9975-4914-97d1-4355a4f9a6a2.png?v=1761151522"
+        },
+        {
+          "name": "Electric Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05012_Isometric_Top_9481cb51-666b-4113-ba4b-3bdb25ac06e0.png?v=1761151520"
+        },
+        {
+          "name": "Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05013_Isometric_Top_10055e9f-c999-4b3d-99c3-d4d75e0c107e.png?v=1761151520"
+        },
+        {
+          "name": "Dark Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05014_Isometric_Top_2ccd0ffa-d669-4cb1-84ef-5e5c9c3075ac.png?v=1761151520"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05018_Isometric_Top_95904b3d-cc49-4630-b7d9-857e099778e2.png?v=1761151521"
+        },
+        {
+          "name": "Dark Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05019_Isometric_Top_a1c7e2ce-c264-4636-8c99-9e604fa77025.png?v=1761151520"
+        },
+        {
+          "name": "Army Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05020_Isometric_Top.png?v=1781826997"
+        },
+        {
+          "name": "Galaxy Black",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05021_Isometric_Top.png?v=1781827026"
+        },
+        {
+          "name": "Galaxy Dark Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05022_Isometric_Top.png?v=1781827057"
+        },
+        {
+          "name": "Galaxy Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05023_Isometric_Top.png?v=1781827083"
+        },
+        {
+          "name": "Galaxy Red",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05024_Isometric_Top.png?v=1781827106"
+        },
+        {
+          "name": "Clear",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/clear_59f8e688-f91b-46d7-9211-8f868dc4a1fb.png?v=1732033476"
+        },
+        {
+          "name": "Clear",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/Clear-3KG.jpg?v=1716212778"
+        },
+        {
+          "name": "Clear",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/clear_59f8e688-f91b-46d7-9211-8f868dc4a1fb.png?v=1732033476"
+        },
+        {
+          "name": "Magenta",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05017_Isometric_Top_7ef53551-1e16-4262-87ff-caf13e4cc440.png?v=1761151520"
+        },
+        {
+          "name": "Dark Green",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05016_Isometric_Top_2ad1a396-a76d-4ccd-a1ca-76632de20ae5.png?v=1761151520"
+        },
+        {
+          "name": "Lime",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05015_Isometric_Top_0431b01d-be28-4b3b-889d-b037ccb19848.png?v=1761151520"
+        },
+        {
+          "name": "Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0548/7299/7945/files/PB05009_Isometric_Top_6e3ef3e2-9694-4c33-92ab-1ea076d54c42.png?v=1761151520"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PA",
+      "model": "Easy PA",
+      "description": "Nylon (PA) de alta resistência mecânica e ao desgaste, para peças de engenharia exigentes.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/EasyPA_E-PA_Filament1KG_4.jpg?v=1773391835"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "High Speed PLA",
+      "description": "PLA otimizado para impressão em alta velocidade, sem perder qualidade.",
+      "colors": [
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_high_speed_pla.jpg?v=1778219597"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/white_high_speed_pla.jpg?v=1778219588"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/grey_high_speed_pla.jpg?v=1778219608"
+        },
+        {
+          "name": "Olive Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/olive_green_high_speed_pla_92b5585e-b86c-4140-9dee-768870443e74.jpg?v=1778219680"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/green_high_speed_pla.jpg?v=1778219643"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/yellow_high_speed_pla.jpg?v=1778219636"
+        },
+        {
+          "name": "Sunny Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_high_speed_pla.jpg?v=1778219597"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/red_high_speed_pla.jpg?v=1778219616"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/pink_high_speed_pla.jpg?v=1778219669"
+        },
+        {
+          "name": "Lavender Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_high_speed_pla.jpg?v=1778219597"
+        },
+        {
+          "name": "Klein Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/klein_blue_high_speed_pla.jpg?v=1778219627"
+        },
+        {
+          "name": "Sky Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_high_speed_pla.jpg?v=1778219597"
+        },
+        {
+          "name": "Jelly Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/helly_green_high_speed_pla.jpg?v=1778219715"
+        },
+        {
+          "name": "Mocha Mousse",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/mocha_mousse_high_speed_pla_280aa716-1b32-4192-8df2-ad87b1c11af5.jpg?v=1778219704"
+        },
+        {
+          "name": "Coral Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/coral_pink_high_speed_pla_5ce6e352-0f13-419d-bacb-8b791fd2b2d2.jpg?v=1778219692"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/klein_blue_high_speed_pla.jpg?v=1778219627"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/orange_high_speed_pla.jpg?v=1778219662"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "High Speed PLA Marble",
+      "description": "Com efeito mármore, veios que imitam pedra natural. Ideal para vasos e peças de decoração.",
+      "colors": [
+        {
+          "name": "Shadow Storm Marble",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Shadow_Storm_Marble_high_speed_marble.jpg?v=1778219230"
+        },
+        {
+          "name": "Oreo Marble",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Oreo_Marble_high_speed_marble.jpg?v=1778219210"
+        },
+        {
+          "name": "Chestnut Brown Marble",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Chestnut_Brown_Marble_high_speed_marble.jpg?v=1778219219"
+        },
+        {
+          "name": "Forest Green Marble",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Forest_Green_Marble_high_speed_marble.jpg?v=1778219205"
+        },
+        {
+          "name": "Brick Red",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Brick_Red_Marble_high_speed_marble.jpg?v=1778219200"
+        },
+        {
+          "name": "Ashen Concrete",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/Ashen_Concrete_Marble_high_speed_marble.jpg?v=1778220898"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA Galaxy",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Galaxy Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/SUNLUPLAGalaxy1KGPLAGalaxyGalaxyGreen.jpg?v=1775110966"
+        },
+        {
+          "name": "Start Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/SUNLUPLAGalaxy1KG-PLAGalaxyStarlitFlow.jpg?v=1775110966"
+        },
+        {
+          "name": "Starlit Flow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/SUNLUPLAGalaxy1KG-PLAGalaxyStarlitFlow.jpg?v=1775110966"
+        },
+        {
+          "name": "Standust Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/SUNLUPLAGalaxy1KG-PLAGalaxyStarlitFlow.jpg?v=1775110966"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA Matte",
+      "description": "Acabamento fosco que disfarça as linhas de camada e elimina o brilho. Ideal para modelos e peças com visual elegante.",
+      "colors": [
+        {
+          "name": "Clay",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_clay.jpg?v=1778146659"
+        },
+        {
+          "name": "Klein Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_klein_blue.jpg?v=1778146576"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_grey.jpg?v=1778146294"
+        },
+        {
+          "name": "Oak",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_white.jpg?v=1778146279"
+        },
+        {
+          "name": "Bone White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_white.jpg?v=1778146279"
+        },
+        {
+          "name": "Olive Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_olive_green.jpg?v=1778146673"
+        },
+        {
+          "name": "Lavender Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_lavender_purple.jpg?v=1778146651"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_green.jpg?v=1778146604"
+        },
+        {
+          "name": "Sunny Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_sunny_orange.jpg?v=1778146720"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_red.jpg?v=1778146303"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_black.jpg?v=1778146287"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_white.jpg?v=1778146279"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_bright_yellow.jpg?v=1778146594"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_klein_blue.jpg?v=1778146576"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_pink.jpg?v=1778146680"
+        },
+        {
+          "name": "Bright Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_bright_yellow.jpg?v=1778146594"
+        },
+        {
+          "name": "Light Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_light_blue.jpg?v=1778146621"
+        },
+        {
+          "name": "Powder Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_powder_blue.jpg?v=1778146636"
+        },
+        {
+          "name": "Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_lavender_purple.jpg?v=1778146651"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_Matte_sunny_orange.jpg?v=1778146720"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA Meta",
+      "description": "PLA em cores pastel (macaron) suaves e agradáveis. Ótimo para peças decorativas delicadas.",
+      "colors": [
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_White.jpg?v=1778144923"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_black.jpg?v=1778144921"
+        },
+        {
+          "name": "Lemon Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_lemon_yellow.jpg?v=1778144971"
+        },
+        {
+          "name": "Sky Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_sky_blue.jpg?v=1778144963"
+        },
+        {
+          "name": "Cherry Red",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_cherry_red.jpg?v=1778144952"
+        },
+        {
+          "name": "Olive Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_black.jpg?v=1778144921"
+        },
+        {
+          "name": "Mint Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_mint_green.jpg?v=1778144934"
+        },
+        {
+          "name": "Sakura Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_sakura_pink.jpg?v=1778144983"
+        },
+        {
+          "name": "Ice Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_ice_blue.jpg?v=1778144930"
+        },
+        {
+          "name": "Apple Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_apple_green.jpg?v=1778145022"
+        },
+        {
+          "name": "Taro Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_taro_purple.jpg?v=1778145002"
+        },
+        {
+          "name": "Cream White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_cream_white.jpg?v=1778145012"
+        },
+        {
+          "name": "Chocolate",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_chocolate.jpg?v=1778144991"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_sakura_pink.jpg?v=1778144983"
+        },
+        {
+          "name": "Coffee",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_black.jpg?v=1778144921"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_sunny_orange.jpg?v=1778145865"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_grey.jpg?v=1778144943"
+        },
+        {
+          "name": "Sunny Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_sunny_orange.jpg?v=1778145865"
+        },
+        {
+          "name": "Teal",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_META_black.jpg?v=1778144921"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA Metal",
+      "description": "Aparência metálica, imitando metais como ouro, bronze e aço. Excelente para peças decorativas sofisticadas.",
+      "colors": [
+        {
+          "name": "Marrakech Bronze",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA Twinkling",
+      "description": "Com partículas cintilantes e efeito brilhante, lembrando um céu estrelado. Para peças decorativas de destaque.",
+      "colors": [
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/BLUE_Twinkling_PLA.jpg?v=1779347925"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA-Lightweight",
+      "description": "PLA leve que expande ao imprimir, reduzindo o peso. Muito usado em aeromodelismo e peças leves.",
+      "colors": [
+        {
+          "name": "PLA-Lightweight",
+          "image": ""
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "PLA+",
+      "description": "Filamento PLA fácil de imprimir, ótimo custo-benefício para protótipos, peças decorativas e uso do dia a dia.",
+      "colors": [
+        {
+          "name": "Coffee Brown",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_coffee_brown_78e1f730-9fc5-4f2c-925f-727b33c28b9e.jpg?v=1776411036"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "Refill PLA",
+      "description": "Recarga de filamento sem carretel — econômico e sustentável, compatível com carretéis reutilizáveis.",
+      "colors": [
+        {
+          "name": "Classic Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_REFILL_BLACK.jpg?v=1773626487"
+        },
+        {
+          "name": "Classic White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/PLA_REFILL_BLACK.jpg?v=1773626487"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "Silk PLA+",
+      "description": "PLA com brilho acetinado (efeito seda) e cores vibrantes. Ótimo para peças decorativas e presentes com acabamento premium.",
+      "colors": [
+        {
+          "name": "Forth-Color Blue Purple Red Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_silk_pla.jpg?v=1779347408"
+        },
+        {
+          "name": "Red",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/red_silk_pla.jpg?v=1779347427"
+        },
+        {
+          "name": "White",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/white_silk_pla.jpg?v=1779347411"
+        },
+        {
+          "name": "Black",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/black_silk_pla.jpg?v=1779347408"
+        },
+        {
+          "name": "Purple",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/purple_silk_pla.jpg?v=1779347496"
+        },
+        {
+          "name": "Orange",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/orange_silk_pla.jpg?v=1779347537"
+        },
+        {
+          "name": "Green",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/green_silk_pla.jpg?v=1779347440"
+        },
+        {
+          "name": "Yellow",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/yellow_silk_pla.jpg?v=1779347485"
+        },
+        {
+          "name": "Pink",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/pink_silk_pla.jpg?v=1779347477"
+        },
+        {
+          "name": "Brass",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/brass_silk_pla.jpg?v=1779347516"
+        },
+        {
+          "name": "Silver",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/silver_silk_pla.jpg?v=1779347448"
+        },
+        {
+          "name": "Light Gold",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/gold_silk_pla.jpg?v=1779347459"
+        },
+        {
+          "name": "Blue",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/blue_silk_pla.jpg?v=1779347433"
+        },
+        {
+          "name": "Grey",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/grey_silk_pla.jpg?v=1779347419"
+        },
+        {
+          "name": "Red Copper",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/red_copper_silk_pla.jpg?v=1779347470"
+        }
+      ]
+    },
+    {
+      "brand": "SunLu",
+      "material": "PLA",
+      "model": "WOOD",
+      "description": "Filamento com fibras de madeira, aparência e textura amadeiradas. Perfeito para peças rústicas e decorativas.",
+      "colors": [
+        {
+          "name": "Wood",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/cherry_wood_PLA_wood.jpg?v=1779348167"
+        },
+        {
+          "name": "Maple wood",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/maple_wood_PLA_wood.jpg?v=1779348178"
+        },
+        {
+          "name": "Walnut wood",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/walnut_wood_PLA_wood.jpg?v=1779348157"
+        },
+        {
+          "name": "Cherry wood",
+          "image": "https://cdn.shopify.com/s/files/1/0152/6507/1190/files/cherry_wood_PLA_wood.jpg?v=1779348167"
+        }
+      ]
+    }
+  ]
+}
