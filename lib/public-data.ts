@@ -26,20 +26,12 @@ function publicProduct(product: Product) {
 function publicVariant(product: Product) {
   return {
     slug: product.slug,
-    name: product.name,
-    category: product.category,
-    tag: product.tag,
-    tone: product.tone,
-    sku: product.sku,
-    brand: product.brand,
     imageUrl: product.imageUrl
       ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}`
       : "",
     priceCents: product.priceCents,
     cardPriceCents: product.cardPriceCents,
     stock: product.stock,
-    visible: product.visible,
-    filamentModel: product.filamentModel,
     colorName: product.colorName,
     colorHex: product.colorHex,
   } as Product;
