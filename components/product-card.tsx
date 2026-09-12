@@ -15,6 +15,7 @@ export default function ProductCard({ product: initialProduct }: { product: Prod
   const variants = initialProduct.variants || [];
   const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
   const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;
+  const productHref = { pathname: `/produto/${initialProduct.slug}`, query: selectedVariant ? { cor: selectedVariant.slug } : undefined };
   return <article className="product-card">
     <div className="product-image">
       <span className="product-tag">{product.brand || product.tag}</span>
@@ -22,17 +23,17 @@ export default function ProductCard({ product: initialProduct }: { product: Prod
     </div>
     <div className="product-content">
       <span className="product-category">{product.category}</span>
-      <h3>{productTitle(product)}</h3><p>{product.description}</p>
+      <Link className="product-title-link" href={productHref}><h3>{productTitle(product)}</h3></Link><p>{product.description}</p>
       <ColorSwatches variants={variants} selected={product} onSelect={(variant) => setSelectedSlug(variant.slug)} />
-      <div className="featured-price">
+      <Link className="featured-price product-price-link" href={productHref} aria-label={`Ver ${productTitle(product)} e valores`}>
         {(product.priceCents || 0) > 0 ? <>
           <span>NO PIX</span><strong>{money(product.priceCents || 0)}</strong>
           <span className="installment-label">10X NO CARTÃO</span>
           <strong className="installment-value">{money(product.cardPriceCents || product.priceCents || 0)}</strong>
         </> : <><span>VALOR</span><strong>Consulte o preço</strong></>}
-      </div>
+      </Link>
       <ul>{product.specs.map((spec) => <li key={spec}>{spec}</li>)}</ul>
-      <Link href={{ pathname: `/produto/${initialProduct.slug}`, query: selectedVariant ? { cor: selectedVariant.slug } : undefined }}>Ver produto <span>→</span></Link>
+      <Link className="product-detail-link" href={productHref}>Ver produto <span>→</span></Link>
     </div>
   </article>;
 }
