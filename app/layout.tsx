@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Manrope, Sora } from "next/font/google";
-import "./site.css";
 import { CartProvider } from "../components/cart-provider";
 import { jsonLd, organizationSchema, siteUrl } from "../lib/seo";
 
@@ -38,6 +37,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="stylesheet" href="/tiger-global.css?v=20260912-1" />
+      </head>
       <body className={`${manrope.variable} ${sora.variable}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }} />
         <CartProvider>{children}</CartProvider>
