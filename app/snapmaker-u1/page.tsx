@@ -7,6 +7,10 @@ import heroImage from "../../public/snapmaker-u1/u1-hero.png";
 import studioImage from "../../public/snapmaker-u1/u1-studio.webp";
 import styles from "./page.module.css";
 import { absoluteUrl, jsonLd } from "../../lib/seo";
+import { getCachedPublicProduct } from "../../lib/public-data";
+import SnapmakerOfferCard from "../../components/snapmaker-offer-card";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Snapmaker U1: impressora 3D multicolor",
@@ -44,7 +48,9 @@ const highlights = [
 
 const materials = ["PLA", "PETG", "TPU", "ABS", "ASA", "PC", "PA", "PVA"];
 
-export default function SnapmakerU1Page() {
+export default async function SnapmakerU1Page() {
+  const storeProduct = await getCachedPublicProduct("sku-0014");
+  const price = Number(storeProduct?.priceCents || 0);
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -53,6 +59,7 @@ export default function SnapmakerU1Page() {
     image: [absoluteUrl("/snapmaker-u1/u1-hero.png")],
     brand: { "@type": "Brand", name: "Snapmaker" },
     url: absoluteUrl("/snapmaker-u1"),
+    ...(price > 0 ? { offers: { "@type": "Offer", priceCurrency: "BRL", price: (price / 100).toFixed(2), availability: (storeProduct?.stock || 0) > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", url: absoluteUrl("/produto/sku-0014") } } : {}),
   };
   return (
     <div className={styles.page}>
@@ -189,6 +196,8 @@ export default function SnapmakerU1Page() {
             </ul>
           </div>
         </section>
+
+        {storeProduct ? <SnapmakerOfferCard product={storeProduct} /> : null}
 
         <section className={styles.finalCta}>
           <span>SNAPMAKER U1</span>
