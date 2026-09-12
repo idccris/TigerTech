@@ -31,6 +31,9 @@ export default function SiteFooter() {
         <section className="footer-links">
           <span className="footer-label">INSTITUCIONAL</span>
           <nav aria-label="Links institucionais">
+            <Link href="/impressoras-3d">Impressoras 3D</Link>
+            <Link href="/filamentos">Filamentos 3D</Link>
+            <Link href="/acessorios-impressora-3d">Acessórios</Link>
             <Link href="/sobre">Sobre a empresa</Link>
             <Link href="/produtos">Como comprar</Link>
             <Link href="/seguranca">Segurança</Link><Link href="/envio">Envio</Link><Link href="/pagamento">Pagamento</Link>

@@ -17,11 +17,23 @@ const categories = [
 const PRODUCTS_PER_BATCH = 24;
 
 
-export default function ProductsPage({ initialProducts }: { initialProducts: Product[] }) {
+type ProductsPageProps = {
+  initialProducts: Product[];
+  initialCategory?: (typeof categories)[number];
+  title?: string;
+  description?: string;
+};
+
+export default function ProductsPage({
+  initialProducts,
+  initialCategory = "Todos",
+  title = "Todos os produtos",
+  description = "Encontre impressoras 3D, filamentos e acessórios para transformar suas ideias em projetos reais.",
+}: ProductsPageProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [query, setQuery] = useState("");
   const [category, setCategory] =
-    useState<(typeof categories)[number]>("Todos");
+    useState<(typeof categories)[number]>(initialCategory);
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_BATCH);
   const deferredQuery = useDeferredValue(query);
   const filtered = useMemo(
@@ -61,11 +73,8 @@ export default function ProductsPage({ initialProducts }: { initialProducts: Pro
       <SiteHeader solid />
       <section className="store-hero">
         <span className="section-kicker">CATÁLOGO COMPLETO</span>
-        <h1>Todos os produtos</h1>
-        <p>
-          Encontre impressoras 3D, filamentos e acessórios para transformar suas
-          ideias em projetos reais.
-        </p>
+        <h1>{title}</h1>
+        <p>{description}</p>
       </section>
       <section className="store-catalog">
         <div className="store-toolbar">

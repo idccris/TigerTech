@@ -5,8 +5,10 @@ import { getCachedPublicCatalogProducts } from "../../lib/public-data";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Produtos | Tiger Tech",
-  description: "Catálogo completo de impressoras 3D, filamentos e acessórios.",
+  title: "Impressoras 3D, filamentos e acessórios",
+  description: "Explore impressoras 3D, filamentos PLA, PETG e materiais especiais, além de acessórios para criar, prototipar e produzir com qualidade.",
+  alternates: { canonical: "/produtos" },
+  openGraph: { title: "Impressoras 3D, filamentos e acessórios | Tiger Tech 3D", description: "Encontre equipamentos, filamentos e acessórios para impressão 3D.", url: "/produtos" },
 };
 
 export default async function Page() {

@@ -6,11 +6,14 @@ import detectionImage from "../../public/snapmaker-u1/u1-detection.png";
 import heroImage from "../../public/snapmaker-u1/u1-hero.png";
 import studioImage from "../../public/snapmaker-u1/u1-studio.webp";
 import styles from "./page.module.css";
+import { absoluteUrl, jsonLd } from "../../lib/seo";
 
 export const metadata: Metadata = {
-  title: "Snapmaker U1 | Impressão 3D multicolor | Tiger Tech",
+  title: "Snapmaker U1: impressora 3D multicolor",
   description:
     "Conheça a Snapmaker U1: quatro cabeçotes independentes, troca automática SnapSwap, impressão multicolor e velocidade de até 500 mm/s.",
+  alternates: { canonical: "/snapmaker-u1" },
+  openGraph: { title: "Snapmaker U1 | Impressão 3D multicolor", description: "Quatro cabeçotes independentes, troca automática SnapSwap e velocidade de até 500 mm/s.", url: "/snapmaker-u1", images: [{ url: "/snapmaker-u1/u1-hero.png", alt: "Impressora 3D Snapmaker U1" }] },
 };
 
 const whatsapp =
@@ -42,8 +45,18 @@ const highlights = [
 const materials = ["PLA", "PETG", "TPU", "ABS", "ASA", "PC", "PA", "PVA"];
 
 export default function SnapmakerU1Page() {
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "Snapmaker U1",
+    description: "Impressora 3D multicolor e multimaterial com quatro cabeçotes independentes, sistema SnapSwap e velocidade de até 500 mm/s.",
+    image: [absoluteUrl("/snapmaker-u1/u1-hero.png")],
+    brand: { "@type": "Brand", name: "Snapmaker" },
+    url: absoluteUrl("/snapmaker-u1"),
+  };
   return (
     <div className={styles.page}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(productSchema) }} />
       <SiteHeader />
       <main>
         <section className={styles.hero}>
