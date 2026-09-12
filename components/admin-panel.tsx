@@ -220,6 +220,26 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       setActiveFilamentGroup(null);
     }
   }
+  async function toggleFilamentFeatured(group: Product, featured: boolean) {
+    setError("");
+    const r = await fetch("/api/admin/products", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ groupSlug: group.groupSlug, featured }),
+    });
+    if (!r.ok) {
+      setError((await r.json()).error || "Não foi possível atualizar o destaque.");
+      return false;
+    }
+    load();
+    localStorage.setItem("catalog-updated", String(Date.now()));
+    if ("BroadcastChannel" in window) {
+      const channel = new BroadcastChannel("catalog-updates");
+      channel.postMessage("refresh");
+      channel.close();
+    }
+    return true;
+  }
 
   function editProduct(product: Product) {
     setEdit({
@@ -362,7 +382,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                   } else editProduct(p);
                 }}
               >
-                {p.variants ? "Gerenciar cores" : "Editar"}
+                {p.variants ? "Gerenciar produto" : "Editar"}
               </button>
               {!p.variants ? <button onClick={() => del(p.slug)}>Excluir</button> : null}
             </article>
@@ -381,6 +401,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
             onEdit={editProduct}
             onAdd={addFilamentColor}
             onDelete={(variant) => del(variant.slug)}
+            onToggleFeatured={toggleFilamentFeatured}
           />
         ) : editorOpen ? (
           <form className="admin-form" onSubmit={save}>

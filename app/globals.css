@@ -1825,6 +1825,21 @@ footer > a:last-child {
   background: white;
 }
 .filament-variant-manager h2 { margin: 5px 0; font: 700 20px var(--font-display); }
+.filament-feature-control {
+  display: grid;
+  gap: 7px;
+  margin: 17px 0 4px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #fafafa;
+}
+.filament-feature-control > span { color: var(--acid); font-size: 8px; font-weight: 900; letter-spacing: .14em; }
+.filament-feature-control > strong { font: 700 13px var(--font-display); }
+.filament-feature-control > small { color: var(--muted); font-size: 8px; line-height: 1.45; }
+.filament-feature-control button { min-height: 37px; border: 1px solid var(--ink); border-radius: 100px; background: white; color: var(--ink); font-size: 9px; font-weight: 900; cursor: pointer; }
+.filament-feature-control button.active { border-color: var(--acid); background: var(--acid); color: white; }
+.filament-feature-control button:disabled { cursor: wait; opacity: .7; }
 .add-filament-color {
   width: 100%;
   margin: 18px 0 12px;

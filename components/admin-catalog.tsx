@@ -160,7 +160,7 @@ export default function AdminCatalog({
                             ? "Visível na loja"
                             : "Oculto na loja"}
                         </small>
-                        {role === "operator" ? <div className="operator-product-actions">{product.variants ? <button onClick={() => setActiveFilamentGroup(product)}>Gerenciar cores</button> : <><button onClick={() => setEditing({ ...product, pixPrice: formatBRLInput(product.priceCents || 0), cardPrice: formatBRLInput(product.cardPriceCents || product.priceCents || 0) })}>Editar</button><button onClick={() => deleteProduct(product as InventoryProduct)}>Excluir</button></>}</div> : null}
+                        {role === "operator" ? <div className="operator-product-actions">{product.variants ? <button onClick={() => setActiveFilamentGroup(product)}>Gerenciar produto</button> : <><button onClick={() => setEditing({ ...product, pixPrice: formatBRLInput(product.priceCents || 0), cardPrice: formatBRLInput(product.cardPriceCents || product.priceCents || 0) })}>Editar</button><button onClick={() => deleteProduct(product as InventoryProduct)}>Excluir</button></>}</div> : null}
                       </div>
                     </article>
                   ))}

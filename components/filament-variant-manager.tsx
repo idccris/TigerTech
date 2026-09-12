@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { Product } from "../lib/products";
 import { productTitle } from "../lib/product-variants";
 
@@ -9,22 +10,42 @@ type Props = {
   onEdit: (variant: Product) => void;
   onAdd: (group: Product) => void;
   onDelete: (variant: Product) => void;
+  onToggleFeatured?: (group: Product, featured: boolean) => Promise<boolean>;
 };
 
-export default function FilamentVariantManager({ group, onClose, onEdit, onAdd, onDelete }: Props) {
+export default function FilamentVariantManager({ group, onClose, onEdit, onAdd, onDelete, onToggleFeatured }: Props) {
   const variants = group.variants || [];
   const totalStock = variants.reduce((total, variant) => total + Math.max(0, variant.stock || 0), 0);
+  const [featured, setFeatured] = useState(() => variants.some((variant) => variant.featured));
+  const [updatingFeatured, setUpdatingFeatured] = useState(false);
+
+  async function toggleFeatured() {
+    if (!onToggleFeatured || updatingFeatured) return;
+    setUpdatingFeatured(true);
+    const nextValue = !featured;
+    const saved = await onToggleFeatured(group, nextValue);
+    if (saved) setFeatured(nextValue);
+    setUpdatingFeatured(false);
+  }
 
   return (
-    <aside className="filament-variant-manager" aria-label={`Cores de ${productTitle(group)}`}>
+    <aside className="filament-variant-manager" aria-label={`Gerenciar produto ${productTitle(group)} e suas cores`}>
       <div className="admin-form-head">
         <div>
-          <span>VARIANTES DO FILAMENTO</span>
+          <span>GERENCIAR PRODUTO</span>
           <h2>{group.brand} {productTitle(group)}</h2>
           <p>{variants.length} {variants.length === 1 ? "cor" : "cores"} · {totalStock} unidades no total</p>
         </div>
-        <button type="button" aria-label="Fechar gerenciador de cores" onClick={onClose}>×</button>
+        <button type="button" aria-label="Fechar gerenciamento do produto" onClick={onClose}>×</button>
       </div>
+      {onToggleFeatured ? <section className="filament-feature-control">
+        <span>DESTAQUES DA LOJA</span>
+        <strong>{featured ? "Este modelo aparece na página inicial" : "Este modelo não aparece nos destaques"}</strong>
+        <button type="button" className={featured ? "active" : ""} aria-pressed={featured} disabled={updatingFeatured} onClick={toggleFeatured}>
+          {updatingFeatured ? "Salvando..." : featured ? "✓ Em destaque na loja" : "Destacar na loja"}
+        </button>
+        <small>Use para exibir este filamento entre os destaques da página inicial.</small>
+      </section> : null}
       <button className="add-filament-color" type="button" onClick={() => onAdd(group)}>+ Adicionar nova cor</button>
       <div className="filament-variant-list">
         {variants.map((variant) => (

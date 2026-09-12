@@ -72,6 +72,33 @@ export async function POST(req: Request) {
   revalidatePath("/produto/[slug]", "page");
   return Response.json({ ok: true });
 }
+export async function PATCH(req: Request) {
+  if (!isTrustedMutation(req))
+    return Response.json({ error: "Origem não autorizada" }, { status: 403 });
+  const user = await requireUser();
+  if (!user)
+    return Response.json({ error: "Não autorizado" }, { status: 401 });
+  const { groupSlug, featured, adminPassword } = await req.json();
+  if (user.role === "operator" && !(await verifyAdminPassword(String(adminPassword || ""))))
+    return Response.json({ error: "Senha do administrador necessária para alterar os destaques." }, { status: 403 });
+  const slug = String(groupSlug || "").trim();
+  if (!slug)
+    return Response.json({ error: "Filamento não identificado." }, { status: 400 });
+  await ensureDb();
+  await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE group_slug=${slug}`;
+  if (featured === true) {
+    const representative = await sql()`SELECT slug FROM products WHERE group_slug=${slug} AND visible=true ORDER BY stock DESC, updated_at DESC LIMIT 1`;
+    if (!representative[0])
+      return Response.json({ error: "Nenhuma cor visível foi encontrada para este filamento." }, { status: 400 });
+    await sql()`UPDATE products SET featured=true, featured_at=NOW(), updated_at=NOW() WHERE slug=${representative[0].slug}`;
+    await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
+  }
+  revalidateTag("catalog-products", { expire: 0 });
+  revalidatePath("/", "page");
+  revalidatePath("/produtos", "page");
+  revalidatePath("/produto/[slug]", "page");
+  return Response.json({ ok: true });
+}
 export async function DELETE(req: Request) {
   if (!isTrustedMutation(req))
     return Response.json({ error: "Origem não autorizada" }, { status: 403 });
