@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, Sora } from "next/font/google";
-import "./globals.css";
+import "./site.css";
 import { CartProvider } from "../components/cart-provider";
 import { jsonLd, organizationSchema, siteUrl } from "../lib/seo";
 
