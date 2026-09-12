@@ -8,6 +8,7 @@ import {
 } from "./db";
 import { defaultHomeContent, parseHomeContent } from "./site-content";
 import { defaultSlideshowContent, parseSlideshowContent } from "./slideshow-content";
+import { defaultSnapmakerU1Content, parseSnapmakerU1Content } from "./snapmaker-content";
 import type { Product } from "./products";
 import { groupProducts } from "./product-variants";
 import { storefrontProductImage } from "./product-images";
@@ -107,4 +108,12 @@ export const getCachedPublicProduct = unstable_cache(
   },
   ["public-product-groups-v1"],
   { revalidate: 3600, tags: ["catalog-products"] },
+);
+
+export const getCachedSnapmakerU1Content = unstable_cache(
+  async () => process.env.DATABASE_URL
+    ? parseSnapmakerU1Content(await getSiteSetting("snapmaker_u1_content"))
+    : defaultSnapmakerU1Content,
+  ["snapmaker-u1-content-v1"],
+  { revalidate: 3600, tags: ["site-design"] },
 );

@@ -5,11 +5,14 @@ import Link from "next/link";
 import type { Product } from "../lib/products";
 import { useCart } from "./cart-provider";
 import styles from "../app/snapmaker-u1/page.module.css";
+import type { SnapmakerU1Content } from "../lib/snapmaker-content";
 
 const money = (cents: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 
-export default function SnapmakerOfferCard({ product }: { product: Product }) {
+type OfferCopy = Pick<SnapmakerU1Content, "offerEyebrow" | "offerDescription" | "offerCategory">;
+
+export default function SnapmakerOfferCard({ product, copy }: { product: Product; copy: OfferCopy }) {
   const cart = useCart();
   const available = (product.stock || 0) > 0;
   const hasPrice = (product.priceCents || 0) > 0;
@@ -17,8 +20,8 @@ export default function SnapmakerOfferCard({ product }: { product: Product }) {
   return (
     <section className={styles.offerSection} aria-labelledby="snapmaker-offer-title">
       <div className={styles.offerIntro}>
-        <span>COMPRE A SNAPMAKER U1</span>
-        <p>Leve a tecnologia de quatro cabeçotes para a sua produção.</p>
+        <span>{copy.offerEyebrow}</span>
+        <p>{copy.offerDescription}</p>
       </div>
       <article className={styles.offerCard}>
         <Link className={styles.offerImage} href={`/produto/${product.slug}`} aria-label="Ver detalhes da Snapmaker U1">
@@ -28,7 +31,7 @@ export default function SnapmakerOfferCard({ product }: { product: Product }) {
           <span>SNAPMAKER</span>
         </Link>
         <div className={styles.offerContent}>
-          <span className={styles.offerCategory}>IMPRESSORA 3D MULTICOLOR</span>
+          <span className={styles.offerCategory}>{copy.offerCategory}</span>
           <h2 id="snapmaker-offer-title">Snapmaker U1</h2>
           <p>{product.description}</p>
           <div className={styles.offerHighlights}>

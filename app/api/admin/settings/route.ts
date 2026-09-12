@@ -2,6 +2,7 @@ import { isTrustedMutation, requireAdmin } from "../../../../lib/admin-auth";
 import { ensureDb, getSiteSetting, sql } from "../../../../lib/db";
 import { defaultHomeContent, parseHomeContent } from "../../../../lib/site-content";
 import { defaultSlideshowContent, parseSlideshowContent } from "../../../../lib/slideshow-content";
+import { sanitizeSnapmakerU1Content } from "../../../../lib/snapmaker-content";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET() {
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Origem não autorizada" }, { status: 403 });
   if (!(await requireAdmin()))
     return Response.json({ error: "Não autorizado" }, { status: 401 });
-  const { heroImage, homeContent, filamentContents, slideshowContent, slideshowImages } = await req.json();
+  const { heroImage, homeContent, filamentContents, slideshowContent, slideshowImages, snapmakerU1Content } = await req.json();
   const validateImage = (value: unknown, maxLength = 4_200_000) => {
     if (value === undefined || value === null) return null;
     const image = String(value || "");
@@ -79,11 +80,13 @@ export async function POST(req: Request) {
       };
     }),
   };
+  const safeSnapmakerContent = snapmakerU1Content === undefined ? null : sanitizeSnapmakerU1Content(snapmakerU1Content);
   const updates = [];
   if (image !== null) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('hero_image',${image},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('home_content',${JSON.stringify(safeContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeFilamentContents) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('filament_type_content',${JSON.stringify(safeFilamentContents)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeSlideshowContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('slideshow_content',${JSON.stringify(safeSlideshowContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
+  if (safeSnapmakerContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('snapmaker_u1_content',${JSON.stringify(safeSnapmakerContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   safeSlideshowImages.forEach((slideImage, index) => {
     if (slideImage !== null) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES(${`slideshow_image_${index + 1}`},${slideImage},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   });
@@ -93,5 +96,6 @@ export async function POST(req: Request) {
   revalidatePath("/", "page");
   revalidatePath("/produtos", "page");
   revalidatePath("/produto/[slug]", "page");
+  revalidatePath("/snapmaker-u1", "page");
   return Response.json({ ok: true });
 }

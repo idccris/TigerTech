@@ -4,11 +4,13 @@ import { useState } from "react";
 import type { HomeContent } from "../lib/site-content";
 import { defaultFilamentBenefits, type FilamentContent } from "../lib/filament-content";
 import { defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
+import type { SnapmakerU1Content } from "../lib/snapmaker-content";
 import AdminNavbar from "./admin-navbar";
+import AdminSnapmakerDesign from "./admin-snapmaker-design";
 
 const filamentIcons = ["✦", "⚡", "✓", "★", "◆", "●", "◉", "♢", "↗", "∞", "☘", "⬢"];
 
-export default function AdminDesign({ initialImage, initialContent, initialFilamentContents, initialSlideshow, initialSlideshowImages }: { initialImage: string; initialContent: HomeContent; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[] }) {
+export default function AdminDesign({ initialImage, initialContent, initialFilamentContents, initialSlideshow, initialSlideshowImages, initialSnapmakerContent }: { initialImage: string; initialContent: HomeContent; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[]; initialSnapmakerContent: SnapmakerU1Content }) {
   const [heroImage, setHeroImage] = useState(initialImage);
   const [content, setContent] = useState(initialContent);
   const [saving, setSaving] = useState(false);
@@ -19,7 +21,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
   const [slideshow, setSlideshow] = useState(initialSlideshow);
   const [slideshowImages, setSlideshowImages] = useState(() => initialSlideshow.slides.map((slide, index) => initialSlideshowImages[index] || slide.defaultImage));
   const [slideshowImageUpdates, setSlideshowImageUpdates] = useState<(string | null)[]>([null, null]);
-  const [activeSection, setActiveSection] = useState<"home" | "filaments" | "slideshow">("home");
+  const [activeSection, setActiveSection] = useState<"home" | "filaments" | "slideshow" | "snapmaker">("home");
   const selectedContent = filamentContents.find((item) => item.typeName === selectedFilament);
   type TextKey = Exclude<keyof HomeContent, "faqs">;
 
@@ -151,6 +153,9 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
       </button>
       <button type="button" className={activeSection === "slideshow" ? "active" : ""} aria-pressed={activeSection === "slideshow"} onClick={() => { setActiveSection("slideshow"); setMessage(""); }}>
         <b>03</b><span><strong>Slideshow</strong><small>2 banners exibidos na página inicial</small></span>
+      </button>
+      <button type="button" className={activeSection === "snapmaker" ? "active" : ""} aria-pressed={activeSection === "snapmaker"} onClick={() => { setActiveSection("snapmaker"); setMessage(""); }}>
+        <b>04</b><span><strong>Landing Page U1</strong><small>Textos da página Snapmaker U1</small></span>
       </button>
     </nav>
 
@@ -289,5 +294,6 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
       <div className="design-publish-bar"><span><strong>Slideshow da página inicial</strong><small>As alterações atualizam os dois banners públicos.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
     </form> : null}
+    {activeSection === "snapmaker" ? <AdminSnapmakerDesign initialContent={initialSnapmakerContent} /> : null}
   </main>;
 }
