@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getCachedPublicCatalogProducts } from "../lib/public-data";
+import { getCachedLandingPages, getCachedPublicCatalogProducts } from "../lib/public-data";
 import { absoluteUrl } from "../lib/seo";
 
 export const revalidate = 3600;
@@ -18,13 +18,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/garantia"), changeFrequency: "monthly", priority: 0.4 },
     { url: absoluteUrl("/trocas-e-devolucoes"), changeFrequency: "monthly", priority: 0.3 },
   ];
-  const products = await getCachedPublicCatalogProducts();
+  const [products, landingPages] = await Promise.all([getCachedPublicCatalogProducts(), getCachedLandingPages()]);
   return [
     ...staticPages,
     ...products.map((product) => ({
       url: absoluteUrl(`/produto/${product.slug}`),
       lastModified: product.updatedAt ? new Date(product.updatedAt) : undefined,
       changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...landingPages.map((page) => ({
+      url: absoluteUrl(`/landing/${page.slug}`),
+      changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
   ];

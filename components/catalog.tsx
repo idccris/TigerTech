@@ -340,9 +340,9 @@ export default function Catalog({
           {slideshow.slides.map((slide, index) => <article
             className={`cta-slide cta-product-slide ${index === 0 ? "cta-slide-snapmaker" : "cta-slide-a1"} ${ctaSlide === index ? "active" : ""}`}
             aria-hidden={ctaSlide !== index}
-            key={index}
+            key={slide.id}
           >
-            <Image
+            {slideshowImages[index] || slide.defaultImage ? <Image
               className={`cta-slide-background ${index === 1 ? "cta-a1-background" : ""}`}
               src={slideshowImages[index] || slide.defaultImage}
               alt=""
@@ -350,7 +350,7 @@ export default function Catalog({
               sizes="100vw"
               unoptimized
               aria-hidden="true"
-            />
+            /> : null}
             <div className="cta-slide-shade" aria-hidden="true" />
             <div className="cta-slide-content">
               <span className="section-kicker">{slide.eyebrow}</span>
@@ -371,10 +371,10 @@ export default function Catalog({
           >
             ←
           </button>
-          {slideshow.slides.map((_, slide) => (
+          {slideshow.slides.map((item, slide) => (
             <button
               type="button"
-              key={slide}
+              key={item.id}
               className={ctaSlide === slide ? "active" : ""}
               onClick={() => setCtaSlide(slide)}
               aria-label={`Mostrar destaque ${slide + 1}`}

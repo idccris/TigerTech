@@ -1,4 +1,5 @@
 import { getSiteSetting } from "../../../../../lib/db";
+import { safeSlideId, slideshowImageKey } from "../../../../../lib/slideshow-content";
 
 export const dynamic = "force-dynamic";
 
@@ -7,9 +8,12 @@ export async function GET(
   context: RouteContext<"/api/settings/slideshow/[slide]">,
 ) {
   const { slide } = await context.params;
-  if (slide !== "1" && slide !== "2")
+  const id = safeSlideId(slide, "");
+  if (!id || id !== slide)
     return new Response(null, { status: 404 });
-  const value = await getSiteSetting(`slideshow_image_${slide}`);
+  let value = await getSiteSetting(slideshowImageKey(id));
+  if (!value && (slide === "snapmaker-u1" || slide === "bambu-lab-a1"))
+    value = await getSiteSetting(`slideshow_image_${slide === "snapmaker-u1" ? 1 : 2}`);
   const match = value.match(/^data:(image\/(?:png|jpeg|webp));base64,(.+)$/);
   if (!match) return new Response(null, { status: 404 });
   return new Response(Buffer.from(match[2], "base64"), {

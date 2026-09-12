@@ -3,14 +3,15 @@
 import { useState } from "react";
 import type { HomeContent } from "../lib/site-content";
 import { defaultFilamentBenefits, type FilamentContent } from "../lib/filament-content";
-import { defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
+import { blankSlideshowSlide, defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
 import type { SnapmakerU1Content } from "../lib/snapmaker-content";
+import type { LandingPageRecord } from "../lib/landing-pages";
 import AdminNavbar from "./admin-navbar";
 import AdminSnapmakerDesign from "./admin-snapmaker-design";
 
 const filamentIcons = ["✦", "⚡", "✓", "★", "◆", "●", "◉", "♢", "↗", "∞", "☘", "⬢"];
 
-export default function AdminDesign({ initialImage, initialContent, initialFilamentContents, initialSlideshow, initialSlideshowImages, initialSnapmakerContent }: { initialImage: string; initialContent: HomeContent; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[]; initialSnapmakerContent: SnapmakerU1Content }) {
+export default function AdminDesign({ initialImage, initialContent, initialFilamentContents, initialSlideshow, initialSlideshowImages, initialSnapmakerContent, initialLandingPages }: { initialImage: string; initialContent: HomeContent; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[]; initialSnapmakerContent: SnapmakerU1Content; initialLandingPages: LandingPageRecord[] }) {
   const [heroImage, setHeroImage] = useState(initialImage);
   const [content, setContent] = useState(initialContent);
   const [saving, setSaving] = useState(false);
@@ -20,7 +21,8 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
   const [specDrafts, setSpecDrafts] = useState<Record<string, string>>(() => Object.fromEntries(initialFilamentContents.map((item) => [item.typeName, item.specs.join(", ")])));
   const [slideshow, setSlideshow] = useState(initialSlideshow);
   const [slideshowImages, setSlideshowImages] = useState(() => initialSlideshow.slides.map((slide, index) => initialSlideshowImages[index] || slide.defaultImage));
-  const [slideshowImageUpdates, setSlideshowImageUpdates] = useState<(string | null)[]>([null, null]);
+  const [slideshowImageUpdates, setSlideshowImageUpdates] = useState<(string | null)[]>(() => initialSlideshow.slides.map(() => null));
+  const [deletedSlideIds, setDeletedSlideIds] = useState<string[]>([]);
   const [activeSection, setActiveSection] = useState<"home" | "filaments" | "slideshow" | "snapmaker">("home");
   const selectedContent = filamentContents.find((item) => item.typeName === selectedFilament);
   type TextKey = Exclude<keyof HomeContent, "faqs">;
@@ -54,8 +56,25 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
   function updateSlide(index: number, patch: Partial<SlideshowContent["slides"][number]>) {
     setSlideshow((current) => ({
-      slides: current.slides.map((slide, slideIndex) => slideIndex === index ? { ...slide, ...patch } : slide) as SlideshowContent["slides"],
+      slides: current.slides.map((slide, slideIndex) => slideIndex === index ? { ...slide, ...patch } : slide),
     }));
+  }
+
+  function addSlide() {
+    if (slideshow.slides.length >= 10) return;
+    const slide = blankSlideshowSlide(slideshow.slides.length);
+    setSlideshow((current) => ({ slides: [...current.slides, slide] }));
+    setSlideshowImages((current) => [...current, ""]);
+    setSlideshowImageUpdates((current) => [...current, ""]);
+  }
+
+  function removeSlide(index: number) {
+    if (slideshow.slides.length <= 1) return;
+    const id = slideshow.slides[index].id;
+    setDeletedSlideIds((current) => [...current, id]);
+    setSlideshow((current) => ({ slides: current.slides.filter((_, slideIndex) => slideIndex !== index) }));
+    setSlideshowImages((current) => current.filter((_, slideIndex) => slideIndex !== index));
+    setSlideshowImageUpdates((current) => current.filter((_, slideIndex) => slideIndex !== index));
   }
 
   async function optimizeImage(file: File, maxWidth: number, maxLength: number) {
@@ -117,7 +136,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         ? { heroImage, homeContent: content }
         : activeSection === "filaments"
           ? { filamentContents }
-          : { slideshowContent: slideshow, slideshowImages: slideshowImageUpdates }),
+          : { slideshowContent: slideshow, slideshowImages: slideshowImageUpdates, deletedSlideIds }),
     });
     setSaving(false);
     if (!response.ok) {
@@ -125,7 +144,10 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
       return;
     }
     setMessage(activeSection === "slideshow" ? "Slideshow publicado com sucesso." : "Design publicado com sucesso.");
-    if (activeSection === "slideshow") setSlideshowImageUpdates([null, null]);
+    if (activeSection === "slideshow") {
+      setSlideshowImageUpdates(slideshow.slides.map(() => null));
+      setDeletedSlideIds([]);
+    }
     if ("BroadcastChannel" in window) {
       const channel = new BroadcastChannel("site-settings");
       channel.postMessage("refresh");
@@ -152,10 +174,10 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         <b>02</b><span><strong>Filamentos</strong><small>{filamentContents.length} tipos com conteúdo compartilhado</small></span>
       </button>
       <button type="button" className={activeSection === "slideshow" ? "active" : ""} aria-pressed={activeSection === "slideshow"} onClick={() => { setActiveSection("slideshow"); setMessage(""); }}>
-        <b>03</b><span><strong>Slideshow</strong><small>2 banners exibidos na página inicial</small></span>
+        <b>03</b><span><strong>Slideshow</strong><small>{slideshow.slides.length} banners na página inicial</small></span>
       </button>
       <button type="button" className={activeSection === "snapmaker" ? "active" : ""} aria-pressed={activeSection === "snapmaker"} onClick={() => { setActiveSection("snapmaker"); setMessage(""); }}>
-        <b>04</b><span><strong>Landing Page U1</strong><small>Textos da página Snapmaker U1</small></span>
+        <b>04</b><span><strong>Landing Page</strong><small>Crie e edite páginas de campanha</small></span>
       </button>
     </nav>
 
@@ -262,21 +284,21 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
     {activeSection === "slideshow" ? <form className="slideshow-admin-workspace" onSubmit={save}>
       <header className="slideshow-admin-intro">
-        <div><span>DESTAQUES DA PÁGINA INICIAL</span><h2>Slideshow</h2><p>Edite as duas campanhas que alternam automaticamente no site.</p></div>
-        <i>2 banners ativos</i>
+        <div><span>DESTAQUES DA PÁGINA INICIAL</span><h2>Slideshow</h2><p>Adicione, edite ou remova as campanhas que alternam automaticamente no site.</p></div>
+        <button type="button" className="design-add-button" disabled={slideshow.slides.length >= 10} onClick={addSlide}>+ Adicionar slideshow</button>
       </header>
 
       <div className="slideshow-admin-grid">
-        {slideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={index}>
-          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Destaque {index + 1} do slideshow</p></div></div>
+        {slideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={slide.id}>
+          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Destaque {index + 1} do slideshow</p></div><button type="button" className="slideshow-delete" disabled={slideshow.slides.length <= 1} onClick={() => removeSlide(index)}>Excluir</button></div>
           <label className="slideshow-image-field">
-            <span className="slideshow-image-preview" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${slideshowImages[index]})` }}>
+            <span className="slideshow-image-preview" style={{ backgroundImage: slideshowImages[index] ? `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${slideshowImages[index]})` : "linear-gradient(135deg,#222,#555)" }}>
               <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickSlideshowImage(index, event.target.files?.[0])} />
               <span><strong>Trocar imagem</strong><small>1920 × 760 px recomendado</small></span>
             </span>
           </label>
           {slideshowImageUpdates[index] !== "" ? <button type="button" className="design-text-button danger" onClick={() => {
-            const defaultImage = defaultSlideshowContent.slides[index].defaultImage;
+            const defaultImage = defaultSlideshowContent.slides[index]?.defaultImage || "";
             setSlideshowImages((current) => current.map((image, imageIndex) => imageIndex === index ? defaultImage : image));
             setSlideshowImageUpdates((current) => current.map((image, imageIndex) => imageIndex === index ? "" : image));
           }}>Restaurar imagem padrão</button> : null}
@@ -294,6 +316,6 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
       <div className="design-publish-bar"><span><strong>Slideshow da página inicial</strong><small>As alterações atualizam os dois banners públicos.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
     </form> : null}
-    {activeSection === "snapmaker" ? <AdminSnapmakerDesign initialContent={initialSnapmakerContent} /> : null}
+    {activeSection === "snapmaker" ? <AdminSnapmakerDesign initialContent={initialSnapmakerContent} initialLandingPages={initialLandingPages} /> : null}
   </main>;
 }

@@ -134,7 +134,7 @@ export function sanitizeSnapmakerU1Content(value: unknown): SnapmakerU1Content {
   }));
   const list = (items: unknown, fallback: string[], limit: number) =>
     (Array.isArray(items) ? items : fallback).slice(0, limit).map((item) => String(item).trim().slice(0, 100)).filter(Boolean);
-  const whatsappUrl = /^(https:\/\/wa\.me\/|https:\/\/api\.whatsapp\.com\/)/.test(String(text.whatsappUrl))
+  const whatsappUrl = String(text.whatsappUrl) === "" ? "" : /^(https:\/\/wa\.me\/|https:\/\/api\.whatsapp\.com\/)/.test(String(text.whatsappUrl))
     ? String(text.whatsappUrl)
     : defaultSnapmakerU1Content.whatsappUrl;
   return {
@@ -145,6 +145,16 @@ export function sanitizeSnapmakerU1Content(value: unknown): SnapmakerU1Content {
     materials: list(source.materials, defaultSnapmakerU1Content.materials, 12),
     detectionItems: list(source.detectionItems, defaultSnapmakerU1Content.detectionItems, 6),
   } as SnapmakerU1Content;
+}
+
+export function blankSnapmakerU1Content(): SnapmakerU1Content {
+  const emptyText = Object.fromEntries(Object.keys(textLimits).map((key) => [key, ""])) as Omit<SnapmakerU1Content, "highlights" | "materials" | "detectionItems">;
+  return {
+    ...emptyText,
+    highlights: Array.from({ length: 4 }, () => ({ title: "", text: "" })),
+    materials: [],
+    detectionItems: [],
+  };
 }
 
 export function parseSnapmakerU1Content(value: string): SnapmakerU1Content {

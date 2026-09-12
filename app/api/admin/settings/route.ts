@@ -1,21 +1,22 @@
 import { isTrustedMutation, requireAdmin } from "../../../../lib/admin-auth";
 import { ensureDb, getSiteSetting, sql } from "../../../../lib/db";
 import { defaultHomeContent, parseHomeContent } from "../../../../lib/site-content";
-import { defaultSlideshowContent, parseSlideshowContent } from "../../../../lib/slideshow-content";
+import { blankSlideshowSlide, defaultSlideshowContent, parseSlideshowContent, safeSlideId, slideshowImageKey } from "../../../../lib/slideshow-content";
 import { sanitizeSnapmakerU1Content } from "../../../../lib/snapmaker-content";
+import { sanitizeLandingPages } from "../../../../lib/landing-pages";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET() {
   if (!(await requireAdmin()))
     return Response.json({ error: "Não autorizado" }, { status: 401 });
-  const [heroImage, rawContent, rawSlideshowContent, slideOneImage, slideTwoImage] = await Promise.all([
+  const [heroImage, rawContent, rawSlideshowContent] = await Promise.all([
     getSiteSetting("hero_image"),
     getSiteSetting("home_content"),
     getSiteSetting("slideshow_content"),
-    getSiteSetting("slideshow_image_1"),
-    getSiteSetting("slideshow_image_2"),
   ]);
-  return Response.json({ heroImage, homeContent: parseHomeContent(rawContent), slideshowContent: parseSlideshowContent(rawSlideshowContent), slideshowImages: [slideOneImage, slideTwoImage] });
+  const slideshowContent = parseSlideshowContent(rawSlideshowContent);
+  const slideshowImages = await Promise.all(slideshowContent.slides.map((slide) => getSiteSetting(slideshowImageKey(slide.id))));
+  return Response.json({ heroImage, homeContent: parseHomeContent(rawContent), slideshowContent, slideshowImages });
 }
 
 export async function POST(req: Request) {
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Origem não autorizada" }, { status: 403 });
   if (!(await requireAdmin()))
     return Response.json({ error: "Não autorizado" }, { status: 401 });
-  const { heroImage, homeContent, filamentContents, slideshowContent, slideshowImages, snapmakerU1Content } = await req.json();
+  const { heroImage, homeContent, filamentContents, slideshowContent, slideshowImages, deletedSlideIds, snapmakerU1Content, landingPages } = await req.json();
   const validateImage = (value: unknown, maxLength = 4_200_000) => {
     if (value === undefined || value === null) return null;
     const image = String(value || "");
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
   try {
     image = validateImage(heroImage);
     safeSlideshowImages = Array.isArray(slideshowImages)
-      ? [0, 1].map((index) => validateImage(slideshowImages[index], 2_000_000))
+      ? slideshowImages.slice(0, 10).map((value) => validateImage(value, 2_000_000))
       : [];
   } catch (error) {
     return Response.json({ error: error instanceof Error ? error.message : "Imagem inválida." }, { status: 413 });
@@ -68,10 +69,12 @@ export async function POST(req: Request) {
     }];
   }) : null;
   const safeSlideshowContent = slideshowContent === undefined ? null : {
-    slides: defaultSlideshowContent.slides.map((fallback, index) => {
-      const slide = slideshowContent?.slides?.[index] || {};
+    slides: (Array.isArray(slideshowContent?.slides) && slideshowContent.slides.length ? slideshowContent.slides : defaultSlideshowContent.slides).slice(0, 10).map((source: any, index: number) => {
+      const fallback = defaultSlideshowContent.slides[index] || blankSlideshowSlide(index);
+      const slide = source || {};
       const href = String(slide.href ?? fallback.href).trim();
       return {
+        id: safeSlideId(slide.id, fallback.id),
         eyebrow: String(slide.eyebrow ?? fallback.eyebrow).slice(0, 60),
         title: String(slide.title ?? fallback.title).slice(0, 100),
         description: String(slide.description ?? fallback.description).slice(0, 280),
@@ -81,14 +84,21 @@ export async function POST(req: Request) {
     }),
   };
   const safeSnapmakerContent = snapmakerU1Content === undefined ? null : sanitizeSnapmakerU1Content(snapmakerU1Content);
+  const safeLandingPages = landingPages === undefined ? null : sanitizeLandingPages(landingPages);
   const updates = [];
   if (image !== null) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('hero_image',${image},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('home_content',${JSON.stringify(safeContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeFilamentContents) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('filament_type_content',${JSON.stringify(safeFilamentContents)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeSlideshowContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('slideshow_content',${JSON.stringify(safeSlideshowContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   if (safeSnapmakerContent) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('snapmaker_u1_content',${JSON.stringify(safeSnapmakerContent)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
+  if (safeLandingPages) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES('landing_pages',${JSON.stringify(safeLandingPages)},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
   safeSlideshowImages.forEach((slideImage, index) => {
-    if (slideImage !== null) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES(${`slideshow_image_${index + 1}`},${slideImage},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
+    const slide = safeSlideshowContent?.slides[index];
+    if (slide && slideImage !== null) updates.push(sql()`INSERT INTO site_settings(key,value,updated_at) VALUES(${slideshowImageKey(slide.id)},${slideImage},NOW()) ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value,updated_at=NOW()`);
+  });
+  (Array.isArray(deletedSlideIds) ? deletedSlideIds : []).slice(0, 10).forEach((value: unknown) => {
+    const id = safeSlideId(value, "");
+    if (id) updates.push(sql()`DELETE FROM site_settings WHERE key=${slideshowImageKey(id)}`);
   });
   await Promise.all(updates);
   revalidateTag("site-design", { expire: 0 });
@@ -97,5 +107,6 @@ export async function POST(req: Request) {
   revalidatePath("/produtos", "page");
   revalidatePath("/produto/[slug]", "page");
   revalidatePath("/snapmaker-u1", "page");
+  revalidatePath("/landing/[slug]", "page");
   return Response.json({ ok: true });
 }

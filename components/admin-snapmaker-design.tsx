@@ -2,20 +2,43 @@
 
 import { useState } from "react";
 import type { SnapmakerU1Content } from "../lib/snapmaker-content";
+import { blankLandingPage, type LandingPageRecord } from "../lib/landing-pages";
 
-type Props = { initialContent: SnapmakerU1Content };
+type EditableLanding = LandingPageRecord & { fixed?: boolean };
+type Props = { initialContent: SnapmakerU1Content; initialLandingPages: LandingPageRecord[] };
 
-export default function AdminSnapmakerDesign({ initialContent }: Props) {
-  const [content, setContent] = useState(initialContent);
+export default function AdminSnapmakerDesign({ initialContent, initialLandingPages }: Props) {
+  const [pages, setPages] = useState<EditableLanding[]>(() => [{ id: "snapmaker-u1", name: "Snapmaker U1", slug: "snapmaker-u1", productSlug: "sku-0014", content: initialContent, fixed: true }, ...initialLandingPages]);
+  const [selectedId, setSelectedId] = useState("snapmaker-u1");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const selected = pages.find((page) => page.id === selectedId) || pages[0];
+  const content = selected.content;
 
   function update<K extends keyof SnapmakerU1Content>(key: K, value: SnapmakerU1Content[K]) {
-    setContent((current) => ({ ...current, [key]: value }));
+    setPages((current) => current.map((page) => page.id === selected.id ? { ...page, content: { ...page.content, [key]: value } } : page));
   }
 
   function updateHighlight(index: number, field: "title" | "text", value: string) {
     update("highlights", content.highlights.map((item, itemIndex) => itemIndex === index ? { ...item, [field]: value } : item));
+  }
+
+  function updatePage(patch: Partial<LandingPageRecord>) {
+    setPages((current) => current.map((page) => page.id === selected.id ? { ...page, ...patch } : page));
+  }
+
+  function addLandingPage() {
+    const page = blankLandingPage(pages.length);
+    setPages((current) => [...current, page]);
+    setSelectedId(page.id);
+    setMessage("");
+  }
+
+  function removeLandingPage() {
+    if (selected.fixed) return;
+    setPages((current) => current.filter((page) => page.id !== selected.id));
+    setSelectedId("snapmaker-u1");
+    setMessage("Landing page removida. Publique para confirmar a exclusão.");
   }
 
   async function save(event: React.FormEvent) {
@@ -26,10 +49,10 @@ export default function AdminSnapmakerDesign({ initialContent }: Props) {
       const response = await fetch("/api/admin/settings", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ snapmakerU1Content: content }),
+        body: JSON.stringify({ snapmakerU1Content: pages[0].content, landingPages: pages.filter((page) => !page.fixed) }),
       });
       if (!response.ok) throw new Error((await response.json()).error || "Não foi possível publicar.");
-      setMessage("Landing page da Snapmaker U1 publicada com sucesso.");
+      setMessage("Landing pages publicadas com sucesso.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Não foi possível publicar.");
     } finally {
@@ -37,12 +60,26 @@ export default function AdminSnapmakerDesign({ initialContent }: Props) {
     }
   }
 
-  return <form className="snapmaker-admin-workspace" onSubmit={save}>
+  return <div className="landing-pages-workspace">
+    <aside className="landing-pages-sidebar">
+      <div><span>LANDING PAGES</span><h2>Páginas</h2><p>Selecione uma página para editar.</p></div>
+      <button type="button" className="design-add-button" disabled={pages.length >= 21} onClick={addLandingPage}>+ Adicionar nova LP</button>
+      <div className="landing-pages-list">
+        {pages.map((page) => <button type="button" key={page.id} className={selected.id === page.id ? "active" : ""} onClick={() => { setSelectedId(page.id); setMessage(""); }}><strong>{page.name}</strong><small>/{page.fixed ? page.slug : `landing/${page.slug}`}</small></button>)}
+      </div>
+    </aside>
+    <form className="snapmaker-admin-workspace" onSubmit={save}>
     {message ? <div className="design-toast" role="status">{message}</div> : null}
     <header className="slideshow-admin-intro">
-      <div><span>LANDING PAGE DE PRODUTO</span><h2>Snapmaker U1</h2><p>Edite os textos comerciais da página. Foto, preço e estoque permanecem vinculados ao produto SKU-0014.</p></div>
-      <a href="/snapmaker-u1" target="_blank" rel="noreferrer">Visualizar página ↗</a>
+      <div><span>LANDING PAGE DE PRODUTO</span><h2>{selected.name}</h2><p>Edite os textos comerciais. Foto, preço e estoque do card são vinculados pelo SKU do produto.</p></div>
+      <div className="landing-header-actions">{!selected.fixed ? <button type="button" className="landing-delete-button" onClick={removeLandingPage}>Excluir LP</button> : null}<a href={selected.fixed ? "/snapmaker-u1" : `/landing/${selected.slug}`} target="_blank" rel="noreferrer">Visualizar página ↗</a></div>
     </header>
+
+    {!selected.fixed ? <section className="design-panel landing-identity-panel">
+      <div className="design-panel-heading"><span>00</span><div><h2>Identificação da página</h2><p>Defina o nome interno, o endereço público e o produto exibido na oferta.</p></div></div>
+      <div className="design-row"><label>Nome da LP<input maxLength={100} required value={selected.name} onChange={(event) => updatePage({ name: event.target.value })} /></label><label>Endereço da página<input maxLength={80} required value={selected.slug} onChange={(event) => updatePage({ slug: event.target.value })} /><small>Será publicada em /landing/{selected.slug}</small></label></div>
+      <label>Slug ou SKU do produto<input maxLength={100} value={selected.productSlug} onChange={(event) => updatePage({ productSlug: event.target.value })} placeholder="Ex.: sku-0014" /><small>Controla foto, nome, preço, estoque e carrinho do card de compra.</small></label>
+    </section> : null}
 
     <div className="snapmaker-admin-grid">
       <section className="design-panel snapmaker-admin-section">
@@ -108,6 +145,7 @@ export default function AdminSnapmakerDesign({ initialContent }: Props) {
       </section>
     </div>
 
-    <div className="design-publish-bar"><span><strong>Landing Page Snapmaker U1</strong><small>Preço, estoque, foto e descrição do card são editados no cadastro do produto.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar landing page"}</button></div>
-  </form>;
+    <div className="design-publish-bar"><span><strong>{selected.name}</strong><small>Preço, estoque, foto e descrição do card são editados no cadastro do produto.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar landing pages"}</button></div>
+    </form>
+  </div>;
 }

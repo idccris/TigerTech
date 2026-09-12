@@ -1,4 +1,5 @@
 export type SlideshowSlide = {
+  id: string;
   eyebrow: string;
   title: string;
   description: string;
@@ -8,12 +9,13 @@ export type SlideshowSlide = {
 };
 
 export type SlideshowContent = {
-  slides: [SlideshowSlide, SlideshowSlide];
+  slides: SlideshowSlide[];
 };
 
 export const defaultSlideshowContent: SlideshowContent = {
   slides: [
     {
+      id: "snapmaker-u1",
       eyebrow: "SNAPMAKER U1",
       title: "Quatro cabeçotes. Menos desperdício.",
       description:
@@ -23,6 +25,7 @@ export const defaultSlideshowContent: SlideshowContent = {
       defaultImage: "/snapmaker-u1/u1-studio.webp",
     },
     {
+      id: "bambu-lab-a1",
       eyebrow: "BAMBU LAB A1",
       title: "Grande volume. Simples desde o primeiro projeto.",
       description:
@@ -37,14 +40,37 @@ export const defaultSlideshowContent: SlideshowContent = {
 export function parseSlideshowContent(value: string): SlideshowContent {
   try {
     const parsed = JSON.parse(value || "{}");
+    if (!Array.isArray(parsed?.slides) || parsed.slides.length === 0)
+      return defaultSlideshowContent;
     return {
-      slides: defaultSlideshowContent.slides.map((fallback, index) => ({
+      slides: parsed.slides.slice(0, 10).map((item: Partial<SlideshowSlide>, index: number) => {
+        const fallback = defaultSlideshowContent.slides[index] || blankSlideshowSlide(index);
+        return {
         ...fallback,
-        ...(parsed?.slides?.[index] || {}),
+        ...item,
+        id: safeSlideId(item.id, fallback.id),
         defaultImage: fallback.defaultImage,
-      })) as SlideshowContent["slides"],
+      };
+      }),
     };
   } catch {
     return defaultSlideshowContent;
   }
+}
+
+export function safeSlideId(value: unknown, fallback = "slide") {
+  const id = String(value || "").toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+  return id || fallback;
+}
+
+export function blankSlideshowSlide(index = 0): SlideshowSlide {
+  return { id: `slide-${Date.now()}-${index}`, eyebrow: "", title: "", description: "", buttonLabel: "", href: "/", defaultImage: "" };
+}
+
+export function slideshowImageKey(id: string) {
+  return `slideshow_image_${safeSlideId(id)}`;
+}
+
+export function legacySlideshowImageKey(id: string) {
+  return id === "snapmaker-u1" ? "slideshow_image_1" : id === "bambu-lab-a1" ? "slideshow_image_2" : "";
 }

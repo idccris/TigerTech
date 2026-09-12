@@ -7,8 +7,9 @@ import {
   listProducts,
 } from "./db";
 import { defaultHomeContent, parseHomeContent } from "./site-content";
-import { defaultSlideshowContent, parseSlideshowContent } from "./slideshow-content";
+import { defaultSlideshowContent, legacySlideshowImageKey, parseSlideshowContent, slideshowImageKey } from "./slideshow-content";
 import { defaultSnapmakerU1Content, parseSnapmakerU1Content } from "./snapmaker-content";
+import { parseLandingPages } from "./landing-pages";
 import type { Product } from "./products";
 import { groupProducts } from "./product-variants";
 import { storefrontProductImage } from "./product-images";
@@ -47,18 +48,21 @@ export const getCachedHomeData = unstable_cache(
   async () => {
     if (!process.env.DATABASE_URL)
       return { products: [], heroImage: "", homeContent: defaultHomeContent, slideshowContent: defaultSlideshowContent, slideshowImages: defaultSlideshowContent.slides.map((slide) => slide.defaultImage) };
-    const [products, heroMeta, rawContent, rawSlideshowContent, slideOneMeta, slideTwoMeta] = await Promise.all([
+    const [products, heroMeta, rawContent, rawSlideshowContent] = await Promise.all([
       listFeaturedProducts(),
       getSiteSettingMeta("hero_image"),
       getSiteSetting("home_content"),
       getSiteSetting("slideshow_content"),
-      getSiteSettingMeta("slideshow_image_1"),
-      getSiteSettingMeta("slideshow_image_2"),
     ]);
     const version = heroMeta?.updated_at
       ? new Date(heroMeta.updated_at).getTime()
       : 0;
     const slideshowContent = parseSlideshowContent(rawSlideshowContent);
+    const slideshowMetas = await Promise.all(slideshowContent.slides.map(async (slide) => {
+      const meta = await getSiteSettingMeta(slideshowImageKey(slide.id));
+      const legacyKey = legacySlideshowImageKey(slide.id);
+      return meta || (legacyKey ? getSiteSettingMeta(legacyKey) : null);
+    }));
     return {
       products: products.map(publicProduct),
       heroImage:
@@ -67,10 +71,10 @@ export const getCachedHomeData = unstable_cache(
           : "",
       homeContent: parseHomeContent(rawContent),
       slideshowContent,
-      slideshowImages: [slideOneMeta, slideTwoMeta].map((meta, index) => {
+      slideshowImages: slideshowMetas.map((meta, index) => {
         if (Number(meta?.size || 0) <= 0) return slideshowContent.slides[index].defaultImage;
         const imageVersion = meta?.updated_at ? new Date(meta.updated_at).getTime() : 0;
-        return `/api/settings/slideshow/${index + 1}?v=${imageVersion}`;
+        return `/api/settings/slideshow/${slideshowContent.slides[index].id}?v=${imageVersion}`;
       }),
     };
   },
@@ -115,5 +119,11 @@ export const getCachedSnapmakerU1Content = unstable_cache(
     ? parseSnapmakerU1Content(await getSiteSetting("snapmaker_u1_content"))
     : defaultSnapmakerU1Content,
   ["snapmaker-u1-content-v1"],
+  { revalidate: 3600, tags: ["site-design"] },
+);
+
+export const getCachedLandingPages = unstable_cache(
+  async () => process.env.DATABASE_URL ? parseLandingPages(await getSiteSetting("landing_pages")) : [],
+  ["landing-pages-v1"],
   { revalidate: 3600, tags: ["site-design"] },
 );
