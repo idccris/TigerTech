@@ -44,8 +44,15 @@ export default function SiteFooter() {
         <section className="footer-trust">
           <span className="footer-label">FORMAS DE PAGAMENTO</span>
           <div className="payment-grid" aria-label="Cartões, boleto e Pix">
-            <span>VISA</span><span className="mastercard"><i /><i /></span><span>ELO</span><span>AMEX</span>
-            <span>BOLETO</span><span>PIX</span>
+            <span className="payment-card visa" aria-label="Visa">VISA</span>
+            <span className="payment-card mastercard" aria-label="Mastercard"><i /><i /><b>mastercard</b></span>
+            <span className="payment-card diners" aria-label="Diners Club"><i>D</i><b>DINERS CLUB<br />INTERNATIONAL</b></span>
+            <span className="payment-card amex" aria-label="American Express"><b>AMERICAN<br />EXPRESS</b></span>
+            <span className="payment-card elo" aria-label="Elo"><i />elo</span>
+            <span className="payment-card boleto" aria-label="Boleto"><i /><b>Boleto</b></span>
+            <span className="payment-card bradesco" aria-label="Bradesco"><i>◉</i>bradesco</span>
+            <span className="payment-card banco-do-brasil" aria-label="Banco do Brasil"><i>◇</i></span>
+            <span className="payment-card pix" aria-label="Pix"><i>◇</i>pix</span>
           </div>
           <span className="footer-label security-title">SEGURANÇA</span>
           <div className="security-badges">

@@ -1202,26 +1202,43 @@ footer > a:last-child {
 }
 .payment-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(42px, 1fr));
-  gap: 7px;
-  max-width: 260px;
+  grid-template-columns: repeat(4, minmax(48px, 1fr));
+  gap: 9px;
+  max-width: 290px;
 }
-.payment-grid > span {
-  min-height: 34px;
+.payment-grid > .payment-card {
+  min-height: 46px;
   display: grid;
   place-items: center;
-  padding: 5px;
-  border: 1px solid #292929;
-  border-radius: 7px;
-  background: #111;
-  color: #ddd;
-  font-size: 7px;
+  padding: 5px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: white;
+  color: #151515;
   font-weight: 900;
-  letter-spacing: .05em;
+  line-height: 1;
 }
-.payment-grid .mastercard { display: flex; justify-content: center; }
-.mastercard i { width: 13px; height: 13px; border-radius: 50%; background: #f05223; }
-.mastercard i + i { margin-left: -4px; background: #f5a623; opacity: .9; }
+.payment-card.visa { color: #1a3f92; font-size: 13px; font-style: italic; letter-spacing: -.06em; }
+.payment-card.mastercard { position: relative; display: flex; gap: 0; justify-content: center; align-items: center; }
+.payment-card.mastercard i { width: 18px; height: 18px; border-radius: 50%; background: #eb001b; }
+.payment-card.mastercard i + i { margin-left: -7px; background: #f79e1b; }
+.payment-card.mastercard b { position: absolute; bottom: 5px; color: #222; font-size: 5px; letter-spacing: -.04em; }
+.payment-card.diners { grid-template-columns: 20px 1fr; gap: 3px; color: #1262a6; }
+.payment-card.diners i { width: 19px; height: 19px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 50%; font: 900 12px Georgia, serif; font-style: normal; }
+.payment-card.diners b { font-size: 4.5px; letter-spacing: -.03em; line-height: 1.05; text-align: center; }
+.payment-card.amex { background: #1676bd; color: white; }
+.payment-card.amex b { padding: 3px 2px; border: 1px solid rgba(255,255,255,.75); font-size: 6px; line-height: 1.05; text-align: center; }
+.payment-card.elo { display: flex; align-items: center; justify-content: center; gap: 2px; color: #293047; font-size: 13px; letter-spacing: -.09em; }
+.payment-card.elo i { width: 12px; height: 12px; border: 3px solid transparent; border-radius: 50%; background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #00a8df 10%, #ffdd00 44%, #e92c7a 72%, #36b877 100%) border-box; }
+.payment-card.boleto { grid-template-columns: 22px 1fr; gap: 3px; font-size: 7px; }
+.payment-card.boleto i { width: 21px; height: 18px; background: repeating-linear-gradient(90deg, #1d1d1d 0 2px, transparent 2px 4px, #444 4px 5px, transparent 5px 7px); }
+.payment-card.boleto b { font-size: 7px; }
+.payment-card.bradesco { display: flex; align-items: center; justify-content: center; gap: 3px; color: #cf173d; font-size: 7px; letter-spacing: -.05em; }
+.payment-card.bradesco i { font-size: 17px; font-style: normal; line-height: .7; }
+.payment-card.banco-do-brasil { background: #f6e819; color: #1b4d9b; }
+.payment-card.banco-do-brasil i { font-size: 28px; font-style: normal; font-weight: 400; transform: rotate(45deg); }
+.payment-card.pix { grid-column: 2 / span 2; display: flex; align-items: center; justify-content: center; gap: 3px; color: #57b9ad; font-size: 12px; letter-spacing: -.08em; }
+.payment-card.pix i { font-size: 22px; font-style: normal; transform: rotate(45deg); }
 .security-title { margin-top: 35px; }
 .security-badges { display: grid; gap: 8px; }
 .security-badges > span {
