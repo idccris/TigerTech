@@ -30,7 +30,7 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
         const optimized = new URL("/_next/image", baseUrl);
         optimized.searchParams.set("url", source);
         optimized.searchParams.set("w", "384");
-        optimized.searchParams.set("q", "68");
+        optimized.searchParams.set("q", "75");
         const response = await fetch(optimized, {
           headers: { Accept: "image/jpeg,image/png" },
           next: { revalidate: 86400 },
