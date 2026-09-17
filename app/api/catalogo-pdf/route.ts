@@ -27,6 +27,15 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
     const batch = pending.slice(index, index + 8);
     await Promise.all(batch.map(async ({ product, source }) => {
       try {
+        const inline = source.match(/^data:(image\/(?:png|jpeg));base64,(.+)$/);
+        if (inline) {
+          const data = Buffer.from(inline[2], "base64");
+          if (data.length <= 5_000_000) {
+            images[product.slug] = { data, mimeType: inline[1] };
+          }
+          return;
+        }
+
         let resolvedSource = source;
         if (source.startsWith("/api/products/image")) {
           const slug = new URL(source, baseUrl).searchParams.get("slug") || product.slug;
