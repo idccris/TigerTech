@@ -13,5 +13,5 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const products = await getCachedPublicCatalogProducts();
-  return <ProductsPage initialProducts={products} />;
+  return <ProductsPage initialProducts={products} showCatalogDownload />;
 }

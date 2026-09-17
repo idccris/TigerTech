@@ -22,6 +22,7 @@ type ProductsPageProps = {
   initialCategory?: (typeof categories)[number];
   title?: string;
   description?: string;
+  showCatalogDownload?: boolean;
 };
 
 export default function ProductsPage({
@@ -29,6 +30,7 @@ export default function ProductsPage({
   initialCategory = "Todos",
   title = "Todos os produtos",
   description = "Encontre impressoras 3D, filamentos e acessórios para transformar suas ideias em projetos reais.",
+  showCatalogDownload = false,
 }: ProductsPageProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [query, setQuery] = useState("");
@@ -75,6 +77,15 @@ export default function ProductsPage({
         <span className="section-kicker">CATÁLOGO COMPLETO</span>
         <h1>{title}</h1>
         <p>{description}</p>
+        {showCatalogDownload && (
+          <a className="catalog-download-button" href="/api/catalogo-pdf">
+            <span className="catalog-download-icon" aria-hidden="true">↓</span>
+            <span className="catalog-download-copy">
+              <strong>Baixar catálogo disponível</strong>
+              <small>PDF atualizado conforme o estoque</small>
+            </span>
+          </a>
+        )}
       </section>
       <section className="store-catalog">
         <div className="store-toolbar">

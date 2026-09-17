@@ -39,6 +39,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         <link rel="stylesheet" href="/tiger-global.css?v=20260912-2" />
+        <link rel="stylesheet" href="/catalog-download.css?v=20260917" />
       </head>
       <body className={`${manrope.variable} ${sora.variable}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }} />
