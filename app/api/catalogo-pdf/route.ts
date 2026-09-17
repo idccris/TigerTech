@@ -29,6 +29,27 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
       try {
         const inline = source.match(/^data:(image\/(?:png|jpeg));base64,(.+)$/);
         if (inline) {
+          const normalized = new URL("/_next/image", baseUrl);
+          normalized.searchParams.set("url", `/api/products/image?slug=${encodeURIComponent(product.slug)}`);
+          normalized.searchParams.set("w", "384");
+          normalized.searchParams.set("q", "75");
+          const normalizedResponse = await fetch(normalized, {
+            headers: { Accept: "image/jpeg,image/png" },
+            next: { revalidate: 86400 },
+          });
+          if (normalizedResponse.ok) {
+            const normalizedData = Buffer.from(await normalizedResponse.arrayBuffer());
+            const normalizedMime =
+              normalizedData[0] === 0xff && normalizedData[1] === 0xd8
+                ? "image/jpeg"
+                : normalizedData.subarray(1, 4).toString("ascii") === "PNG"
+                  ? "image/png"
+                  : "";
+            if (normalizedMime) {
+              images[product.slug] = { data: normalizedData, mimeType: normalizedMime };
+              return;
+            }
+          }
           const data = Buffer.from(inline[2], "base64");
           if (data.length <= 5_000_000) {
             images[product.slug] = { data, mimeType: inline[1] };
