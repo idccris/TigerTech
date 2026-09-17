@@ -11,6 +11,11 @@ const LIGHT = [0.96, 0.965, 0.97] as const;
 type RGB = readonly [number, number, number];
 type DecodedPng = { width: number; height: number; rgb: Buffer };
 
+export type CatalogImage = {
+  data: Buffer;
+  mimeType: string;
+};
+
 function clean(value = "") {
   return value
     .replace(/<[^>]*>/g, " ")
@@ -150,6 +155,28 @@ function decodePng(png: Buffer): DecodedPng | null {
   return { width, height, rgb };
 }
 
+function jpegDimensions(data: Buffer) {
+  if (data[0] !== 0xff || data[1] !== 0xd8) return null;
+  for (let offset = 2; offset + 9 < data.length;) {
+    if (data[offset] !== 0xff) {
+      offset += 1;
+      continue;
+    }
+    const marker = data[offset + 1];
+    if ([0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd, 0xce, 0xcf].includes(marker)) {
+      return { height: data.readUInt16BE(offset + 5), width: data.readUInt16BE(offset + 7) };
+    }
+    if (marker === 0xd8 || marker === 0xd9) {
+      offset += 2;
+      continue;
+    }
+    const length = data.readUInt16BE(offset + 2);
+    if (!length) return null;
+    offset += length + 2;
+  }
+  return null;
+}
+
 class Pdf {
   private objects: Array<Buffer | null> = [];
   reserve() {
@@ -211,10 +238,12 @@ export function buildCatalogPdf({
   products,
   logo,
   generatedAt,
+  images,
 }: {
   products: Product[];
   logo: Buffer;
   generatedAt: Date;
+  images: Record<string, CatalogImage>;
 }) {
   const machines = products
     .filter((product) => product.category === "Impressoras 3D" && (product.stock || 0) > 0)
@@ -240,9 +269,44 @@ export function buildCatalogPdf({
         deflateSync(decodedLogo.rgb),
       )
     : null;
+  const embeddedImages = new Map<string, { name: string; id: number; width: number; height: number }>();
+  let imageNumber = 0;
+  for (const [key, image] of Object.entries(images)) {
+    const jpeg = image.mimeType.includes("jpeg") ? jpegDimensions(image.data) : null;
+    const png = !jpeg ? decodePng(image.data) : null;
+    if (!jpeg && !png) continue;
+    imageNumber += 1;
+    const dimensions = jpeg || png!;
+    const id = jpeg
+      ? pdf.stream(
+          `/Type /XObject /Subtype /Image /Width ${dimensions.width} /Height ${dimensions.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode`,
+          image.data,
+        )
+      : pdf.stream(
+          `/Type /XObject /Subtype /Image /Width ${dimensions.width} /Height ${dimensions.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode`,
+          deflateSync(png!.rgb),
+        );
+    embeddedImages.set(key, { name: `P${imageNumber}`, id, ...dimensions });
+  }
   const pagesId = pdf.reserve();
   const pageIds: number[] = [];
   const pages: string[] = [];
+
+  function productImage(product: Product, x: number, top: number, width: number, height: number) {
+    const embedded = embeddedImages.get(product.slug);
+    let commands = rect(x, top, width, height, LIGHT);
+    if (!embedded) {
+      commands += text("TIGER TECH", x + 14, top + height / 2 - 5, 8, true, GRAY);
+      return commands;
+    }
+    const scale = Math.min(width / embedded.width, height / embedded.height);
+    const drawWidth = embedded.width * scale;
+    const drawHeight = embedded.height * scale;
+    const drawX = x + (width - drawWidth) / 2;
+    const drawTop = top + (height - drawHeight) / 2;
+    commands += `q ${drawWidth} 0 0 ${drawHeight} ${drawX} ${H - drawTop - drawHeight} cm /${embedded.name} Do Q\n`;
+    return commands;
+  }
 
   function header() {
     let commands = rect(0, 0, W, 38, ORANGE);
@@ -329,10 +393,7 @@ export function buildCatalogPdf({
     let commands = categoryPage("MAQUINAS 3D", "Modelos de impressoras disponiveis no estoque.");
     let top = 154;
     for (const machine of machines) {
-      const description = wrap(machine.description || machine.longDescription || "Impressora 3D disponivel para pronta consulta.", 76).slice(0, 3);
-      const specs = machine.specs?.slice(0, 3).join("  |  ") || "";
-      const specLines = specs ? wrap(specs, 88).slice(0, 2) : [];
-      const height = 67 + description.length * 12 + specLines.length * 10;
+      const height = 132;
       if (top + height > 786) {
         addPage(commands);
         commands = categoryPage("MAQUINAS 3D", "Continuacao dos modelos disponiveis.");
@@ -340,10 +401,11 @@ export function buildCatalogPdf({
       }
       commands += rect(44, top, 507, height, [1, 1, 1], [0.85, 0.86, 0.88]);
       commands += rect(44, top, 7, height, ORANGE);
-      commands += text(machine.brand || machine.tag || "Tiger Tech", 66, top + 14, 8, true, ORANGE);
-      commands += text(machine.name, 66, top + 30, 14, true);
-      commands += paragraph(description, 66, top + 52, 9, 12);
-      if (specLines.length) commands += paragraph(specLines, 66, top + 54 + description.length * 12, 7.5, 10, GRAY);
+      commands += productImage(machine, 62, top + 13, 118, 106);
+      commands += text(machine.brand || machine.tag || "Tiger Tech", 198, top + 23, 8, true, ORANGE);
+      commands += paragraph(wrap(machine.name, 42).slice(0, 2), 198, top + 43, 16, 19, BLACK);
+      const specs = machine.specs?.slice(0, 3).join("  |  ") || "Disponivel em estoque";
+      commands += paragraph(wrap(specs, 54).slice(0, 2), 198, top + 86, 8.5, 11, GRAY);
       top += height + 12;
     }
     addPage(commands);
@@ -352,19 +414,15 @@ export function buildCatalogPdf({
   if (!filaments.length) {
     addEmptySection("FILAMENTOS", "Modelos e cores disponiveis no estoque.");
   } else {
-    let commands = categoryPage("FILAMENTOS", "Cada modelo aparece uma vez; abaixo dele estao somente as cores com estoque.");
+    let commands = categoryPage("FILAMENTOS", "Cada modelo aparece uma vez, com sua foto principal e cores disponiveis.");
     let top = 154;
     for (const filament of filaments) {
       const variants = availableVariants(filament);
       const colorNames = [...new Set(
         variants.map((variant) => clean(variant.colorName || variant.name)).filter(Boolean),
       )].sort((a, b) => a.localeCompare(b, "pt-BR"));
-      const description = wrap(
-        filament.description || filament.longDescription || "Filamento para impressao 3D disponivel em diversas cores.",
-        79,
-      ).slice(0, 3);
-      const colorLines = wrap(`Cores disponiveis: ${colorNames.join(", ")}.`, 88);
-      const height = 72 + description.length * 12 + colorLines.length * 10;
+      const colorLines = wrap(`Cores disponiveis: ${colorNames.join(", ")}.`, 66);
+      const height = Math.max(126, 72 + colorLines.length * 10);
       if (top + height > 786) {
         addPage(commands);
         commands = categoryPage("FILAMENTOS", "Continuacao dos modelos e cores disponiveis.");
@@ -372,10 +430,10 @@ export function buildCatalogPdf({
       }
       commands += rect(44, top, 507, height, [1, 1, 1], [0.85, 0.86, 0.88]);
       commands += rect(44, top, 7, height, ORANGE);
-      commands += text(filament.brand || filament.tag || "Filamento", 66, top + 13, 8, true, ORANGE);
-      commands += text(filament.filamentModel || filament.name, 66, top + 29, 13, true);
-      commands += paragraph(description, 66, top + 50, 8.8, 12);
-      commands += paragraph(colorLines, 66, top + 55 + description.length * 12, 8, 10, BLACK);
+      commands += productImage(filament, 62, top + 13, 104, Math.min(104, height - 26));
+      commands += text(filament.brand || filament.tag || "Filamento", 184, top + 18, 8, true, ORANGE);
+      commands += paragraph(wrap(filament.filamentModel || filament.name, 48).slice(0, 2), 184, top + 36, 14, 17, BLACK);
+      commands += paragraph(colorLines, 184, top + 76, 8, 10, BLACK);
       top += height + 12;
     }
     addPage(commands);
@@ -383,7 +441,8 @@ export function buildCatalogPdf({
 
   for (const commands of pages) {
     const contentId = pdf.stream("", Buffer.from(commands, "ascii"));
-    const resources = `/Font << /F1 ${regular} 0 R /F2 ${bold} 0 R >>${logoId ? ` /XObject << /Logo ${logoId} 0 R >>` : ""}`;
+    const xObjects = [logoId ? `/Logo ${logoId} 0 R` : "", ...Array.from(embeddedImages.values()).map((image) => `/${image.name} ${image.id} 0 R`)].filter(Boolean).join(" ");
+    const resources = `/Font << /F1 ${regular} 0 R /F2 ${bold} 0 R >>${xObjects ? ` /XObject << ${xObjects} >>` : ""}`;
     const pageId = pdf.add(
       `<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${W} ${H}] /Resources << ${resources} >> /Contents ${contentId} 0 R >>`,
     );
