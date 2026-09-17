@@ -27,6 +27,7 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
     const batch = pending.slice(index, index + 8);
     await Promise.all(batch.map(async ({ product, source }) => {
       try {
+        let resolvedSource = source;
         if (source.startsWith("/api/products/image")) {
           const slug = new URL(source, baseUrl).searchParams.get("slug") || product.slug;
           const row = await getProductImage(slug);
@@ -39,10 +40,15 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
             }
             return;
           }
+          if (/^https?:\/\//i.test(stored)) {
+            resolvedSource = stored;
+          } else {
+            return;
+          }
         }
 
         const imageUrl = new URL("/_next/image", baseUrl);
-        imageUrl.searchParams.set("url", source);
+        imageUrl.searchParams.set("url", resolvedSource);
         imageUrl.searchParams.set("w", "384");
         imageUrl.searchParams.set("q", "75");
         const response = await fetch(imageUrl, {
