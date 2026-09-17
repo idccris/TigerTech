@@ -351,21 +351,12 @@ export function buildCatalogPdf({
     10,
     14,
   );
-  cover += rect(48, 480, 150, 84, LIGHT);
-  cover += text(String(machines.length), 64, 494, 27, true, ORANGE);
-  cover += text("MODELOS DE MAQUINAS", 64, 536, 8, true);
-  cover += rect(218, 480, 150, 84, LIGHT);
-  cover += text(String(filaments.length), 234, 494, 27, true, ORANGE);
-  cover += text("TIPOS DE FILAMENTO", 234, 536, 8, true);
-  cover += rect(388, 480, 150, 84, LIGHT);
-  cover += text(String(colors), 404, 494, 27, true, ORANGE);
-  cover += text("CORES DISPONIVEIS", 404, 536, 8, true);
-  cover += rect(48, 630, 507, 80, ORANGE);
-  cover += text("SEM PRECOS", 66, 649, 10, true, BLACK);
+  cover += rect(48, 500, 507, 80, ORANGE);
+  cover += text("SEM PRECOS", 66, 519, 10, true, BLACK);
   cover += paragraph(
     wrap("Consulte a equipe Tiger Tech para valores, condicoes comerciais e confirmacao do estoque.", 70),
     66,
-    671,
+    541,
     10,
     14,
     BLACK,
@@ -393,7 +384,12 @@ export function buildCatalogPdf({
     let commands = categoryPage("MAQUINAS 3D", "Modelos de impressoras disponiveis no estoque.");
     let top = 154;
     for (const machine of machines) {
-      const height = 132;
+      const description = wrap(
+        machine.description || "Impressora 3D disponivel para diferentes projetos.",
+        54,
+      ).slice(0, 2);
+      const specs = machine.specs?.slice(0, 3).join("  |  ") || "Disponivel em estoque";
+      const height = 148;
       if (top + height > 786) {
         addPage(commands);
         commands = categoryPage("MAQUINAS 3D", "Continuacao dos modelos disponiveis.");
@@ -401,11 +397,11 @@ export function buildCatalogPdf({
       }
       commands += rect(44, top, 507, height, [1, 1, 1], [0.85, 0.86, 0.88]);
       commands += rect(44, top, 7, height, ORANGE);
-      commands += productImage(machine, 62, top + 13, 118, 106);
-      commands += text(machine.brand || machine.tag || "Tiger Tech", 198, top + 23, 8, true, ORANGE);
-      commands += paragraph(wrap(machine.name, 42).slice(0, 2), 198, top + 43, 16, 19, BLACK);
-      const specs = machine.specs?.slice(0, 3).join("  |  ") || "Disponivel em estoque";
-      commands += paragraph(wrap(specs, 54).slice(0, 2), 198, top + 86, 8.5, 11, GRAY);
+      commands += productImage(machine, 62, top + 13, 124, 122);
+      commands += text(machine.brand || machine.tag || "Tiger Tech", 204, top + 18, 8, true, ORANGE);
+      commands += paragraph(wrap(machine.name, 40).slice(0, 2), 204, top + 37, 15, 18, BLACK);
+      commands += paragraph(description, 204, top + 77, 8.8, 11, GRAY);
+      commands += paragraph(wrap(specs, 51).slice(0, 2), 204, top + 112, 7.7, 10, BLACK);
       top += height + 12;
     }
     addPage(commands);
@@ -421,8 +417,12 @@ export function buildCatalogPdf({
       const colorNames = [...new Set(
         variants.map((variant) => clean(variant.colorName || variant.name)).filter(Boolean),
       )].sort((a, b) => a.localeCompare(b, "pt-BR"));
+      const description = wrap(
+        filament.description || "Filamento para impressao 3D, com boa estabilidade e acabamento.",
+        65,
+      ).slice(0, 2);
       const colorLines = wrap(`Cores disponiveis: ${colorNames.join(", ")}.`, 66);
-      const height = Math.max(126, 72 + colorLines.length * 10);
+      const height = Math.max(144, 91 + description.length * 10 + colorLines.length * 10);
       if (top + height > 786) {
         addPage(commands);
         commands = categoryPage("FILAMENTOS", "Continuacao dos modelos e cores disponiveis.");
@@ -430,10 +430,11 @@ export function buildCatalogPdf({
       }
       commands += rect(44, top, 507, height, [1, 1, 1], [0.85, 0.86, 0.88]);
       commands += rect(44, top, 7, height, ORANGE);
-      commands += productImage(filament, 62, top + 13, 104, Math.min(104, height - 26));
-      commands += text(filament.brand || filament.tag || "Filamento", 184, top + 18, 8, true, ORANGE);
-      commands += paragraph(wrap(filament.filamentModel || filament.name, 48).slice(0, 2), 184, top + 36, 14, 17, BLACK);
-      commands += paragraph(colorLines, 184, top + 76, 8, 10, BLACK);
+      commands += productImage(filament, 62, top + 13, 112, Math.min(112, height - 26));
+      commands += text(filament.brand || filament.tag || "Filamento", 192, top + 17, 8, true, ORANGE);
+      commands += paragraph(wrap(filament.filamentModel || filament.name, 45).slice(0, 2), 192, top + 35, 14, 17, BLACK);
+      commands += paragraph(description, 192, top + 73, 8.5, 10, GRAY);
+      commands += paragraph(colorLines, 192, top + 100, 7.8, 10, BLACK);
       top += height + 12;
     }
     addPage(commands);

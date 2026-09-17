@@ -27,11 +27,15 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
     const batch = pending.slice(index, index + 8);
     await Promise.all(batch.map(async ({ product, source }) => {
       try {
-        const optimized = new URL("/_next/image", baseUrl);
-        optimized.searchParams.set("url", source);
-        optimized.searchParams.set("w", "384");
-        optimized.searchParams.set("q", "75");
-        const response = await fetch(optimized, {
+        const imageUrl = source.startsWith("/")
+          ? new URL(source, baseUrl)
+          : new URL("/_next/image", baseUrl);
+        if (!source.startsWith("/")) {
+          imageUrl.searchParams.set("url", source);
+          imageUrl.searchParams.set("w", "384");
+          imageUrl.searchParams.set("q", "75");
+        }
+        const response = await fetch(imageUrl, {
           headers: { Accept: "image/jpeg,image/png" },
           next: { revalidate: 86400 },
         });
