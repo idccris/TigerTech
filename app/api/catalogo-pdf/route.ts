@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { listProducts } from "../../../lib/db";
+import { getProductImage, listProducts } from "../../../lib/db";
 import { buildCatalogPdf, type CatalogImage } from "../../../lib/catalog-pdf";
 import { groupProducts } from "../../../lib/product-variants";
 import type { Product } from "../../../lib/products";
@@ -27,14 +27,24 @@ async function loadCatalogImages(products: Product[], requestUrl: string) {
     const batch = pending.slice(index, index + 8);
     await Promise.all(batch.map(async ({ product, source }) => {
       try {
-        const imageUrl = source.startsWith("/")
-          ? new URL(source, baseUrl)
-          : new URL("/_next/image", baseUrl);
-        if (!source.startsWith("/")) {
-          imageUrl.searchParams.set("url", source);
-          imageUrl.searchParams.set("w", "384");
-          imageUrl.searchParams.set("q", "75");
+        if (source.startsWith("/api/products/image")) {
+          const slug = new URL(source, baseUrl).searchParams.get("slug") || product.slug;
+          const row = await getProductImage(slug);
+          const stored = String(row?.image_url || "");
+          const match = stored.match(/^data:(image\/(?:png|jpeg));base64,(.+)$/);
+          if (match) {
+            const data = Buffer.from(match[2], "base64");
+            if (data.length <= 5_000_000) {
+              images[product.slug] = { data, mimeType: match[1] };
+            }
+            return;
+          }
         }
+
+        const imageUrl = new URL("/_next/image", baseUrl);
+        imageUrl.searchParams.set("url", source);
+        imageUrl.searchParams.set("w", "384");
+        imageUrl.searchParams.set("q", "75");
         const response = await fetch(imageUrl, {
           headers: { Accept: "image/jpeg,image/png" },
           next: { revalidate: 86400 },
