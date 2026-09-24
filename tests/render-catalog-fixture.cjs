@@ -17,7 +17,9 @@ async function main() {
   const options = { logo: fs.readFileSync('public/tiger-tech-logo.png'), generatedAt: new Date(), images, curated: true };
   fs.mkdirSync('tmp/pdfs', { recursive: true });
   fs.writeFileSync('tmp/pdfs/single-machine.pdf', buildCatalogPdf({ ...options, products: [product] }));
-  fs.writeFileSync('tmp/pdfs/selection.pdf', buildCatalogPdf({ ...options, products: [{ ...product, name: 'Máquina demonstrativa', specificationsText: '' }, { ...product, slug: 'accessory', name: 'Acessório demonstrativo', category: 'Acessórios', imageUrl: '' }] }));
+  const machines = Array.from({ length: 5 }, (_, index) => ({ ...product, slug: `machine-${index}`, name: `Máquina demonstrativa ${index + 1}`, specificationsText: '' }));
+  const compactImages = Object.fromEntries(machines.map(machine => [machine.slug, images[product.slug]]));
+  fs.writeFileSync('tmp/pdfs/selection.pdf', buildCatalogPdf({ ...options, images: compactImages, products: machines }));
   console.log('Generated visual fixtures with normalized machine image.');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

@@ -341,7 +341,44 @@ export function buildCatalogPdf({
       intro += text("Conheça os produtos nas próximas páginas.", 48, 465, 11, false, GRAY);
       addPage(intro);
     }
-    for (const product of [...products].sort((a, b) => a.category.localeCompare(b.category, "pt-BR") || byBrandAndName(a, b))) {
+    if (!singleMachine) {
+      const categories = [...new Set(products.map(product => product.category))];
+      const compactLines = (value: string, width: number, limit: number) => {
+        const lines = wrap(value, width);
+        if (lines.length <= limit) return lines;
+        return [...lines.slice(0, limit - 1), lines[limit - 1].replace(/\s+\S*$/, "") + "..."];
+      };
+      for (const category of categories) {
+        const categoryHeader = () => header()
+          + text(category.toLocaleUpperCase("pt-BR"), 44, 64, 24, true)
+          + text("Seleção de produtos Tiger Tech", 44, 101, 10, false, GRAY)
+          + rect(44, 124, 64, 4, ORANGE);
+        let commands = categoryHeader();
+        let top = 142;
+        for (const product of products.filter(p => p.category === category).sort(byBrandAndName)) {
+          const details = category === "Filamentos"
+            ? "Cores: " + [...new Set((product.variants || [product]).map(p => p.colorName).filter(Boolean))].join(", ")
+            : (product.specs || []).slice(0, 3).join(" | ");
+          const detailLines = category === "Filamentos" ? wrap(details, 57) : compactLines(details, 57, 3);
+          const height = Math.max(148, 118 + detailLines.length * 10);
+          if (top + height > 786) {
+            addPage(commands);
+            commands = categoryHeader();
+            top = 142;
+          }
+          commands += rect(44, top, 507, height, [1, 1, 1], [0.85, 0.86, 0.88]);
+          commands += rect(44, top, 7, height, ORANGE);
+          commands += productImage(product, 62, top + 13, 124, 122);
+          commands += text(product.brand || "Tiger Tech", 204, top + 15, 8, true, ORANGE);
+          commands += paragraph(compactLines(product.filamentModel || product.name, 36, 2), 204, top + 33, 14, 17, BLACK);
+          commands += paragraph(compactLines(product.description, 56, 2), 204, top + 74, 8.8, 11, GRAY);
+          commands += paragraph(detailLines, 204, top + 108, 7.7, 10, BLACK);
+          top += height + 12;
+        }
+        addPage(commands);
+      }
+    }
+    for (const product of singleMachine ? products : []) {
       let commands = header();
       let top = 62;
       const title = product.filamentModel || product.name;

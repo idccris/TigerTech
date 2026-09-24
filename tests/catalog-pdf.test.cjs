@@ -44,6 +44,14 @@ test('public catalog retains stock filtering', () => {
   const text = pdfText(build([{ ...machine, stock: 0 }], { curated: false }));
   assert.ok(!text.includes(machine.name));
 });
+test('multiple machines use four cards per page instead of one product per page', () => {
+  const products = Array.from({ length: 92 }, (_, index) => ({ ...machine, slug: `machine-${index}`, name: `Modelo ${String(index + 1).padStart(3, '0')}` }));
+  const pdf = build(products);
+  assert.equal((pdf.toString('latin1').match(/\/Type \/Page\b/g) || []).length, 24);
+  const text = pdfText(pdf);
+  for (const product of products) assert.ok(text.includes(product.name));
+  assert.ok(!text.includes(machine.longDescription));
+});
 
 // Isolated API tests: no production database or authentication writes.
 let user = null;
