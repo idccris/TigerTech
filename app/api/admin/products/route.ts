@@ -49,9 +49,9 @@ export async function POST(req: Request) {
   const submittedImage = keepStoredImage ? "" : submittedImages[0];
   if (user.role === "operator" && !(await verifyAdminPassword(String(p.adminPassword || ""))))
     return Response.json({ error: "Senha do administrador necessária para publicar." }, { status: 403 });
-  if (submittedImages.some((image: string) => image.length > 4_200_000))
+  if (submittedImages.some((image: string) => image.length > 1_000_000) || submittedImages.reduce((total: number, image: string) => total + image.length, 0) > 4_000_000)
     return Response.json(
-      { error: "Imagem muito grande. Use até 3 MB." },
+      { error: "As imagens ficaram muito grandes. Remova uma foto e tente adicioná-la novamente para otimizar." },
       { status: 413 },
     );
   for (const image of submittedImages) {
