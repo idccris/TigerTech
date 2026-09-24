@@ -6,6 +6,7 @@ import {
 } from "../../../lib/db";
 import { publicCatalogProducts } from "../../../lib/public-data";
 import type { Product } from "../../../lib/products";
+import { storefrontProductImage, storefrontProductImages } from "../../../lib/product-images";
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   try {
@@ -18,13 +19,13 @@ export async function GET(req: NextRequest) {
       .filter(Boolean)
       .slice(0, 30);
     const raw = slugs.length
-      ? (await Promise.all(slugs.map(findProduct))).filter((product): product is Product => product !== null)
+      ? (await Promise.all(slugs.map(findProduct))).filter((product) => product !== null) as Product[]
       : slug
       ? await findProduct(slug)
       : featured
         ? await listFeaturedProducts()
         : await listProducts(false);
-    const lightweight = (product: any) => product ? ({ ...product, imageUrl: product.imageUrl ? `/api/products/image?slug=${encodeURIComponent(product.slug)}&v=${encodeURIComponent(product.updatedAt || "1")}` : "" }) : null;
+    const lightweight = (product: Product | null) => product ? ({ ...product, imageUrl: storefrontProductImage(product), imageUrls: storefrontProductImages(product) }) : null;
     const data = catalog && Array.isArray(raw)
       ? publicCatalogProducts(raw)
       : Array.isArray(raw) ? raw.map(lightweight) : lightweight(raw);

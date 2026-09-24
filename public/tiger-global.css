@@ -3084,6 +3084,98 @@ footer > a:last-child {
   position: relative;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.08);
 }
+.detail-gallery {
+  min-width: 0;
+}
+.detail-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.detail-thumbnails button {
+  position: relative;
+  height: 92px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+}
+.detail-thumbnails button.active {
+  border-color: var(--acid);
+}
+.detail-thumbnails img {
+  object-fit: contain;
+  padding: 5px;
+}
+.product-image-editor {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.product-image-editor legend {
+  font-size: 12px;
+  font-weight: 800;
+}
+.product-image-editor > p,
+.product-image-editor > small {
+  display: block;
+  margin: 6px 0 10px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.product-image-slots {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+.product-image-slot label {
+  position: relative;
+  min-height: 125px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 5px;
+  overflow: hidden;
+  border: 1px dashed #aaa;
+  border-radius: 12px;
+  background: #f7f7f7 center/contain no-repeat;
+  cursor: pointer;
+}
+.product-image-slot label.has-image span {
+  position: absolute;
+  inset: auto 7px 7px;
+  padding: 6px;
+  border-radius: 6px;
+  background: rgba(0,0,0,.72);
+  color: white;
+  text-align: center;
+}
+.product-image-slot input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.product-image-slot label b { font-size: 28px; color: var(--acid); }
+.product-image-slot label span { font-size: 10px; font-weight: 800; }
+.product-image-slot > button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  color: #a22;
+  font-size: 10px;
+  cursor: pointer;
+}
+@media (max-width: 620px) {
+  .product-image-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .detail-thumbnails button { height: 70px; }
+}
 .detail-visual .product-tag {
   z-index: 4;
   font-size: 9px;

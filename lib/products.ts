@@ -12,6 +12,7 @@ export type Product = {
   sku?: string;
   brand?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   featured?: boolean;
   priceCents?: number;
   cardPriceCents?: number;

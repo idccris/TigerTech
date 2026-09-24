@@ -1,5 +1,5 @@
 import { isTrustedMutation, requireUser, verifyAdminPassword } from "../../../../lib/admin-auth";
-import { ensureDb, listProducts, sql } from "../../../../lib/db";
+import { ensureDb, listProductGallerySlots, listProducts, sql } from "../../../../lib/db";
 import { filamentGroupSlug, isFilament } from "../../../../lib/product-variants";
 import { parseBRLToCents } from "../../../../lib/money";
 import { storefrontProductImage } from "../../../../lib/product-images";
@@ -7,10 +7,17 @@ import { revalidatePath, revalidateTag } from "next/cache";
 export async function GET() {
   if (!(await requireUser()))
     return Response.json({ error: "Não autorizado" }, { status: 401 });
-  const products = await listProducts(true);
+  const [products, gallerySlots] = await Promise.all([listProducts(true), listProductGallerySlots()]);
+  const slotsBySlug = new Map<string, number[]>();
+  for (const row of gallerySlots) {
+    const values = slotsBySlug.get(String(row.product_slug)) || [];
+    values.push(Number(row.position));
+    slotsBySlug.set(String(row.product_slug), values);
+  }
   return Response.json(products.map((product: any) => ({
     ...product,
     imageUrl: storefrontProductImage(product),
+    imageUrls: [storefrontProductImage(product), ...(slotsBySlug.get(product.slug) || []).map(position => `/api/products/image?slug=${encodeURIComponent(product.slug)}&index=${position}&v=${encodeURIComponent(product.updatedAt || "1")}`)].filter(Boolean),
   })), { headers: { "Cache-Control": "private, max-age=15" } });
 }
 export async function POST(req: Request) {
@@ -34,17 +41,23 @@ export async function POST(req: Request) {
   const duplicateSku = await sql()`SELECT slug FROM products WHERE LOWER(sku)=LOWER(${sku}) AND slug<>${slug} LIMIT 1`;
   if (duplicateSku[0])
     return Response.json({ error: "Já existe um produto cadastrado com este SKU." }, { status: 409 });
-  const keepStoredImage = String(p.imageUrl || "").startsWith("/api/products/image");
-  const submittedImage = keepStoredImage ? "" : String(p.imageUrl || "");
+  const submittedImages = Array.isArray(p.imageUrls)
+    ? p.imageUrls.slice(0, 4).map((value: unknown) => String(value || ""))
+    : [String(p.imageUrl || "")];
+  while (submittedImages.length < 4) submittedImages.push("");
+  const keepStoredImage = submittedImages[0].startsWith("/api/products/image");
+  const submittedImage = keepStoredImage ? "" : submittedImages[0];
   if (user.role === "operator" && !(await verifyAdminPassword(String(p.adminPassword || ""))))
     return Response.json({ error: "Senha do administrador necessária para publicar." }, { status: 403 });
-  if (p.imageUrl && p.imageUrl.length > 4_200_000)
+  if (submittedImages.some((image: string) => image.length > 4_200_000))
     return Response.json(
       { error: "Imagem muito grande. Use até 3 MB." },
       { status: 413 },
     );
-  if (submittedImage && !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(submittedImage))
-    return Response.json({ error: "Formato de imagem inválido." }, { status: 400 });
+  for (const image of submittedImages) {
+    if (image && !image.startsWith("/api/products/image") && !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(image))
+      return Response.json({ error: "Formato de imagem inválido." }, { status: 400 });
+  }
   const name = String(p.name || "").trim().slice(0, 160);
   const category = String(p.category || "").trim().slice(0, 80);
   if (!name || !category)
@@ -64,6 +77,15 @@ export async function POST(req: Request) {
   const priceCents = parseBRLToCents(p.pixPrice ?? p.price);
   const cardPriceCents = parseBRLToCents(p.cardPrice ?? p.pixPrice ?? p.price);
   await sql()`INSERT INTO products(slug,group_slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at) VALUES(${slug},${groupSlug},${sku},${name},${filamentModel},${colorName},${colorHex},${category},${String(p.brand || "").slice(0, 80)},${String(p.brand || "").slice(0, 80)},${String(p.description || "").slice(0, 500)},${String(p.longDescription || "").slice(0, 10000)},${String(p.specificationsText || "").slice(0, 10000)},${JSON.stringify(Array.isArray(p.specs) ? p.specs.slice(0, 100) : [])},${JSON.stringify(benefits)},${p.tone || "orange"},${submittedImage},${Math.max(0, Math.min(1_000_000, Math.floor(Number(p.stock) || 0)))},${priceCents},${cardPriceCents},${p.visible !== false},${p.featured === true},CASE WHEN ${p.featured === true} THEN NOW() ELSE NULL END,NOW()) ON CONFLICT(slug) DO UPDATE SET group_slug=EXCLUDED.group_slug,sku=EXCLUDED.sku,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=CASE WHEN ${keepStoredImage} THEN products.image_url ELSE EXCLUDED.image_url END,stock=EXCLUDED.stock,price_cents=EXCLUDED.price_cents,card_price_cents=EXCLUDED.card_price_cents,visible=EXCLUDED.visible,featured=EXCLUDED.featured,featured_at=CASE WHEN EXCLUDED.featured=true AND products.featured=false THEN NOW() WHEN EXCLUDED.featured=false THEN NULL ELSE products.featured_at END,updated_at=NOW()`;
+  for (let position = 1; position <= 3; position += 1) {
+    const image = submittedImages[position];
+    if (image.startsWith("/api/products/image")) continue;
+    if (!image) {
+      await sql()`DELETE FROM product_images WHERE product_slug=${slug} AND position=${position}`;
+    } else {
+      await sql()`INSERT INTO product_images(product_slug,position,image_url,updated_at) VALUES(${slug},${position},${image},NOW()) ON CONFLICT(product_slug,position) DO UPDATE SET image_url=EXCLUDED.image_url,updated_at=NOW()`;
+    }
+  }
   if (p.featured === true)
     await sql()`UPDATE products SET featured=false,featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
   revalidateTag("catalog-products", { expire: 0 });

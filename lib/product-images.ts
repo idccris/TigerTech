@@ -18,3 +18,9 @@ export function storefrontProductImage(product: Pick<Product, "slug" | "selected
   const imageSlug = product.selectedVariantSlug || product.slug;
   return `/api/products/image?slug=${encodeURIComponent(imageSlug)}&v=${encodeURIComponent(product.updatedAt || "1")}`;
 }
+
+export function storefrontProductImages(product: Pick<Product, "slug" | "selectedVariantSlug" | "imageUrl" | "imageUrls" | "updatedAt">) {
+  const primary = storefrontProductImage(product);
+  const additional = (product.imageUrls || []).filter((value) => value && value !== product.imageUrl);
+  return [primary, ...additional].filter(Boolean).slice(0, 4);
+}

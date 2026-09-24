@@ -58,7 +58,7 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
     return {
       "@type": "Product",
       name: variantName,
-      image: variant.imageUrl ? [absoluteUrl(variant.imageUrl)] : undefined,
+      image: (variant.imageUrls?.length ? variant.imageUrls : variant.imageUrl ? [variant.imageUrl] : []).map(absoluteUrl),
       sku: variant.sku || undefined,
       color: variant.colorName || undefined,
       url: absoluteUrl(`/produto/${canonicalSlug}${variant.slug !== canonicalSlug ? `?cor=${encodeURIComponent(variant.slug)}` : ""}`),

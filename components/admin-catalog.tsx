@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Product } from "../lib/products";
 import AdminNavbar from "./admin-navbar";
 import AdminCatalogExport from "./admin-catalog-export";
+import ProductImageEditor from "./product-image-editor";
 import FilamentFields from "./filament-fields";
 import { PrinterVisual } from "./catalog";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
@@ -31,7 +32,7 @@ export default function AdminCatalog({
   const [activeFilamentGroup, setActiveFilamentGroup] = useState<Product | null>(null);
   const [adminPassword, setAdminPassword] = useState("");
   const [error, setError] = useState("");
-  const blank = { slug: "", sku: "", name: "", category: "Impressoras 3D", brand: "", description: "", longDescription: "", specificationsText: "", specs: [], benefits: [], tone: "orange", imageUrl: "", stock: 0, pixPrice: "0,00", cardPrice: "0,00", visible: true, featured: false };
+  const blank = { slug: "", sku: "", name: "", category: "Impressoras 3D", brand: "", description: "", longDescription: "", specificationsText: "", specs: [], benefits: [], tone: "orange", imageUrl: "", imageUrls: [], stock: 0, pixPrice: "0,00", cardPrice: "0,00", visible: true, featured: false };
 
   async function saveProduct(event: React.FormEvent) {
     event.preventDefault();
@@ -175,7 +176,7 @@ export default function AdminCatalog({
         group={activeFilamentGroup}
         onClose={() => setActiveFilamentGroup(null)}
         onEdit={(variant) => { setActiveFilamentGroup(null); setEditing({ ...variant, pixPrice: formatBRLInput(variant.priceCents || 0), cardPrice: formatBRLInput(variant.cardPriceCents || variant.priceCents || 0) }); }}
-        onAdd={(group) => { const source = group.variants?.[0] || group; setActiveFilamentGroup(null); setEditing({ ...source, slug: "", sku: "", colorName: "", colorHex: "#777777", imageUrl: "", stock: 0, visible: true, featured: false, pixPrice: formatBRLInput(source.priceCents || 0), cardPrice: formatBRLInput(source.cardPriceCents || source.priceCents || 0) }); }}
+        onAdd={(group) => { const source = group.variants?.[0] || group; setActiveFilamentGroup(null); setEditing({ ...source, slug: "", sku: "", colorName: "", colorHex: "#777777", imageUrl: "", imageUrls: [], stock: 0, visible: true, featured: false, pixPrice: formatBRLInput(source.priceCents || 0), cardPrice: formatBRLInput(source.cardPriceCents || source.priceCents || 0) }); }}
         onDelete={(variant) => deleteProduct(variant as InventoryProduct)}
       /></div> : null}
       {editing ? <div className="operator-editor"><form onSubmit={saveProduct}><div className="admin-form-head"><h2>{isFilament(editing) ? (editing.slug ? "Editar cor" : "Adicionar cor") : (editing.slug ? "Editar produto" : "Novo produto")}</h2><button type="button" onClick={() => setEditing(null)}>×</button></div>
@@ -185,6 +186,7 @@ export default function AdminCatalog({
         <label>Identificador (SKU)<input required value={editing.sku || ""} onChange={(e) => setEditing({ ...editing, sku: e.target.value })} /><small>SKU único para diferenciar o produto.</small></label>
         <label>Marca<input value={editing.brand || ""} onChange={(e) => setEditing({ ...editing, brand: e.target.value })} /></label>
         {!isFilament(editing) ? <label>Descrição<textarea value={editing.description || ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} /></label> : <p className="filament-shared-note">Descrição, especificações e benefícios são editados por tipo na página Design.</p>}
+        <ProductImageEditor compact images={editing.imageUrls?.length ? editing.imageUrls : [editing.imageUrl || ""]} onChange={(imageUrls) => setEditing({ ...editing, imageUrl: imageUrls[0] || "", imageUrls })} onError={setError} />
         <label>Quantidade<input type="number" min="0" value={editing.stock || 0} onChange={(e) => setEditing({ ...editing, stock: Number(e.target.value) })} /></label>
         <div className="design-row"><label>Preço no Pix (R$)<input type="text" inputMode="decimal" value={editing.pixPrice || "0,00"} onChange={(e) => setEditing({ ...editing, pixPrice: e.target.value })} onBlur={(e) => setEditing({ ...editing, pixPrice: formatBRLInput(parseBRLToCents(e.target.value)) })} /></label><label>Preço no cartão (R$)<input type="text" inputMode="decimal" value={editing.cardPrice || "0,00"} onChange={(e) => setEditing({ ...editing, cardPrice: e.target.value })} onBlur={(e) => setEditing({ ...editing, cardPrice: formatBRLInput(parseBRLToCents(e.target.value)) })} /></label></div>
         <label className="check"><input type="checkbox" checked={editing.visible !== false} onChange={(e) => setEditing({ ...editing, visible: e.target.checked })} /> Produto visível na loja</label>

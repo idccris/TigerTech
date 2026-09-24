@@ -17,6 +17,9 @@ export default function ProductDetail({ product: initialProduct, initialSelected
   const variants = initialProduct.variants || [];
   const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
   const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;
+  const gallery = product.imageUrls?.length ? product.imageUrls : (product.imageUrl ? [product.imageUrl] : []);
+  const firstGalleryImage = gallery[0] || "";
+  const [activeImage, setActiveImage] = useState(firstGalleryImage);
   const cart = useCart();
   const [specificationsOpen, setSpecificationsOpen] = useState(false);
   const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format((cents || 0) / 100);
@@ -28,6 +31,9 @@ export default function ProductDetail({ product: initialProduct, initialSelected
     window.addEventListener("keydown", close);
     return () => window.removeEventListener("keydown", close);
   }, [specificationsOpen]);
+  useEffect(() => {
+    setActiveImage(firstGalleryImage);
+  }, [firstGalleryImage, product.slug]);
   return (
     <main className="product-page">
       <header className="product-header">
@@ -41,20 +47,28 @@ export default function ProductDetail({ product: initialProduct, initialSelected
         </button>
       </header>
       <section className="product-detail">
-        <div className={`detail-visual ${product.tone}`}>
-          <span className="product-tag">{product.brand || product.tag}</span>
-          {product.imageUrl ? (
-            <Image
-              className="uploaded-product-photo"
-              src={product.imageUrl}
-              alt={product.colorName ? `${productTitle(product)} — ${product.colorName}` : product.name}
-              fill
-              sizes="(max-width: 900px) 100vw, 50vw"
-              priority
-            />
-          ) : (
-            <PrinterVisual tone={product.tone} />
-          )}
+        <div className="detail-gallery">
+          <div className={`detail-visual ${product.tone}`}>
+            <span className="product-tag">{product.brand || product.tag}</span>
+            {activeImage ? (
+              <Image
+                key={activeImage}
+                className="uploaded-product-photo"
+                src={activeImage}
+                alt={product.colorName ? `${productTitle(product)} — ${product.colorName}` : product.name}
+                fill
+                sizes="(max-width: 900px) 100vw, 50vw"
+                priority
+              />
+            ) : (
+              <PrinterVisual tone={product.tone} />
+            )}
+          </div>
+          {gallery.length > 1 ? <div className="detail-thumbnails" aria-label="Outras fotos do produto">
+            {gallery.map((image, index) => <button type="button" key={image} className={activeImage === image ? "active" : ""} onClick={() => setActiveImage(image)} aria-label={`Ver foto ${index + 1}`} aria-pressed={activeImage === image}>
+              <Image src={image} alt="" fill sizes="100px" />
+            </button>)}
+          </div> : null}
         </div>
         <div className="detail-copy">
           <span className="product-category">{product.category}</span>

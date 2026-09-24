@@ -6,7 +6,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug") || "";
-  const row = await getProductImage(slug);
+  const index = Math.max(0, Math.min(3, Number(req.nextUrl.searchParams.get("index")) || 0));
+  const row = await getProductImage(slug, index);
   const value = String(row?.image_url || "");
   const match = value.match(/^data:(image\/(?:png|jpeg|webp));base64,(.+)$/);
   if (match)

@@ -12,12 +12,13 @@ import { defaultSnapmakerU1Content, parseSnapmakerU1Content } from "./snapmaker-
 import { parseLandingPages } from "./landing-pages";
 import type { Product } from "./products";
 import { groupProducts } from "./product-variants";
-import { storefrontProductImage } from "./product-images";
+import { storefrontProductImage, storefrontProductImages } from "./product-images";
 
 function publicProduct(product: Product) {
   return {
     ...product,
     imageUrl: storefrontProductImage(product),
+    imageUrls: storefrontProductImages(product),
   };
 }
 
@@ -29,6 +30,7 @@ function publicVariant(product: Product) {
     slug: product.slug,
     sku: product.sku,
     imageUrl: storefrontProductImage(product),
+    imageUrls: storefrontProductImages(product),
     priceCents: product.priceCents,
     cardPriceCents: product.cardPriceCents,
     stock: product.stock,

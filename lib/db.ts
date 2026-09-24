@@ -94,6 +94,20 @@ export async function ensureDb() {
         ]);
       }
 
+      const galleryVersion = await db`SELECT value FROM site_settings WHERE key='product_gallery_schema' LIMIT 1`;
+      if (galleryVersion[0]?.value !== "1") {
+        await db.transaction([
+          db`CREATE TABLE IF NOT EXISTS product_images (
+            product_slug TEXT NOT NULL REFERENCES products(slug) ON DELETE CASCADE,
+            position SMALLINT NOT NULL CHECK(position BETWEEN 1 AND 3),
+            image_url TEXT NOT NULL,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            PRIMARY KEY(product_slug,position)
+          )`,
+          db`INSERT INTO site_settings(key,value,updated_at) VALUES ('product_gallery_schema','1',NOW()) ON CONFLICT(key) DO UPDATE SET value='1',updated_at=NOW()`,
+        ]);
+      }
+
       const imported = await db`SELECT value FROM site_settings WHERE key='filament_catalog_version' LIMIT 1`;
       if (imported[0]?.value !== FILAMENT_CATALOG_VERSION) {
         const rows = filamentCatalogRows();
@@ -147,15 +161,30 @@ export async function findProduct(slug: string) {
     : seedRows;
   const contentRows = await sql()`SELECT value FROM site_settings WHERE key='filament_type_content' LIMIT 1`;
   const products = applyFilamentContents(rows.map(rowToProduct), parseFilamentContents(String(contentRows[0]?.value || "")));
-  if (!seed.groupSlug) return products[0];
+  if (!seed.groupSlug) return attachProductGallery(products[0]);
   const available = products.find((product) => (product.stock || 0) > 0) || products[0];
-  return {
+  return attachProductGallery({
     ...available,
     slug: seed.groupSlug,
     groupSlug: seed.groupSlug,
     selectedVariantSlug: seed.slug,
     variants: products,
+  });
+}
+
+async function attachProductGallery(product: Product) {
+  const imageSlug = product.selectedVariantSlug || product.slug;
+  const rows = await sql()`SELECT position FROM product_images WHERE product_slug=${imageSlug} ORDER BY position`;
+  const version = encodeURIComponent(product.updatedAt || "1");
+  return {
+    ...product,
+    imageUrls: [product.imageUrl || "", ...rows.map(row => `/api/products/image?slug=${encodeURIComponent(imageSlug)}&index=${Number(row.position)}&v=${version}`)].filter(Boolean),
   };
+}
+
+export async function listProductGallerySlots() {
+  await ensureDb();
+  return sql()`SELECT product_slug,position FROM product_images ORDER BY product_slug,position`;
 }
 export async function listFilamentTypes() {
   await ensureDb();
@@ -213,8 +242,12 @@ export async function getSiteSettingMeta(key: string) {
   const rows = await sql()`SELECT LENGTH(value)::int size,updated_at FROM site_settings WHERE key=${key} LIMIT 1`;
   return rows[0] || null;
 }
-export async function getProductImage(slug: string) {
+export async function getProductImage(slug: string, position = 0) {
   await ensureDb();
+  if (position > 0) {
+    const rows = await sql()`SELECT image_url,updated_at FROM product_images WHERE product_slug=${slug} AND position=${position} LIMIT 1`;
+    return rows[0] || null;
+  }
   const rows = await sql()`SELECT image_url,updated_at FROM products WHERE slug=${slug} LIMIT 1`;
   return rows[0] || null;
 }

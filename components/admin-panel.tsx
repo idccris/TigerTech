@@ -8,6 +8,7 @@ import type { Product } from "../lib/products";
 import FilamentVariantManager from "./filament-variant-manager";
 import BrandLogo from "./brand-logo";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
+import ProductImageEditor from "./product-image-editor";
 const formatBRLInputFromText = (value: string) => formatBRLInput(parseBRLToCents(value));
 const iconOptions = [
   "✦",
@@ -52,6 +53,7 @@ const blank = {
   specs: [],
   tone: "orange",
   imageUrl: "",
+  imageUrls: [],
   stock: 0,
   pixPrice: "0,00",
   cardPrice: "0,00",
@@ -133,20 +135,6 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       setEdit({ ...edit, category: newCategory.trim() });
       setNewCategory("");
     }
-  }
-  function pickImage(file?: File) {
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setError("Selecione uma imagem válida.");
-      return;
-    }
-    if (file.size > 3 * 1024 * 1024) {
-      setError("A imagem deve ter no máximo 3 MB.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => setEdit({ ...edit, imageUrl: String(reader.result) });
-    reader.readAsDataURL(file);
   }
   function updateBenefit(
     index: number,
@@ -262,6 +250,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       colorName: "",
       colorHex: "#777777",
       imageUrl: "",
+      imageUrls: [],
       stock: 0,
       visible: true,
       featured: false,
@@ -576,33 +565,11 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
               </small>
             </label>
             </> : <p className="filament-shared-note">As descrições, especificações e os benefícios deste filamento são compartilhados por tipo. Edite esse conteúdo na página Design.</p>}
-            <label>
-              {isFilament(edit) ? "Foto correspondente à cor" : "Imagem do produto"}
-              <span
-                className={`image-upload ${edit.imageUrl ? "has-image" : ""}`}
-                style={
-                  edit.imageUrl
-                    ? { backgroundImage: `url(${edit.imageUrl})` }
-                    : undefined
-                }
-              >
-                <input
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={(e) => pickImage(e.target.files?.[0])}
-                />
-                {!edit.imageUrl && (
-                  <>
-                    <b>+</b>
-                    <small>Adicionar imagem</small>
-                  </>
-                )}
-                {edit.imageUrl && <em>Trocar imagem</em>}
-              </span>
-              <small className="upload-note">
-                PNG, JPG ou WebP · máximo 3 MB
-              </small>
-            </label>
+            <ProductImageEditor
+              images={edit.imageUrls?.length ? edit.imageUrls : [edit.imageUrl || ""]}
+              onChange={(imageUrls) => setEdit({ ...edit, imageUrl: imageUrls[0] || "", imageUrls })}
+              onError={setError}
+            />
             <label>
               Quantidade
               <input
