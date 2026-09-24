@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Product } from "../lib/products";
 import AdminNavbar from "./admin-navbar";
+import AdminCatalogExport from "./admin-catalog-export";
 import FilamentFields from "./filament-fields";
 import { PrinterVisual } from "./catalog";
 import { formatBRLInput, parseBRLToCents } from "../lib/money";
@@ -101,6 +102,7 @@ export default function AdminCatalog({
         </div>
         {role === "operator" ? <button className="operator-new-product" onClick={() => { setEditing(blank); setError(""); }}>+ Novo produto</button> : null}
       </header>
+      <AdminCatalogExport products={groupedProducts} />
       <section className="brand-filter" aria-label="Filtrar por marca ou categoria">
         {filters.map((filter) => (
           <button

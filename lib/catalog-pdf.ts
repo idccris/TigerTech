@@ -239,11 +239,13 @@ export function buildCatalogPdf({
   logo,
   generatedAt,
   images,
+  curated = false,
 }: {
   products: Product[];
   logo: Buffer;
   generatedAt: Date;
   images: Record<string, CatalogImage>;
+  curated?: boolean;
 }) {
   const machines = products
     .filter((product) => product.category === "Impressoras 3D" && (product.stock || 0) > 0)
@@ -251,7 +253,6 @@ export function buildCatalogPdf({
   const filaments = products
     .filter((product) => product.category === "Filamentos" && availableVariants(product).length > 0)
     .sort(byBrandAndName);
-  const colors = filaments.reduce((total, product) => total + availableVariants(product).length, 0);
   const date = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Sao_Paulo",
     day: "2-digit",
@@ -296,7 +297,7 @@ export function buildCatalogPdf({
     const embedded = embeddedImages.get(product.slug);
     let commands = rect(x, top, width, height, LIGHT);
     if (!embedded) {
-      commands += text("TIGER TECH", x + 14, top + height / 2 - 5, 8, true, GRAY);
+      commands += text(curated ? "Foto não disponível" : "TIGER TECH", x + 14, top + height / 2 - 5, 8, true, GRAY);
       return commands;
     }
     const scale = Math.min(width / embedded.width, height / embedded.height);
@@ -321,7 +322,7 @@ export function buildCatalogPdf({
 
   function footer(page: number) {
     return line(44, 804, W - 44, 804, [0.85, 0.86, 0.88], 0.6)
-      + text("Disponibilidade sujeita a confirmacao no momento do pedido.", 44, 813, 7.5, false, GRAY)
+      + text(curated ? `Tiger Tech | Gerado em ${date}` : "Disponibilidade sujeita a confirmacao no momento do pedido.", 44, 813, 7.5, false, GRAY)
       + text(String(page).padStart(2, "0"), W - 58, 813, 7.5, true, GRAY);
   }
 
@@ -329,6 +330,68 @@ export function buildCatalogPdf({
     pages.push(commands + footer(pages.length + 1));
   }
 
+  if (curated) {
+    const singleMachine = products.length === 1 && products[0].category === "Impressoras 3D";
+    if (!singleMachine) {
+      let intro = header() + rect(0, 38, W, 250, BLACK);
+      intro += text("TIGER TECH", 48, 110, 38, true, [1, 1, 1]);
+      intro += text("CATÁLOGO DE PRODUTOS", 48, 175, 23, true, ORANGE);
+      intro += text(`Gerado em ${date}`, 48, 340, 12);
+      intro += paragraph(wrap("Uma seleção de soluções para transformar suas ideias em projetos reais.", 65), 48, 382, 12, 17);
+      intro += text("Conheça os produtos nas próximas páginas.", 48, 465, 11, false, GRAY);
+      addPage(intro);
+    }
+    for (const product of [...products].sort((a, b) => a.category.localeCompare(b.category, "pt-BR") || byBrandAndName(a, b))) {
+      let commands = header();
+      let top = 62;
+      const title = product.filamentModel || product.name;
+      commands += text(`${product.brand || "Tiger Tech"} | ${product.category}`, 44, top, 10, true, ORANGE);
+      top += 22;
+      const titles = wrap(title, 32);
+      commands += paragraph(titles, 44, top, 22, 27, BLACK);
+      top += titles.length * 27 + 14;
+      const imageHeight = singleMachine ? 235 : 170;
+      commands += productImage(product, 44, top, 507, imageHeight);
+      top += imageHeight + 22;
+      const append = (heading: string, value: string) => {
+        if (!clean(value)) return;
+        if (top > 728) {
+          addPage(commands);
+          const continuationTitle = wrap(title, 50);
+          commands = header() + paragraph(continuationTitle, 44, 62, 14, 18);
+          top = 80 + continuationTitle.length * 18;
+        }
+        commands += text(heading, 44, top, 11, true, ORANGE);
+        top += 24;
+        for (const sourceLine of value.split(/\r?\n/)) {
+          for (const content of wrap(sourceLine, 72)) {
+            if (top > 774) {
+              addPage(commands);
+              const continuationTitle = wrap(title, 50);
+              commands = header() + paragraph(continuationTitle, 44, 62, 14, 18);
+              top = 80 + continuationTitle.length * 18;
+              commands += text(heading + " (continuação)", 44, top, 11, true, ORANGE);
+              top += 24;
+            }
+            commands += text(content, 44, top, 10, false, GRAY);
+            top += 15;
+          }
+        }
+        top += 16;
+      };
+      append("DESCRIÇÃO", singleMachine ? product.longDescription || product.description : product.description);
+      if (singleMachine) {
+        const details = [product.specificationsText || "", ...(product.specs || [])].filter(Boolean).join("\n");
+        append("ESPECIFICAÇÕES TÉCNICAS", details || "Consulte nossa equipe para mais informações técnicas.");
+        append("DESTAQUES", (product.benefits || []).filter((b) => b.title || b.text).map((b) => [b.title, b.text].filter(Boolean).join(": ")).join("\n"));
+      } else if (product.category === "Filamentos") {
+        append("CORES", [...new Set((product.variants || [product]).map((p) => p.colorName).filter(Boolean))].join(", "));
+      } else {
+        append("DESTAQUES", (product.specs || []).join("\n"));
+      }
+      addPage(commands);
+    }
+  } else {
   let cover = header();
   cover += rect(0, 38, W, 250, BLACK);
   cover += text("CATALOGO", 48, 86, 15, true, ORANGE);
@@ -440,6 +503,7 @@ export function buildCatalogPdf({
     addPage(commands);
   }
 
+  }
   for (const commands of pages) {
     const contentId = pdf.stream("", Buffer.from(commands, "ascii"));
     const xObjects = [logoId ? `/Logo ${logoId} 0 R` : "", ...Array.from(embeddedImages.values()).map((image) => `/${image.name} ${image.id} 0 R`)].filter(Boolean).join(" ");
@@ -452,7 +516,7 @@ export function buildCatalogPdf({
   pdf.set(pagesId, `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(" ")}] /Count ${pageIds.length} >>`);
   const catalog = pdf.add(`<< /Type /Catalog /Pages ${pagesId} 0 R /PageLayout /OneColumn >>`);
   const info = pdf.add(
-    `<< /Title <${latinHex("Catalogo Tiger Tech")}> /Author <${latinHex("Tiger Tech")}> /Subject <${latinHex("Maquinas e filamentos disponiveis")}> /Creator <${latinHex("Tiger Tech")}> >>`,
+    `<< /Title <${latinHex("Catalogo Tiger Tech")}> /Author <${latinHex("Tiger Tech")}> /Subject <${latinHex(curated ? "Seleção de produtos" : "Maquinas e filamentos disponiveis")}> /Creator <${latinHex("Tiger Tech")}> >>`,
   );
   return pdf.finish(catalog, info);
 }
