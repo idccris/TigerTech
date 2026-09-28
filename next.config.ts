@@ -26,6 +26,9 @@ const nextConfig: NextConfig = {
       {
         pathname: "/api/conteudos/image",
       },
+      {
+        pathname: "/products/filaments/**",
+      },
     ],
   },
   async headers() {
