@@ -48,7 +48,9 @@ export default async function ProductPage({ params, searchParams }: ProductPageP
     permanentRedirect(`/produto/${product.groupSlug}?cor=${encodeURIComponent(slug)}`);
   const selectedVariantSlug = product.variants?.some((variant) => variant.slug === cor)
     ? cor
-    : product.selectedVariantSlug;
+    : product.coverImageUrl
+      ? undefined
+      : product.selectedVariantSlug;
   const title = productTitle(product);
   const variants = product.variants?.length ? product.variants : [product];
   const canonicalSlug = product.groupSlug || product.slug;

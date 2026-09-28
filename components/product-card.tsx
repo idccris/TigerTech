@@ -11,7 +11,9 @@ import PrinterVisual from "./printer-visual";
 const money = (cents: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 
 export default function ProductCard({ product: initialProduct }: { product: Product }) {
-  const [selectedSlug, setSelectedSlug] = useState(initialProduct.selectedVariantSlug || initialProduct.slug);
+  const [selectedSlug, setSelectedSlug] = useState(
+    initialProduct.coverImageUrl ? "" : initialProduct.selectedVariantSlug || initialProduct.slug,
+  );
   const variants = initialProduct.variants || [];
   const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
   const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;

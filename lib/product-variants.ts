@@ -1,4 +1,5 @@
 import type { Product } from "./products";
+import { filamentCoverImage } from "./filament-covers";
 
 const normalize = (value: string) => value.trim().replace(/\s+/g, " ").toLocaleLowerCase("pt-BR");
 
@@ -50,7 +51,15 @@ export function groupProducts(products: Product[]): Product[] {
     if (!isFilament(available) || !available.filamentModel) return [available];
     const variants = [...group].sort((a, b) => (a.colorName || "").localeCompare(b.colorName || "", "pt-BR"));
     const groupSlug = available.groupSlug || filamentGroupSlug(available.brand || "", available.filamentModel);
-    return [{ ...available, slug: groupSlug, groupSlug, selectedVariantSlug: available.slug, variants }];
+    const coverImageUrl = filamentCoverImage(groupSlug);
+    return [{
+      ...available,
+      slug: groupSlug,
+      groupSlug,
+      selectedVariantSlug: available.slug,
+      ...(coverImageUrl ? { imageUrl: coverImageUrl, imageUrls: [coverImageUrl], coverImageUrl } : {}),
+      variants,
+    }];
   });
 }
 
@@ -67,11 +76,13 @@ export function groupProductsForAdmin(products: Product[]): Product[] {
     if (!isFilament(representative) || !representative.filamentModel) return representative;
     const variants = [...group].sort((a, b) => (a.colorName || "").localeCompare(b.colorName || "", "pt-BR"));
     const groupSlug = representative.groupSlug || filamentGroupSlug(representative.brand || "", representative.filamentModel);
+    const coverImageUrl = filamentCoverImage(groupSlug);
     return {
       ...representative,
       slug: groupSlug,
       groupSlug,
       selectedVariantSlug: representative.slug,
+      ...(coverImageUrl ? { imageUrl: coverImageUrl, imageUrls: [coverImageUrl], coverImageUrl } : {}),
       stock: variants.reduce((total, variant) => total + Math.max(0, variant.stock || 0), 0),
       visible: variants.some((variant) => variant.visible !== false),
       variants,

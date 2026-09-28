@@ -13,6 +13,7 @@ export type Product = {
   brand?: string;
   imageUrl?: string;
   imageUrls?: string[];
+  coverImageUrl?: string;
   featured?: boolean;
   priceCents?: number;
   cardPriceCents?: number;

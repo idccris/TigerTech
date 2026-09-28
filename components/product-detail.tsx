@@ -13,7 +13,9 @@ import ColorSwatches from "./color-swatches";
 import { productTitle } from "../lib/product-variants";
 
 export default function ProductDetail({ product: initialProduct, initialSelectedSlug }: { product: Product; initialSelectedSlug?: string }) {
-  const [selectedSlug, setSelectedSlug] = useState(initialSelectedSlug || initialProduct.selectedVariantSlug || initialProduct.slug);
+  const [selectedSlug, setSelectedSlug] = useState(
+    initialSelectedSlug || (initialProduct.coverImageUrl ? "" : initialProduct.selectedVariantSlug || initialProduct.slug),
+  );
   const variants = initialProduct.variants || [];
   const selectedVariant = variants.find((variant) => variant.slug === selectedSlug);
   const product = selectedVariant ? { ...initialProduct, ...selectedVariant, variants } : initialProduct;

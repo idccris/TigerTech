@@ -14,6 +14,7 @@ export function isAllowedRemoteProductImage(value: string) {
 export function storefrontProductImage(product: Pick<Product, "slug" | "selectedVariantSlug" | "imageUrl" | "updatedAt">) {
   const value = product.imageUrl || "";
   if (!value) return "";
+  if (value.startsWith("/products/")) return value;
   if (isAllowedRemoteProductImage(value)) return value;
   const imageSlug = product.selectedVariantSlug || product.slug;
   return `/api/products/image?slug=${encodeURIComponent(imageSlug)}&v=${encodeURIComponent(product.updatedAt || "1")}`;

@@ -2,6 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcryptjs";
 import { products as defaults, type Product } from "./products";
 import { filamentGroupSlug, groupProducts } from "./product-variants";
+import { filamentCoverImage } from "./filament-covers";
 import { applyFilamentContents, parseFilamentContents } from "./filament-content";
 import { FILAMENT_CATALOG_VERSION, filamentCatalogRows } from "./filament-catalog";
 
@@ -187,13 +188,17 @@ export async function findProduct(slug: string) {
   const products = applyFilamentContents(rows.map(rowToProduct), parseFilamentContents(String(contentRows[0]?.value || "")));
   if (!seed.groupSlug) return attachProductGallery(products[0]);
   const available = products.find((product) => (product.stock || 0) > 0) || products[0];
-  return attachProductGallery({
+  const grouped = await attachProductGallery({
     ...available,
     slug: seed.groupSlug,
     groupSlug: seed.groupSlug,
     selectedVariantSlug: seed.slug,
     variants: products,
   });
+  const coverImageUrl = filamentCoverImage(seed.groupSlug);
+  return coverImageUrl
+    ? { ...grouped, imageUrl: coverImageUrl, imageUrls: [coverImageUrl], coverImageUrl }
+    : grouped;
 }
 
 async function attachProductGallery(product: Product) {
