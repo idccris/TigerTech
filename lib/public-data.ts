@@ -112,7 +112,7 @@ export const getCachedPublicProduct = unstable_cache(
       variants: product.variants?.map(publicVariant),
     };
   },
-  ["public-product-groups-v1"],
+  ["public-product-groups-v2"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
