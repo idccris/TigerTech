@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getCachedLandingPages, getCachedPublicCatalogProducts } from "../lib/public-data";
 import { absoluteUrl } from "../lib/seo";
+import { listContentPosts } from "../lib/content-posts";
 
 export const revalidate = 3600;
 
@@ -13,12 +14,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/acessorios-impressora-3d"), changeFrequency: "weekly", priority: 0.7 },
     { url: absoluteUrl("/snapmaker-u1"), changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/sobre"), changeFrequency: "monthly", priority: 0.5 },
+    { url: absoluteUrl("/conteudos"), changeFrequency: "weekly", priority: 0.8 },
     { url: absoluteUrl("/envio"), changeFrequency: "monthly", priority: 0.4 },
     { url: absoluteUrl("/pagamento"), changeFrequency: "monthly", priority: 0.4 },
     { url: absoluteUrl("/garantia"), changeFrequency: "monthly", priority: 0.4 },
     { url: absoluteUrl("/trocas-e-devolucoes"), changeFrequency: "monthly", priority: 0.3 },
   ];
-  const [products, landingPages] = await Promise.all([getCachedPublicCatalogProducts(), getCachedLandingPages()]);
+  const [products, landingPages, contentPosts] = await Promise.all([getCachedPublicCatalogProducts(), getCachedLandingPages(), listContentPosts()]);
   return [
     ...staticPages,
     ...products.map((product) => ({
@@ -29,6 +31,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
     ...landingPages.map((page) => ({
       url: absoluteUrl(`/landing/${page.slug}`),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    ...contentPosts.map((post) => ({
+      url: absoluteUrl(`/conteudos/${post.slug}`),
+      lastModified: post.updatedAt ? new Date(post.updatedAt) : undefined,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),

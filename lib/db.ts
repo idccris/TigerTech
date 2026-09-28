@@ -108,6 +108,30 @@ export async function ensureDb() {
         ]);
       }
 
+      const contentHubVersion = await db`SELECT value FROM site_settings WHERE key='content_hub_schema' LIMIT 1`;
+      if (contentHubVersion[0]?.value !== "1") {
+        await db.transaction([
+          db`CREATE TABLE IF NOT EXISTS content_posts (
+            slug TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            category TEXT NOT NULL DEFAULT 'Guia 3D',
+            excerpt TEXT NOT NULL DEFAULT '',
+            body TEXT NOT NULL DEFAULT '',
+            author TEXT NOT NULL DEFAULT 'Tiger Tech 3D',
+            cover_image TEXT NOT NULL DEFAULT '',
+            gallery JSONB NOT NULL DEFAULT '[]',
+            seo_title TEXT NOT NULL DEFAULT '',
+            seo_description TEXT NOT NULL DEFAULT '',
+            published BOOLEAN NOT NULL DEFAULT false,
+            published_at TIMESTAMPTZ,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+          )`,
+          db`CREATE INDEX IF NOT EXISTS content_posts_public_idx ON content_posts(published,published_at DESC)`,
+          db`INSERT INTO site_settings(key,value,updated_at) VALUES ('content_hub_schema','1',NOW()) ON CONFLICT(key) DO UPDATE SET value='1',updated_at=NOW()`,
+        ]);
+      }
+
       const imported = await db`SELECT value FROM site_settings WHERE key='filament_catalog_version' LIMIT 1`;
       if (imported[0]?.value !== FILAMENT_CATALOG_VERSION) {
         const rows = filamentCatalogRows();

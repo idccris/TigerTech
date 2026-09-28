@@ -27,6 +27,7 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
         <Link href="/produtos">Produtos</Link>
         <Link href="/impressoras-3d">Impressoras 3D</Link>
         <Link href="/filamentos">Filamentos</Link>
+        <Link href="/conteudos">Conteúdos</Link>
         <Link href="/sobre">Sobre</Link>
         <CartButton />
         <a className="nav-cta" href={whatsapp} target="_blank" rel="noreferrer">

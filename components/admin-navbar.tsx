@@ -10,6 +10,7 @@ const adminLinks = [
   { href: "/admin/catalogo", label: "Catálogo" },
   { href: "/admin/pedidos", label: "Pedidos" },
   { href: "/admin/design", label: "Design" },
+  { href: "/admin/conteudos", label: "Conteúdos" },
   { href: "/admin/usuarios", label: "Usuários" },
 ];
 

@@ -35,6 +35,7 @@ export default function SiteFooter() {
             <Link href="/filamentos">Filamentos 3D</Link>
             <Link href="/acessorios-impressora-3d">Acessórios</Link>
             <Link href="/sobre">Sobre a empresa</Link>
+            <Link href="/conteudos">Conteúdos</Link>
             <Link href="/produtos">Como comprar</Link>
             <Link href="/seguranca">Segurança</Link><Link href="/envio">Envio</Link><Link href="/pagamento">Pagamento</Link>
             <Link href="/garantia">Tempo de garantia</Link><Link href="/politica-de-privacidade">Política de privacidade</Link>
