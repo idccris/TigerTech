@@ -1,0 +1,35 @@
+.admin-product-actions {
+  grid-column: 2 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+}
+
+.admin-product-actions > button {
+  border: 0;
+  padding: 8px 10px;
+  border-radius: 7px;
+  background: var(--paper);
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.admin-product-actions > button:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
+.admin-product-actions > .add-to-store {
+  background: #e7f7ed;
+  color: #176b37;
+}
+
+.admin-product-actions > .remove-from-store {
+  background: #fff0e8;
+  color: #9a3d1c;
+}
+
+.admin-product-actions > .delete-product {
+  color: #a22;
+}
