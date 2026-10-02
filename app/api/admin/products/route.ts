@@ -100,20 +100,30 @@ export async function PATCH(req: Request) {
   const user = await requireUser();
   if (!user)
     return Response.json({ error: "Não autorizado" }, { status: 401 });
-  const { groupSlug, featured, adminPassword } = await req.json();
+  const { groupSlug, slug: productSlug, featured, visible, adminPassword } = await req.json();
   if (user.role === "operator" && !(await verifyAdminPassword(String(adminPassword || ""))))
-    return Response.json({ error: "Senha do administrador necessária para alterar os destaques." }, { status: 403 });
-  const slug = String(groupSlug || "").trim();
-  if (!slug)
-    return Response.json({ error: "Filamento não identificado." }, { status: 400 });
+    return Response.json({ error: "Senha do administrador necessária para alterar o produto." }, { status: 403 });
   await ensureDb();
-  await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE group_slug=${slug}`;
-  if (featured === true) {
-    const representative = await sql()`SELECT slug FROM products WHERE group_slug=${slug} AND visible=true ORDER BY stock DESC, updated_at DESC LIMIT 1`;
-    if (!representative[0])
-      return Response.json({ error: "Nenhuma cor visível foi encontrada para este filamento." }, { status: 400 });
-    await sql()`UPDATE products SET featured=true, featured_at=NOW(), updated_at=NOW() WHERE slug=${representative[0].slug}`;
-    await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
+  const group = String(groupSlug || "").trim();
+  const product = String(productSlug || "").trim();
+  if (typeof visible === "boolean") {
+    if (!group && !product)
+      return Response.json({ error: "Produto não identificado." }, { status: 400 });
+    if (group)
+      await sql()`UPDATE products SET visible=${visible}, featured=CASE WHEN ${visible} THEN featured ELSE false END, featured_at=CASE WHEN ${visible} THEN featured_at ELSE NULL END, updated_at=NOW() WHERE group_slug=${group}`;
+    else
+      await sql()`UPDATE products SET visible=${visible}, featured=CASE WHEN ${visible} THEN featured ELSE false END, featured_at=CASE WHEN ${visible} THEN featured_at ELSE NULL END, updated_at=NOW() WHERE slug=${product}`;
+  } else {
+    if (!group)
+      return Response.json({ error: "Filamento não identificado." }, { status: 400 });
+    await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE group_slug=${group}`;
+    if (featured === true) {
+      const representative = await sql()`SELECT slug FROM products WHERE group_slug=${group} AND visible=true ORDER BY stock DESC, updated_at DESC LIMIT 1`;
+      if (!representative[0])
+        return Response.json({ error: "Nenhuma cor visível foi encontrada para este filamento." }, { status: 400 });
+      await sql()`UPDATE products SET featured=true, featured_at=NOW(), updated_at=NOW() WHERE slug=${representative[0].slug}`;
+      await sql()`UPDATE products SET featured=false,featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
+    }
   }
   revalidateTag("catalog-products", { expire: 0 });
   revalidatePath("/", "page");
