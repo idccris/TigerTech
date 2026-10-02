@@ -93,6 +93,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
     [edit, setEdit] = useState<any>(blank),
     [editorOpen, setEditorOpen] = useState(false),
     [activeFilamentGroup, setActiveFilamentGroup] = useState<Product | null>(null),
+    [visibilityUpdating, setVisibilityUpdating] = useState<string | null>(null),
     [categories, setCategories] = useState<string[]>([
       "Impressoras 3D",
       "Filamentos",
@@ -229,6 +230,37 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
     return true;
   }
 
+  async function toggleStoreVisibility(product: Product) {
+    const productKey = product.groupSlug || product.slug;
+    setError("");
+    setVisibilityUpdating(productKey);
+    try {
+      const r = await fetch("/api/admin/products", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ...(product.variants
+            ? { groupSlug: product.groupSlug }
+            : { slug: product.slug }),
+          visible: product.visible === false,
+        }),
+      });
+      if (!r.ok) {
+        setError((await r.json()).error || "Não foi possível alterar a exibição na loja.");
+        return;
+      }
+      await load();
+      localStorage.setItem("catalog-updated", String(Date.now()));
+      if ("BroadcastChannel" in window) {
+        const channel = new BroadcastChannel("catalog-updates");
+        channel.postMessage("refresh");
+        channel.close();
+      }
+    } finally {
+      setVisibilityUpdating(null);
+    }
+  }
+
   function editProduct(product: Product) {
     setEdit({
       ...product,
@@ -363,17 +395,32 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                 <strong>{isFilament(p) ? `${p.brand} ${productTitle(p)}` : p.name}</strong>
                 <small>{p.visible ? "Visível na loja" : "Oculto"}</small>
               </div>
-              <button
-                onClick={() => {
-                  if (isFilament(p) && p.variants) {
-                    setEditorOpen(false);
-                    setActiveFilamentGroup(p);
-                  } else editProduct(p);
-                }}
-              >
-                {p.variants ? "Gerenciar produto" : "Editar"}
-              </button>
-              {!p.variants ? <button onClick={() => del(p.slug)}>Excluir</button> : null}
+              <div className="admin-product-actions">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isFilament(p) && p.variants) {
+                      setEditorOpen(false);
+                      setActiveFilamentGroup(p);
+                    } else editProduct(p);
+                  }}
+                >
+                  {p.variants ? "Gerenciar produto" : "Editar"}
+                </button>
+                <button
+                  type="button"
+                  className={p.visible ? "remove-from-store" : "add-to-store"}
+                  disabled={visibilityUpdating === (p.groupSlug || p.slug)}
+                  onClick={() => toggleStoreVisibility(p)}
+                >
+                  {visibilityUpdating === (p.groupSlug || p.slug)
+                    ? "Atualizando..."
+                    : p.visible
+                      ? "Remover da loja"
+                      : "Adicionar à loja"}
+                </button>
+                {!p.variants ? <button type="button" className="delete-product" onClick={() => del(p.slug)}>Excluir</button> : null}
+              </div>
             </article>
           ))}
           {filteredItems.length === 0 ? (
