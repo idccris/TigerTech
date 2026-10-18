@@ -32,7 +32,7 @@ export default function AdminCatalogExport({ products }: { products: Product[] }
     if (busy || !selected.size) return;
     if (singleSnapmakerU1) {
       const link = document.createElement("a");
-      link.href = "/catalogos/catalogo-snapmaker-u1-final-2026.pdf";
+      link.href = "/catalogos/catalogo-snapmaker-u1-compativel.pdf";
       link.download = "catalogo-snapmaker-u1.pdf";
       document.body.appendChild(link);
       link.click();

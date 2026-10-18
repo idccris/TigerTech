@@ -92,7 +92,7 @@ test('Snapmaker U1 export returns the approved static catalog', async () => {
   const response = await POST(request({ slugs: ['sku-0014'] }));
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('Content-Disposition'), 'attachment; filename="catalogo-snapmaker-u1.pdf"');
-  const expected = fs.readFileSync(path.join(__dirname, '../public/catalogos/catalogo-snapmaker-u1-final-2026.pdf'));
+  const expected = fs.readFileSync(path.join(__dirname, '../public/catalogos/catalogo-snapmaker-u1-compativel.pdf'));
   assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
 });
 test('excessive generation is rate limited', async () => {
