@@ -86,6 +86,15 @@ test('authenticated export returns only selected products as a private PDF', asy
   assert.ok(!text.includes('OMITTED-PRODUCT'));
   assert.ok(!text.includes('PRIVATE-INPUT'));
 });
+test('Snapmaker U1 export returns the approved static catalog', async () => {
+  user = { username: 'test', role: 'operator' };
+  rows = [{ ...machine, slug: 'sku-0014', name: 'Snapmaker U1' }];
+  const response = await POST(request({ slugs: ['sku-0014'] }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('Content-Disposition'), 'attachment; filename="catalogo-snapmaker-u1.pdf"');
+  const expected = fs.readFileSync(path.join(__dirname, '../public/catalogos/catalogo-snapmaker-u1.pdf'));
+  assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
+});
 test('excessive generation is rate limited', async () => {
   user = { username: 'test' }; allowed = false;
   assert.equal((await POST(request({ slugs: ['machine'] }))).status, 429);

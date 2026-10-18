@@ -18,6 +18,7 @@ export default function AdminCatalogExport({ products }: { products: Product[] }
     && (!category || p.category === category)
     && `${p.name} ${p.filamentModel || ""} ${p.brand || ""}`.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR").trim()));
   const singleMachine = selected.size === 1 && products.some(p => selected.has(p.slug) && p.category === "Impressoras 3D");
+  const singleSnapmakerU1 = selected.size === 1 && selected.has("sku-0014");
 
   function toggle(slug: string) {
     setSelected(previous => {
@@ -43,7 +44,7 @@ export default function AdminCatalogExport({ products }: { products: Product[] }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
-      link.download = `tiger-tech-catalogo-${new Date().toISOString().slice(0, 10)}.pdf`;
+      link.download = singleSnapmakerU1 ? "catalogo-snapmaker-u1.pdf" : `tiger-tech-catalogo-${new Date().toISOString().slice(0, 10)}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
