@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const products = groupProductsForAdmin(await listCatalogExportProducts()).filter((p) => selected.has(p.slug));
     if (products.length !== selected.size) return Response.json({ error: "Um produto foi alterado ou removido. Atualize a página e selecione novamente." }, { status: 409 });
     if (products.length === 1 && products[0].slug === "sku-0014") {
-      const pdf = await fs.readFile(path.join(process.cwd(), "public", "catalogos", "catalogo-snapmaker-u1.pdf"));
+      const pdf = await fs.readFile(path.join(process.cwd(), "public", "catalogos", "catalogo-snapmaker-u1-final-2026.pdf"));
       return new Response(new Uint8Array(pdf), { headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": 'attachment; filename="catalogo-snapmaker-u1.pdf"',
