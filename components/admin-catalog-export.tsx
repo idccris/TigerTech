@@ -30,6 +30,15 @@ export default function AdminCatalogExport({ products }: { products: Product[] }
 
   async function download() {
     if (busy || !selected.size) return;
+    if (singleSnapmakerU1) {
+      const link = document.createElement("a");
+      link.href = "/catalogos/catalogo-snapmaker-u1.pdf";
+      link.download = "catalogo-snapmaker-u1.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -44,7 +53,7 @@ export default function AdminCatalogExport({ products }: { products: Product[] }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
-      link.download = singleSnapmakerU1 ? "catalogo-snapmaker-u1.pdf" : `tiger-tech-catalogo-${new Date().toISOString().slice(0, 10)}.pdf`;
+      link.download = `tiger-tech-catalogo-${new Date().toISOString().slice(0, 10)}.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
