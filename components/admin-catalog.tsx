@@ -103,7 +103,7 @@ export default function AdminCatalog({
         </div>
         {role === "operator" ? <button className="operator-new-product" onClick={() => { setEditing(blank); setError(""); }}>+ Novo produto</button> : null}
       </header>
-      <AdminCatalogExport products={groupedProducts} />
+      {role === "admin" ? <AdminCatalogExport /> : null}
       <section className="brand-filter" aria-label="Filtrar por marca ou categoria">
         {filters.map((filter) => (
           <button

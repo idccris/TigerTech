@@ -31,3 +31,14 @@
 .dialog button:disabled{opacity:.5;cursor:not-allowed}
 .dialog :is(button,input,select):focus-visible,.launch:focus-visible{outline:3px solid #1665cb;outline-offset:3px}
 @media(max-width:640px){.header{padding:18px}.header h2{font-size:22px}.content{padding:0 18px 18px}.filters{grid-template-columns:1fr 1fr}.filters label:first-child{grid-column:1/-1}.list{grid-template-columns:1fr}.footer{padding:14px 18px;grid-template-columns:1fr}.download{grid-column:1;grid-row:auto;width:100%}.footer p{font-size:11px}.eyebrow{font-size:9px}.actions{gap:6px}}
+
+.entry{border:1px solid #ddd;border-radius:18px;background:#fff;color:#1b1b1d;overflow:hidden}
+.entry .layout{max-height:none}
+.entry .list{margin-top:16px}
+.catalogChoice{display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:pointer}
+.individual{flex-shrink:0;padding:10px;border:1px solid #f65a0a;border-radius:8px;background:white;color:#b64000;cursor:pointer;min-height:44px}
+.fieldset>label{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.fieldset>label input{box-sizing:border-box;width:100%;min-height:44px;border:1px solid #ccc;border-radius:8px;padding:10px;font:inherit}
+.entry button:disabled{opacity:.5;cursor:not-allowed}
+.entry :is(button,input):focus-visible{outline:3px solid #1665cb;outline-offset:3px}
+@media(max-width:400px){.item{flex-wrap:wrap}.individual{width:100%}}

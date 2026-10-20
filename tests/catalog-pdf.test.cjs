@@ -53,50 +53,68 @@ test('multiple machines use four cards per page instead of one product per page'
   assert.ok(!text.includes(machine.longDescription));
 });
 
-// Isolated API tests: no production database or authentication writes.
+// Isolated downloads: no production database or authentication writes.
 let user = null;
-let rows = [machine];
-let reads = 0;
 let allowed = true;
 function mock(relative, exports) { require.cache[require.resolve(relative)] = { id: relative, filename: relative, loaded: true, exports }; }
-mock('../lib/catalog-export-products.ts', { listCatalogExportProducts: async () => { reads++; return rows; } });
 mock('../lib/admin-auth.ts', { requireUser: async () => user, isTrustedMutation: request => !request.headers.get('origin') || request.headers.get('origin') === 'https://shop.test', consumeRateLimit: async () => allowed, hashToken: value => value });
-mock('../lib/catalog-pdf-images.ts', { loadCatalogImages: async () => ({}) });
 const { POST } = require('../app/api/admin/catalogo-pdf/route.ts');
+const { machineCatalogs, selectMachineCatalogs } = require('../lib/machine-catalogs.ts');
 function request(body, headers = {}) { return new Request('https://shop.test/api/admin/catalogo-pdf', { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) }); }
-test('export requires authentication and rejects foreign origins before reading products', async () => {
-  reads = 0; user = null;
-  assert.equal((await POST(request({ slugs: ['machine'] }))).status, 401);
-  assert.equal((await POST(request({ slugs: ['machine'] }, { origin: 'https://evil.test' }))).status, 403);
-  assert.equal(reads, 0);
+
+test('downloads require authentication and reject foreign origins', async () => {
+  user = null;
+  assert.equal((await POST(request({ ids: ['a1'] }))).status, 401);
+  assert.equal((await POST(request({ ids: ['a1'] }, { origin: 'https://evil.test' }))).status, 403);
 });
-test('selection validation rejects empty, stale and malformed selections', async () => {
-  user = { username: 'test', role: 'admin' };
-  for (const slugs of [[], null, [12], Array(1001).fill('machine')]) assert.equal((await POST(request({ slugs }))).status, 400);
-  assert.equal((await POST(request({ slugs: ['removed'] }))).status, 409);
-});
-test('authenticated export returns only selected products as a private PDF', async () => {
-  user = { username: 'test', role: 'operator' }; rows = [machine, { ...machine, slug: 'omitted', name: 'OMITTED-PRODUCT' }];
-  const response = await POST(request({ slugs: ['machine'], stock: 'PRIVATE-INPUT' }));
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get('Content-Type'), 'application/pdf');
-  assert.equal(response.headers.get('Cache-Control'), 'private, no-store');
-  const text = pdfText(Buffer.from(await response.arrayBuffer()));
-  assert.ok(text.includes(machine.name));
-  assert.ok(!text.includes('OMITTED-PRODUCT'));
-  assert.ok(!text.includes('PRIVATE-INPUT'));
-});
-test('Snapmaker U1 export returns the approved static catalog', async () => {
+test('operators cannot download administrator catalogs', async () => {
   user = { username: 'test', role: 'operator' };
-  rows = [{ ...machine, slug: 'sku-0014', name: 'Snapmaker U1' }];
-  const response = await POST(request({ slugs: ['sku-0014'] }));
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get('Content-Disposition'), 'attachment; filename="catalogo-snapmaker-u1.pdf"');
-  const expected = fs.readFileSync(path.join(__dirname, '../public/catalogos/catalogo-snapmaker-u1-compativel.pdf'));
-  assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
+  assert.equal((await POST(request({ ids: ['a1'] }))).status, 403);
 });
-test('excessive generation is rate limited', async () => {
-  user = { username: 'test' }; allowed = false;
-  assert.equal((await POST(request({ slugs: ['machine'] }))).status, 429);
+test('invalid, duplicate, stale and path traversal selections are rejected', async () => {
+  user = { username: 'test', role: 'admin' };
+  for (const ids of [[], null, [12], ['a1', 'a1'], ['../a1'], ['removed'], Array(10).fill('a1')])
+    assert.equal((await POST(request({ ids }))).status, 400);
+  assert.equal((await POST(request({ slugs: ['sku-0014'] }))).status, 400);
+  assert.equal((await POST(new Request('https://shop.test/api/admin/catalogo-pdf', {method:'POST',body:'{'}))).status, 400);
+  assert.equal(selectMachineCatalogs(null), null);
+});
+for (const catalog of machineCatalogs) {
+  test(catalog.name + ' download preserves every original PDF byte', async () => {
+    user = { username: 'test', role: 'admin' };
+    const response = await POST(request({ ids: [catalog.id] }));
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('Content-Type'), 'application/pdf');
+    assert.equal(response.headers.get('Cache-Control'), 'private, no-store');
+    assert.equal(response.headers.get('Content-Disposition'), 'attachment; filename="' + catalog.file + '"');
+    const expected = fs.readFileSync(path.join(__dirname, '../assets/machine-catalogs', catalog.file));
+    assert.deepEqual(Buffer.from(await response.arrayBuffer()), expected);
+    assert.equal(expected.subarray(0, 5).toString(), '%PDF-');
+  });
+}
+test('multiple selection returns ZIP containing only the selected original PDFs', async () => {
+  user = { username: 'test', role: 'admin' };
+  const response = await POST(request({ ids: ['a1', 'h2d'] }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('Content-Type'), 'application/zip');
+  const zip = Buffer.from(await response.arrayBuffer());
+  let offset = 0;
+  for (const id of ['a1', 'h2d']) {
+    assert.equal(zip.readUInt32LE(offset), 0x04034b50);
+    const size = zip.readUInt32LE(offset + 18);
+    const nameLength = zip.readUInt16LE(offset + 26);
+    const name = zip.subarray(offset + 30, offset + 30 + nameLength).toString();
+    const catalog = machineCatalogs.find(item => item.id === id);
+    assert.equal(name, catalog.file);
+    assert.deepEqual(zip.subarray(offset + 30 + nameLength, offset + 30 + nameLength + size),
+      fs.readFileSync(path.join(__dirname, '../assets/machine-catalogs', catalog.file)));
+    offset += 30 + nameLength + size;
+  }
+  assert.equal(zip.readUInt32LE(offset), 0x02014b50);
+  assert.equal(zip.readUInt16LE(zip.length - 12), 2);
+});
+test('downloads enforce rate limits', async () => {
+  user = { username: 'test', role: 'admin' }; allowed = false;
+  assert.equal((await POST(request({ ids: ['a1'] }))).status, 429);
   allowed = true;
 });

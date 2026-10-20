@@ -1,106 +1,84 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import type { Product } from "../lib/products";
+import { useState } from "react";
+import { machineCatalogs } from "../lib/machine-catalogs";
 import styles from "./admin-catalog-export.module.css";
 
-export default function AdminCatalogExport({ products }: { products: Product[] }) {
-  const dialog = useRef<HTMLDialogElement>(null);
+export default function AdminCatalogExport() {
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
-  const [brand, setBrand] = useState("");
-  const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const brands = useMemo(() => [...new Set(products.map(p => p.brand || "Sem marca"))].sort(), [products]);
-  const categories = useMemo(() => [...new Set(products.map(p => p.category))].sort(), [products]);
-  const filtered = products.filter(p => (!brand || (p.brand || "Sem marca") === brand)
-    && (!category || p.category === category)
-    && `${p.name} ${p.filamentModel || ""} ${p.brand || ""}`.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR").trim()));
-  const singleMachine = selected.size === 1 && products.some(p => selected.has(p.slug) && p.category === "Impressoras 3D");
-  const singleSnapmakerU1 = selected.size === 1 && selected.has("sku-0014");
+  const filtered = machineCatalogs.filter(item => item.name.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR").trim()));
 
-  function toggle(slug: string) {
+  function toggle(id: string) {
     setSelected(previous => {
       const next = new Set(previous);
-      if (next.has(slug)) next.delete(slug); else next.add(slug);
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   }
 
-  async function download() {
-    if (busy || !selected.size) return;
-    if (singleSnapmakerU1) {
-      const link = document.createElement("a");
-      link.href = "/catalogos/catalogo-snapmaker-u1-compativel.pdf";
-      link.download = "catalogo-snapmaker-u1.pdf";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      return;
-    }
+  async function download(ids: string[]) {
+    if (busy || !ids.length) return;
     setBusy(true);
     setError("");
     try {
       const response = await fetch("/api/admin/catalogo-pdf", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slugs: [...selected] }),
+        body: JSON.stringify({ ids }),
       });
       if (!response.ok) {
         const result = await response.json().catch(() => null);
-        throw new Error(result?.error || "Não foi possível gerar o catálogo. Tente novamente.");
+        throw new Error(result?.error || "Não foi possível baixar os catálogos.");
       }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
-      link.download = `tiger-tech-catalogo-${new Date().toISOString().slice(0, 10)}.pdf`;
+      link.download = ids.length === 1
+        ? machineCatalogs.find(item => item.id === ids[0])!.file
+        : "tiger-tech-catalogos.zip";
       document.body.appendChild(link);
       link.click();
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
     } catch (failure) {
-      setError(failure instanceof Error ? failure.message : "Erro ao baixar o PDF.");
+      setError(failure instanceof Error ? failure.message : "Erro ao baixar os arquivos.");
     } finally { setBusy(false); }
   }
 
-  return <div className={styles.entry}>
-    <button type="button" className={styles.launch} onClick={() => { setError(""); dialog.current?.showModal(); }}>Gerar catálogo PDF</button>
-    <dialog ref={dialog} className={styles.dialog} aria-labelledby="catalog-export-title"
-      onCancel={event => { if (busy) event.preventDefault(); }}>
-      <div className={styles.layout}>
-        <header className={styles.header}>
-          <div><span className={styles.eyebrow}>MATERIAL PARA SEUS CLIENTES</span><h2 id="catalog-export-title">Monte seu catálogo</h2></div>
-          <button type="button" disabled={busy} className={styles.close} aria-label="Fechar catálogo" onClick={() => dialog.current?.close()}>×</button>
-        </header>
-        <div className={styles.content}>
-          <p className={styles.intro}>Escolha os produtos que deseja apresentar. O PDF não contém preços, estoque, códigos internos ou controles administrativos.</p>
-          <fieldset disabled={busy} className={styles.fieldset}>
-            <legend className={styles.legend}>Filtrar produtos</legend>
-            <div className={styles.filters}>
-              <label>Buscar produto<input type="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Nome do produto" /></label>
-              <label>Marca<select value={brand} onChange={e => setBrand(e.target.value)}><option value="">Todas as marcas</option>{brands.map(value => <option key={value}>{value}</option>)}</select></label>
-              <label>Categoria<select value={category} onChange={e => setCategory(e.target.value)}><option value="">Todas as categorias</option>{categories.map(value => <option key={value}>{value}</option>)}</select></label>
-            </div>
-            <div className={styles.actions}>
-              <button type="button" disabled={!filtered.length} onClick={() => setSelected(previous => new Set([...previous, ...filtered.map(p => p.slug)]))}>Selecionar resultados ({filtered.length})</button>
-              <button type="button" onClick={() => setSelected(new Set(products.map(p => p.slug)))}>Todos os produtos</button>
-              <button type="button" disabled={!selected.size} onClick={() => setSelected(new Set())}>Limpar seleção</button>
-            </div>
-            <p className={styles.note}>A seleção é mantida ao trocar os filtros. Inclui produtos cadastrados mesmo sem estoque; confirme a disponibilidade antes de enviar ao cliente.</p>
-            <div className={styles.list}>
-              {filtered.length ? filtered.map(product => <label key={product.slug} className={styles.item}>
-                <input type="checkbox" checked={selected.has(product.slug)} onChange={() => toggle(product.slug)} />
-                <span><strong>{product.filamentModel || product.name}</strong><small>{product.brand || "Sem marca"} · {product.category}</small></span>
-              </label>) : <p>Nenhum produto encontrado para estes filtros.</p>}
-            </div>
-          </fieldset>
-        </div>
-        <footer className={styles.footer}>
-          <div aria-live="polite"><strong>{selected.size} produto(s) selecionado(s)</strong><p>{singleMachine ? "Ficha da máquina com foto, descrição e especificações completas cadastradas." : "Catálogo com fotos principais e descrições dos produtos selecionados."}</p></div>
-          {error ? <p className={styles.error} role="alert">{error}</p> : null}
-          <button type="button" className={styles.download} disabled={busy || !selected.size} onClick={download}>{busy ? "Gerando PDF…" : singleMachine ? "Baixar ficha da máquina" : "Baixar catálogo PDF"}</button>
-        </footer>
+  return <section className={styles.entry} aria-labelledby="machine-catalog-title">
+    <div className={styles.layout}>
+      <header className={styles.header}>
+        <div><span className={styles.eyebrow}>MATERIAL PARA SEUS CLIENTES</span><h2 id="machine-catalog-title">Catálogos das máquinas</h2></div>
+      </header>
+      <div className={styles.content}>
+        <p className={styles.intro}>Baixe o PDF de cada modelo para enviar ao cliente. Selecione vários para baixar um ZIP com os PDFs originais separados.</p>
+        <fieldset disabled={busy} className={styles.fieldset}>
+          <legend className={styles.legend}>Selecionar catálogos</legend>
+          <label>Buscar modelo<input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Ex.: A1 Mini, H2D ou X1 Carbon" /></label>
+          <div className={styles.actions}>
+            <button type="button" disabled={!filtered.length} onClick={() => setSelected(previous => new Set([...previous, ...filtered.map(item => item.id)]))}>Selecionar resultados ({filtered.length})</button>
+            <button type="button" onClick={() => setSelected(new Set(machineCatalogs.map(item => item.id)))}>Selecionar todos</button>
+            <button type="button" disabled={!selected.size} onClick={() => setSelected(new Set())}>Limpar seleção</button>
+          </div>
+          <div className={styles.list}>
+            {filtered.map(item => <div key={item.id} className={styles.item}>
+              <label className={styles.catalogChoice}>
+                <input type="checkbox" checked={selected.has(item.id)} onChange={() => toggle(item.id)} />
+                <span><strong>{item.name}</strong><small>Catálogo em PDF</small></span>
+              </label>
+              <button type="button" className={styles.individual} onClick={() => download([item.id])} aria-label={`Baixar PDF de ${item.name}`}>Baixar PDF</button>
+            </div>)}
+            {!filtered.length ? <p>Nenhum modelo encontrado.</p> : null}
+          </div>
+        </fieldset>
       </div>
-    </dialog>
-  </div>;
+      <footer className={styles.footer}>
+        <div aria-live="polite"><strong>{selected.size} catálogo(s) selecionado(s)</strong></div>
+        {error ? <p className={styles.error} role="alert">{error}</p> : null}
+        <button type="button" className={styles.download} disabled={busy || !selected.size} onClick={() => download([...selected])}>{busy ? "Preparando download…" : selected.size > 1 ? "Baixar PDFs selecionados (ZIP)" : "Baixar PDF selecionado"}</button>
+      </footer>
+    </div>
+  </section>;
 }

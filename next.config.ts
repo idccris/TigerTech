@@ -26,6 +26,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  outputFileTracingIncludes: { "/api/admin/catalogo-pdf": ["./assets/machine-catalogs/*.pdf"] },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "store.bblcdn.com" },
