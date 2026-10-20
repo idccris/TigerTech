@@ -89,7 +89,7 @@ export const getCachedPublicProducts = unstable_cache(
     process.env.DATABASE_URL
       ? (await listProducts(false)).map(publicProduct)
       : [],
-  ["public-products-20261020"],
+  ["public-products-20261020-machines-restored"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
@@ -98,7 +98,7 @@ export const getCachedPublicCatalogProducts = unstable_cache(
     process.env.DATABASE_URL
       ? publicCatalogProducts(await listProducts(false))
       : [],
-  ["public-catalog-products-20261020"],
+  ["public-catalog-products-20261020-machines-restored"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
