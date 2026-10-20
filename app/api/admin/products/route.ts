@@ -1,6 +1,7 @@
 import { isTrustedMutation, requireUser, verifyAdminPassword } from "../../../../lib/admin-auth";
 import { ensureDb, listProductGallerySlots, listProducts, sql } from "../../../../lib/db";
 import { filamentGroupSlug, isFilament } from "../../../../lib/product-variants";
+import { trimFeaturedModels } from "../../../../lib/product-features";
 import { parseBRLToCents } from "../../../../lib/money";
 import { storefrontProductImage } from "../../../../lib/product-images";
 import { revalidatePath, revalidateTag } from "next/cache";
@@ -18,7 +19,7 @@ export async function GET() {
     ...product,
     imageUrl: storefrontProductImage(product),
     imageUrls: [storefrontProductImage(product), ...(slotsBySlug.get(product.slug) || []).map(position => `/api/products/image?slug=${encodeURIComponent(product.slug)}&index=${position}&v=${encodeURIComponent(product.updatedAt || "1")}`)].filter(Boolean),
-  })), { headers: { "Cache-Control": "private, max-age=15" } });
+  })), { headers: { "Cache-Control": "private, no-store" } });
 }
 export async function POST(req: Request) {
   if (!isTrustedMutation(req))
@@ -69,6 +70,8 @@ export async function POST(req: Request) {
   const groupSlug = filament ? filamentGroupSlug(String(p.brand || "").trim(), filamentModel) : "";
   if (filament && (!filamentModel || !colorName || !/^#[0-9a-f]{6}$/i.test(colorHex)))
     return Response.json({ error: "Para cadastrar um filamento, selecione o tipo/modelo, informe o nome da cor e escolha a cor da bolinha." }, { status: 400 });
+  const existingGroup = filament ? await sql()`SELECT BOOL_OR(featured) AS featured FROM products WHERE group_slug=${groupSlug}` : [];
+  const effectiveFeatured = filament ? existingGroup[0]?.featured === true : p.featured === true;
   const benefits = Array.from({ length: 3 }, (_, index) => ({
     icon: p.benefits?.[index]?.icon || "✦",
     title: String(p.benefits?.[index]?.title || "").slice(0, 28),
@@ -76,7 +79,7 @@ export async function POST(req: Request) {
   }));
   const priceCents = parseBRLToCents(p.pixPrice ?? p.price);
   const cardPriceCents = parseBRLToCents(p.cardPrice ?? p.pixPrice ?? p.price);
-  await sql()`INSERT INTO products(slug,group_slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at) VALUES(${slug},${groupSlug},${sku},${name},${filamentModel},${colorName},${colorHex},${category},${String(p.brand || "").slice(0, 80)},${String(p.brand || "").slice(0, 80)},${String(p.description || "").slice(0, 500)},${String(p.longDescription || "").slice(0, 10000)},${String(p.specificationsText || "").slice(0, 10000)},${JSON.stringify(Array.isArray(p.specs) ? p.specs.slice(0, 100) : [])},${JSON.stringify(benefits)},${p.tone || "orange"},${submittedImage},${Math.max(0, Math.min(1_000_000, Math.floor(Number(p.stock) || 0)))},${priceCents},${cardPriceCents},${p.visible !== false},${p.featured === true},CASE WHEN ${p.featured === true} THEN NOW() ELSE NULL END,NOW()) ON CONFLICT(slug) DO UPDATE SET group_slug=EXCLUDED.group_slug,sku=EXCLUDED.sku,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=CASE WHEN ${keepStoredImage} THEN products.image_url ELSE EXCLUDED.image_url END,stock=EXCLUDED.stock,price_cents=EXCLUDED.price_cents,card_price_cents=EXCLUDED.card_price_cents,visible=EXCLUDED.visible,featured=EXCLUDED.featured,featured_at=CASE WHEN EXCLUDED.featured=true AND products.featured=false THEN NOW() WHEN EXCLUDED.featured=false THEN NULL ELSE products.featured_at END,updated_at=NOW()`;
+  await sql()`INSERT INTO products(slug,group_slug,sku,name,filament_model,color_name,color_hex,category,tag,brand,description,long_description,specifications_text,specs,benefits,tone,image_url,stock,price_cents,card_price_cents,visible,featured,featured_at,updated_at) VALUES(${slug},${groupSlug},${sku},${name},${filamentModel},${colorName},${colorHex},${category},${String(p.brand || "").slice(0, 80)},${String(p.brand || "").slice(0, 80)},${String(p.description || "").slice(0, 500)},${String(p.longDescription || "").slice(0, 10000)},${String(p.specificationsText || "").slice(0, 10000)},${JSON.stringify(Array.isArray(p.specs) ? p.specs.slice(0, 100) : [])},${JSON.stringify(benefits)},${p.tone || "orange"},${submittedImage},${Math.max(0, Math.min(1_000_000, Math.floor(Number(p.stock) || 0)))},${priceCents},${cardPriceCents},${p.visible !== false},${effectiveFeatured},CASE WHEN ${effectiveFeatured} THEN NOW() ELSE NULL END,NOW()) ON CONFLICT(slug) DO UPDATE SET group_slug=EXCLUDED.group_slug,sku=EXCLUDED.sku,name=EXCLUDED.name,filament_model=EXCLUDED.filament_model,color_name=EXCLUDED.color_name,color_hex=EXCLUDED.color_hex,category=EXCLUDED.category,tag=EXCLUDED.tag,brand=EXCLUDED.brand,description=EXCLUDED.description,long_description=EXCLUDED.long_description,specifications_text=EXCLUDED.specifications_text,specs=EXCLUDED.specs,benefits=EXCLUDED.benefits,tone=EXCLUDED.tone,image_url=CASE WHEN ${keepStoredImage} THEN products.image_url ELSE EXCLUDED.image_url END,stock=EXCLUDED.stock,price_cents=EXCLUDED.price_cents,card_price_cents=EXCLUDED.card_price_cents,visible=EXCLUDED.visible,featured=EXCLUDED.featured,featured_at=CASE WHEN EXCLUDED.featured=true AND products.featured=false THEN NOW() WHEN EXCLUDED.featured=false THEN NULL ELSE products.featured_at END,updated_at=NOW()`;
   for (let position = 1; position <= 3; position += 1) {
     const image = submittedImages[position];
     if (image.startsWith("/api/products/image")) continue;
@@ -86,8 +89,7 @@ export async function POST(req: Request) {
       await sql()`INSERT INTO product_images(product_slug,position,image_url,updated_at) VALUES(${slug},${position},${image},NOW()) ON CONFLICT(product_slug,position) DO UPDATE SET image_url=EXCLUDED.image_url,updated_at=NOW()`;
     }
   }
-  if (p.featured === true)
-    await sql()`UPDATE products SET featured=false,featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
+  if (effectiveFeatured) await trimFeaturedModels();
   revalidateTag("catalog-products", { expire: 0 });
   revalidatePath("/", "page");
   revalidatePath("/produtos", "page");
@@ -116,14 +118,17 @@ export async function PATCH(req: Request) {
   } else {
     if (!group)
       return Response.json({ error: "Filamento não identificado." }, { status: 400 });
-    await sql()`UPDATE products SET featured=false, featured_at=NULL WHERE group_slug=${group}`;
-    if (featured === true) {
-      const representative = await sql()`SELECT slug FROM products WHERE group_slug=${group} AND visible=true ORDER BY stock DESC, updated_at DESC LIMIT 1`;
-      if (!representative[0])
-        return Response.json({ error: "Nenhuma cor visível foi encontrada para este filamento." }, { status: 400 });
-      await sql()`UPDATE products SET featured=true, featured_at=NOW(), updated_at=NOW() WHERE slug=${representative[0].slug}`;
-      await sql()`UPDATE products SET featured=false,featured_at=NULL WHERE slug IN (SELECT slug FROM products WHERE featured=true ORDER BY featured_at DESC NULLS LAST OFFSET 6)`;
-    }
+    if (typeof featured !== "boolean")
+      return Response.json({ error: "Informe o estado do destaque." }, { status: 400 });
+    const colors = await sql()`SELECT slug,visible,stock FROM products WHERE group_slug=${group}`;
+    if (!colors.length) return Response.json({ error: "Filamento não encontrado." }, { status: 404 });
+    if (featured && !colors.some(color => color.visible && Number(color.stock) > 0))
+      return Response.json({ error: "Ative pelo menos uma cor com estoque antes de destacar o modelo." }, { status: 400 });
+    const db = sql();
+    await db.transaction([
+      db`UPDATE products SET featured=${featured},featured_at=CASE WHEN ${featured} THEN NOW() ELSE NULL END,updated_at=NOW() WHERE group_slug=${group}`,
+      trimFeaturedModels(db),
+    ]);
   }
   revalidateTag("catalog-products", { expire: 0 });
   revalidatePath("/", "page");

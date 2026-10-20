@@ -1,0 +1,447 @@
+:root { --surface:#fff; --surface-alt:#f4f4f4; }
+html[data-theme="dark"] { color-scheme:dark; --ink:#f3f3f3; --paper:#111; --surface:#1b1b1b; --surface-alt:#242424; --line:#3d3d3d; --muted:#b5b5b5; }
+.theme-toggle { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:44px; min-height:44px; padding:8px 12px; border:1px solid var(--line); border-radius:24px; background:var(--surface); color:var(--ink); font:700 12px var(--font-body); cursor:pointer; flex-shrink:0; }
+.theme-toggle > span:first-child { font-size:22px; line-height:1; }
+.theme-toggle:focus-visible { outline:3px solid var(--acid); outline-offset:3px; }
+.site-header > .theme-toggle { margin-left:auto; }
+.site-header .nav { margin-left:16px; }
+.admin-display-filters { display:flex; flex-wrap:wrap; gap:16px; margin:20px 0; padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
+.admin-display-filters label { display:grid; gap:8px; flex:1 1 200px; font-size:12px; font-weight:700; }
+.admin-display-filters input,.admin-display-filters select { width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font:inherit; }
+.admin-display-filters p { flex-basis:100%; margin:0; color:var(--muted); font-size:12px; }
+.admin-feedback { color:#b33b17; padding:12px; }
+@media(max-width:1100px) { .theme-toggle-label { display:none; } }
+@media(max-width:760px) { .site-header > .theme-toggle { margin-left:auto; margin-right:10px; } .site-header .nav { margin-left:0; } .admin-navbar > .theme-toggle { margin-left:auto; } }
+html[data-theme="dark"] .security-seal {
+  background: #080808;
+}
+html[data-theme="dark"] .security-principles article {
+  background: var(--surface);
+}
+html[data-theme="dark"] .security-statement-icon {
+  background: #080808;
+}
+html[data-theme="dark"] .warranty-policy-alert {
+  background: #080808;
+}
+html[data-theme="dark"] .legal-hero aside {
+  background: var(--surface);
+}
+html[data-theme="dark"] .legal-document {
+  background: var(--surface);
+}
+html[data-theme="dark"] .legal-note {
+  background: var(--surface-alt);
+  color: #ffb18a;
+}
+html[data-theme="dark"] .legal-contact a {
+  background: #080808;
+}
+html[data-theme="dark"] .site-header.solid {
+  background: var(--surface);
+}
+html[data-theme="dark"] .brand-mark {
+  background: #080808;
+}
+html[data-theme="dark"] .nav-cta {
+  background: #080808;
+}
+html[data-theme="dark"] .nav-cart span {
+  background: #080808;
+}
+html[data-theme="dark"] .contents-grid article { background: var(--surface); }
+html[data-theme="dark"] .content-card-image { background: var(--surface-alt); }
+html[data-theme="dark"] .content-article-cover { background: var(--surface-alt); }
+html[data-theme="dark"] .content-article-body { color: var(--ink); }
+html[data-theme="dark"] .content-article-gallery > div { background: var(--surface-alt); }
+html[data-theme="dark"] .content-related a { background: var(--surface); }
+html[data-theme="dark"] .contents-admin-message { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .contents-admin-list > article { background: var(--surface); }
+html[data-theme="dark"] .contents-admin-thumb { background: var(--surface-alt); }
+html[data-theme="dark"] .content-status { background: var(--surface-alt); }
+html[data-theme="dark"] .content-status.published { background: var(--surface-alt); color: #76dba1; }
+html[data-theme="dark"] .contents-admin-actions a,
+html[data-theme="dark"] .contents-admin-actions button { background: var(--surface); }
+html[data-theme="dark"] .contents-admin-actions .danger { color: #ffb18a; }
+html[data-theme="dark"] .content-editor-head { background: var(--surface); }
+html[data-theme="dark"] .content-editor-grid > section,
+html[data-theme="dark"] .content-editor-grid > aside > * { background: var(--surface); }
+html[data-theme="dark"] .content-editor-grid input,
+html[data-theme="dark"] .content-editor-grid textarea { background: var(--surface); }
+html[data-theme="dark"] .slug-input { background: var(--surface-alt); }
+html[data-theme="dark"] .content-image-slot > button { color: #ffb18a; }
+html[data-theme="dark"] .content-editor-error { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .content-editor-save { background: var(--surface); }
+html[data-theme="dark"] .content-editor-save button { background: var(--surface); }
+html[data-theme="dark"] .primary-button {
+  background: #080808;
+}
+html[data-theme="dark"] .floating-label {
+  background: var(--surface);
+}
+html[data-theme="dark"] .catalog-section {
+  background: var(--surface);
+}
+html[data-theme="dark"] .category-list button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .category-list button.active {
+  background: #080808;
+}
+html[data-theme="dark"] .product-card {
+  background: var(--surface);
+}
+html[data-theme="dark"] .product-tag {
+  background: var(--surface);
+}
+html[data-theme="dark"] .product-visual.violet {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .product-visual.blue {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .product-visual.mint {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .product-visual.slate {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .product-content li {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .about {
+  background: #080808;
+}
+html[data-theme="dark"] .cta-slide .primary-button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .cta-a1-background {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .cta-slider-controls button.active { background: var(--surface); }
+html[data-theme="dark"] .cta-slider-controls button:first-child,
+html[data-theme="dark"] .cta-slider-controls button:last-child {
+  background: var(--surface);
+}
+html[data-theme="dark"] footer {
+  background: #080808;
+}
+html[data-theme="dark"] .footer-label {
+  color: var(--muted);
+}
+html[data-theme="dark"] .footer-bottom {
+  color: var(--muted);
+}
+html[data-theme="dark"] .admin-login {
+  background: #080808;
+}
+html[data-theme="dark"] .admin-login form {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-login input,
+html[data-theme="dark"] .admin-form input,
+html[data-theme="dark"] .admin-form textarea,
+html[data-theme="dark"] .admin-form select {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-login small,
+html[data-theme="dark"] .admin-form > small {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .admin-navbar {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-navbar > div a:hover,
+html[data-theme="dark"] .admin-navbar > div a.active {
+  background: #080808;
+}
+html[data-theme="dark"] .design-editor > section {
+  background: var(--surface);
+}
+html[data-theme="dark"] .design-editor input,
+html[data-theme="dark"] .design-editor textarea,
+html[data-theme="dark"] .operator-editor input,
+html[data-theme="dark"] .operator-editor textarea,
+html[data-theme="dark"] .user-modal input,
+html[data-theme="dark"] .user-modal select {
+  background: var(--surface);
+}
+html[data-theme="dark"] .users-list article { background: var(--surface); }
+html[data-theme="dark"] .users-list article em { background: var(--surface-alt); }
+html[data-theme="dark"] .users-list article em.admin { background: #080808; }
+html[data-theme="dark"] .users-list article button { background: var(--surface); }
+html[data-theme="dark"] .users-message { color: #ffb18a; }
+html[data-theme="dark"] .user-modal form,
+html[data-theme="dark"] .operator-editor form { background: var(--surface); }
+html[data-theme="dark"] .operator-product-actions button { background: var(--surface); }
+html[data-theme="dark"] .operator-editor form > small { color: #ffb18a; }
+html[data-theme="dark"] .admin-header-actions button.secondary {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-product-filters button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-product-filters button.active {
+  background: #080808;
+}
+html[data-theme="dark"] .admin-category-home {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-category-grid > button > span {
+  background: #080808;
+}
+html[data-theme="dark"] .admin-list article {
+  background: var(--surface);
+}
+html[data-theme="dark"] .admin-list article > button:last-child {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .admin-form {
+  background: var(--surface);
+}
+html[data-theme="dark"] .filament-variant-manager {
+  background: var(--surface);
+}
+html[data-theme="dark"] .filament-feature-control {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .filament-feature-control button { background: var(--surface); }
+html[data-theme="dark"] .variant-actions button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .variant-actions button:last-child { color: #ffb18a; }
+html[data-theme="dark"] .hero-admin-form .remove-cover {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .add-category button {
+  background: #080808;
+}
+html[data-theme="dark"] .image-upload.has-image {
+  background-color: var(--surface);
+}
+html[data-theme="dark"] .benefit-number {
+  background: #080808;
+}
+html[data-theme="dark"] .icon-picker button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .benefit-mini-preview {
+  background: var(--surface);
+}
+html[data-theme="dark"] .feature-check {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .cart-drawer {
+  background: var(--surface);
+}
+html[data-theme="dark"] .quantity button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .cart-summary button {
+  background: #080808;
+}
+html[data-theme="dark"] .cart-empty a {
+  background: #080808;
+}
+html[data-theme="dark"] .checkout-form > button,
+html[data-theme="dark"] .cart-success > button {
+  background: #080808;
+}
+html[data-theme="dark"] .checkout-error {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .product-pricing > small {
+  color: var(--muted);
+}
+html[data-theme="dark"] .orders-hero-actions > article {
+  background: var(--surface);
+}
+html[data-theme="dark"] .orders-hero-actions > a,
+html[data-theme="dark"] .orders-delete-all {
+  background: #080808;
+}
+html[data-theme="dark"] .orders-delete-all {
+  background: var(--surface);
+  color: #ffb18a;
+}
+html[data-theme="dark"] .orders-delete-all span { color: #ffb18a; }
+html[data-theme="dark"] .orders-empty {
+  background: var(--surface);
+}
+html[data-theme="dark"] .order-card {
+  background: var(--surface);
+}
+html[data-theme="dark"] .order-card > header em {
+  color: #76dba1;
+}
+html[data-theme="dark"] .order-status-area .order-delete-button {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .order-delete-modal form {
+  background: var(--surface);
+}
+html[data-theme="dark"] .order-delete-modal-head span {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .order-delete-modal input {
+  background: var(--surface);
+}
+html[data-theme="dark"] .order-delete-error {
+  background: var(--surface-alt);
+  color: #ffb18a;
+}
+html[data-theme="dark"] .order-delete-modal-actions button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .orders-error {
+  background: var(--surface-alt);
+  color: #ffb18a;
+}
+html[data-theme="dark"] .orders-pagination > a,
+html[data-theme="dark"] .orders-pagination div a {
+  background: var(--surface);
+}
+html[data-theme="dark"] .orders-pagination div a.active {
+  background: #080808;
+}
+html[data-theme="dark"] .product-header {
+  background: var(--surface);
+}
+html[data-theme="dark"] .detail-thumbnails button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .detail-specs span {
+  background: var(--surface);
+}
+html[data-theme="dark"] .benefit-button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .buy-button {
+  background: #080808;
+}
+html[data-theme="dark"] .specifications-button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .inventory-summary article {
+  background: var(--surface);
+}
+html[data-theme="dark"] .brand-filter button {
+  background: var(--surface);
+}
+html[data-theme="dark"] .brand-filter button.active {
+  background: #080808;
+}
+html[data-theme="dark"] .inventory-card {
+  background: var(--surface);
+}
+html[data-theme="dark"] .inventory-card-copy .visible {
+  color: #76dba1;
+}
+html[data-theme="dark"] .inventory-card-copy .hidden {
+  color: #ffb18a;
+}
+html[data-theme="dark"] .store-page,
+html[data-theme="dark"] .about-page {
+  background: var(--surface);
+}
+html[data-theme="dark"] .store-hero {
+  background: #080808;
+}
+html[data-theme="dark"] .about-hero {
+  background: #080808;
+}
+html[data-theme="dark"] .about-contact p {
+  color: #ffb18a;
+}
+@media (max-width: 700px) {
+  html[data-theme="dark"] .admin-menu-toggle {
+    background: var(--surface);
+  }
+  html[data-theme="dark"] .admin-menu-toggle span {
+    background: #080808;
+  }
+  html[data-theme="dark"] .nav {
+    background: var(--surface);
+  }
+}
+html[data-theme="dark"] .filament-shared-note { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .filament-design-section { background: var(--surface); }
+html[data-theme="dark"] .filament-content-tabs button.active { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-content-editor { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-content-editor > label input,
+html[data-theme="dark"] .filament-content-editor > label textarea { background: var(--surface); }
+html[data-theme="dark"] .color-carousel-arrow { background: var(--surface); }
+html[data-theme="dark"] .design-v2 { background: var(--surface-alt); }
+html[data-theme="dark"] .design-status { background: var(--surface); }
+html[data-theme="dark"] .design-section-tabs button > b { background: var(--surface-alt); }
+html[data-theme="dark"] .design-section-tabs button.active { background: #080808; }
+html[data-theme="dark"] .design-toast { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .design-panel { background: var(--surface); }
+html[data-theme="dark"] .design-panel-heading > span,
+html[data-theme="dark"] .filament-section-title > b { background: #080808; }
+html[data-theme="dark"] .design-cover-action { background: var(--surface); }
+html[data-theme="dark"] .design-text-button.danger { color: #ffb18a; }
+html[data-theme="dark"] .design-copy-panel input,
+html[data-theme="dark"] .design-copy-panel textarea,
+html[data-theme="dark"] .design-stats-panel input { background: var(--surface-alt); }
+html[data-theme="dark"] .design-copy-panel input:focus,
+html[data-theme="dark"] .design-copy-panel textarea:focus,
+html[data-theme="dark"] .design-stats-panel input:focus,
+html[data-theme="dark"] .filament-content-editor-v2 input:focus,
+html[data-theme="dark"] .filament-content-editor-v2 textarea:focus { background: var(--surface); }
+html[data-theme="dark"] .design-stats-panel .design-stats > div { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-type-sidebar { background: var(--surface); }
+html[data-theme="dark"] .filament-type-list button { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-type-list button > b { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-type-list button.active { background: #080808; }
+html[data-theme="dark"] .filament-editor-panel { background: var(--surface); }
+html[data-theme="dark"] .filament-content-editor-v2 > header { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-content-editor-v2 > header > i { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-content-editor-v2 input,
+html[data-theme="dark"] .filament-content-editor-v2 textarea { background: var(--surface-alt); }
+html[data-theme="dark"] .filament-benefit-grid .benefit-edit-card { background: var(--surface-alt); }
+html[data-theme="dark"] .slideshow-admin-intro { background: var(--surface); }
+html[data-theme="dark"] .slideshow-admin-intro > i { background: var(--surface-alt); }
+html[data-theme="dark"] .design-add-button { background: #080808; }
+html[data-theme="dark"] .slideshow-edit-card { background: var(--surface); }
+html[data-theme="dark"] .slideshow-edit-heading > b { background: #080808; }
+html[data-theme="dark"] .slideshow-delete { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .slideshow-fields input,
+html[data-theme="dark"] .slideshow-fields textarea { background: var(--surface-alt); }
+html[data-theme="dark"] .slideshow-fields input:focus,
+html[data-theme="dark"] .slideshow-fields textarea:focus { background: var(--surface); }
+html[data-theme="dark"] .snapmaker-admin-workspace .slideshow-admin-intro > a { background: #080808; }
+html[data-theme="dark"] .snapmaker-admin-section input,
+html[data-theme="dark"] .snapmaker-admin-section textarea { background: var(--surface-alt); }
+html[data-theme="dark"] .snapmaker-admin-section input:focus,
+html[data-theme="dark"] .snapmaker-admin-section textarea:focus { background: var(--surface); }
+html[data-theme="dark"] .snapmaker-stat-editors > div { background: var(--surface-alt); }
+html[data-theme="dark"] .snapmaker-highlight-editors article { background: var(--surface-alt); }
+html[data-theme="dark"] .landing-pages-sidebar { background: var(--surface); }
+html[data-theme="dark"] .landing-pages-list button { background: var(--surface-alt); }
+html[data-theme="dark"] .landing-pages-list button.active { background: #080808; }
+html[data-theme="dark"] .landing-header-actions a { background: #080808; }
+html[data-theme="dark"] .landing-delete-button { background: var(--surface-alt); color: #ffb18a; }
+html[data-theme="dark"] .landing-identity-panel input { background: var(--surface-alt); }
+
+html[data-theme="dark"] .home-faq {
+  background: var(--surface-alt);
+}
+html[data-theme="dark"] .faq-editor-heading > button { background: #080808; }
+html[data-theme="dark"] .faq-editor-section input,
+html[data-theme="dark"] .faq-editor-section textarea { background: var(--surface); }
+html[data-theme="dark"] .faq-editor-list article { background: var(--surface-alt); }
+html[data-theme="dark"] .faq-editor-actions button { background: var(--surface); }
+html[data-theme="dark"] .faq-editor-actions button.danger { color: #ffb18a; }
+
+html[data-theme="dark"] .hero.has-cover::before { background:linear-gradient(90deg,rgba(10,10,10,.94),rgba(10,10,10,.65) 43%,rgba(10,10,10,.08) 78%); }
+html[data-theme="dark"] :is(.security-statement,.shipping-statement,.about-contact,.icon-picker button.active,.security-shield,.nav-cart span) { color:#080808; }
+html[data-theme="dark"] .cta-slide .primary-button { color:var(--ink); }
+html[data-theme="dark"] :is(.feature-check,.filament-shared-note,.design-toast,.legal-note) { background:#332319; border-color:#70401f; color:#ffd4b8; }
+html[data-theme="dark"] :is(.product-image,.detail-visual,.uploaded-product-photo,.inventory-image) { color:#111; }
+html[data-theme="dark"] .product-tag { background:#1b1b1b; color:#f4f4f4; }
+html[data-theme="dark"] .payment-options label.selected { background:#332319; }
+@media(max-width:760px) { html[data-theme="dark"] .hero.has-cover::before { background:linear-gradient(180deg,rgba(10,10,10,.94),rgba(10,10,10,.75) 46%,rgba(10,10,10,.14) 80%); } }
+
+html[data-theme="dark"] .hero:not(.has-cover) { background:radial-gradient(circle at 12% 20%,#332219 0,transparent 36%),var(--paper); }
+html[data-theme="dark"] .nav-cart span { color:#fff; }

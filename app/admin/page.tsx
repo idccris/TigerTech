@@ -5,6 +5,6 @@ export const metadata = { title: "Administração | Tiger Tech" };
 export const dynamic = "force-dynamic";
 export default async function Page() {
   const user = await requireUser();
-  if (user?.role === "operator") redirect("/admin/catalogo");
+  if (user?.role === "operator") redirect("/admin/produtos");
   return <AdminPanel initialLogged={Boolean(user)} />;
 }

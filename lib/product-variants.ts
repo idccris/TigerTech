@@ -85,6 +85,7 @@ export function groupProductsForAdmin(products: Product[]): Product[] {
       ...(coverImageUrl ? { imageUrl: coverImageUrl, imageUrls: [coverImageUrl], coverImageUrl } : {}),
       stock: variants.reduce((total, variant) => total + Math.max(0, variant.stock || 0), 0),
       visible: variants.some((variant) => variant.visible !== false),
+      featured: variants.some((variant) => variant.featured === true),
       variants,
     };
   });

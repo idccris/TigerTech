@@ -133,3 +133,21 @@ test('design creates editable cards for every registered filament type', () => {
   assert.deepEqual(contents.map((item) => item.typeName), ['MATTE', 'SILK']);
   assert.equal(contents[0].benefits.length, 3);
 });
+
+const { appearsInStore, matchesDisplayFilters } = require('../lib/product-display.ts');
+test('filament highlight includes the whole group even when another color is representative', () => {
+ const group = groupProductsForAdmin([blue, { ...red, featured: true }])[0];
+ assert.equal(group.featured, true);
+ assert.equal(group.variants.length, 2);
+ assert.equal(matchesDisplayFilters(group, 'shown', 'featured'), true);
+});
+test('visibility filters use the same color for visible and available stock', () => {
+ const group = groupProductsForAdmin([{ ...blue, visible:false }, red])[0];
+ assert.equal(appearsInStore(group), false);
+ assert.equal(matchesDisplayFilters(group, 'hidden', 'not-featured'), true);
+ assert.equal(matchesDisplayFilters(group, 'shown', 'all'), false);
+});
+test('hidden or sold-out models are not reported as homepage highlights', () => {
+ assert.equal(matchesDisplayFilters({ ...blue, stock:0, featured:true }, 'all', 'featured'), false);
+ assert.equal(matchesDisplayFilters({ ...blue, visible:false, featured:true }, 'all', 'featured'), false);
+});

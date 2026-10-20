@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ThemeToggle from "./theme-toggle";
 import BrandLogo from "./brand-logo";
 
 const adminLinks = [
@@ -28,7 +29,7 @@ export default function AdminNavbar() {
     setMenuOpen(false);
   }, [pathname]);
 
-  const links = role === "admin" ? adminLinks : adminLinks.filter((link) => link.href === "/admin/catalogo");
+  const links = role === "admin" ? adminLinks : [{ href: "/admin/produtos", label: "Produtos" }];
   async function leave() {
     await fetch("/api/admin/logout", { method: "POST" });
     router.push("/");
@@ -41,6 +42,7 @@ export default function AdminNavbar() {
         <BrandLogo priority />
         <span>ADMIN</span>
       </Link>
+      <ThemeToggle />
       <button
         type="button"
         className="admin-menu-toggle"

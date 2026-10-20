@@ -4,6 +4,7 @@ import { PrinterVisual } from "./catalog";
 import AdminNavbar from "./admin-navbar";
 import FilamentFields from "./filament-fields";
 import { groupProductsForAdmin, isFilament, productTitle } from "../lib/product-variants";
+import { appearsInStore, isFeaturedModel, matchesDisplayFilters } from "../lib/product-display";
 import type { Product } from "../lib/products";
 import FilamentVariantManager from "./filament-variant-manager";
 import BrandLogo from "./brand-logo";
@@ -100,18 +101,23 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       "Acessórios",
     ]),
     [newCategory, setNewCategory] = useState("");
+  const [storeFilter, setStoreFilter] = useState("all");
+  const [featuredFilter, setFeaturedFilter] = useState("all");
+  const [search, setSearch] = useState("");
   const groupedItems = useMemo(() => groupProductsForAdmin(items), [items]);
   const filteredItems = productFilter
-    ? groupedItems.filter((product) => matchesProductFilter(String(product.category || ""), productFilter))
+    ? groupedItems.filter((product) => matchesProductFilter(String(product.category || ""), productFilter) && matchesDisplayFilters(product, storeFilter, featuredFilter) && [product.name, product.brand, product.filamentModel, ...(product.variants || [product]).map(v => [v.sku, v.colorName].join(" "))].join(" ").toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")))
     : [];
   const categoryCount = (filter: ProductFilter) =>
     groupedItems.filter((product) => matchesProductFilter(String(product.category || ""), filter)).length;
   async function load() {
     try {
-      const r = await fetch("/api/admin/products");
+      const r = await fetch("/api/admin/products", { cache: "no-store" });
       if (r.ok) {
         setLogged(true);
-        setItems(await r.json());
+        const updated = await r.json();
+        setItems(updated);
+        setActiveFilamentGroup(current => current ? groupProductsForAdmin(updated).find(p => p.groupSlug === current.groupSlug) || null : null);
         fetch("/api/admin/categories")
           .then((x) => (x.ok ? x.json() : []))
           .then((x) => x.length && setCategories(x));
@@ -163,7 +169,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
     });
     const j = await r.json();
     if (!r.ok) setError(j.error);
-    else if (j.role === "operator") window.location.assign("/admin/catalogo");
+    else if (j.role === "operator") window.location.assign("/admin/produtos");
     else load();
   }
   async function save(e: any) {
@@ -220,7 +226,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
       setError((await r.json()).error || "Não foi possível atualizar o destaque.");
       return false;
     }
-    load();
+    await load();
     localStorage.setItem("catalog-updated", String(Date.now()));
     if ("BroadcastChannel" in window) {
       const channel = new BroadcastChannel("catalog-updates");
@@ -371,6 +377,13 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
           );
         })}
       </nav>
+      <section className="admin-display-filters" aria-label="Filtrar exibição dos produtos">
+        <label>Buscar<input type="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Nome, marca, SKU ou cor" /></label>
+        <label>Na loja<select value={storeFilter} onChange={e => setStoreFilter(e.target.value)}><option value="all">Todos</option><option value="shown">Aparecem na loja</option><option value="hidden">Não aparecem na loja</option></select></label>
+        <label>Destaques<select value={featuredFilter} onChange={e => setFeaturedFilter(e.target.value)}><option value="all">Todos</option><option value="featured">Aparecem nos destaques</option><option value="not-featured">Fora dos destaques</option></select></label>
+        <p>{filteredItems.length} modelos encontrados. Produtos ocultos ou sem estoque não aparecem na loja.</p>
+      </section>
+      {error && !editorOpen ? <p className="admin-feedback" role="alert">{error}</p> : null}
       <section
         className={`admin-layout ${editorOpen || activeFilamentGroup ? "editor-open" : ""}`}
       >
@@ -393,7 +406,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                   {p.category} · Estoque {p.stock}{p.variants ? ` · ${p.variants.length} cores` : ""}
                 </span>
                 <strong>{isFilament(p) ? `${p.brand} ${productTitle(p)}` : p.name}</strong>
-                <small>{p.visible ? "Visível na loja" : "Oculto"}</small>
+                <small>{appearsInStore(p) ? "Aparece na loja" : p.visible === false ? "Oculto na loja" : "Não aparece: sem estoque"}{appearsInStore(p) && isFeaturedModel(p) ? " · ★ Em destaque" : " · Fora dos destaques"}</small>
               </div>
               <div className="admin-product-actions">
                 <button
@@ -432,6 +445,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
         </div>
         {activeFilamentGroup ? (
           <FilamentVariantManager
+            key={activeFilamentGroup.groupSlug}
             group={activeFilamentGroup}
             onClose={() => setActiveFilamentGroup(null)}
             onEdit={editProduct}
@@ -663,7 +677,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
               />{" "}
               Produto visível na loja
             </label>
-            <label className="check feature-check">
+            {!isFilament(edit) ? <label className="check feature-check">
               <input
                 type="checkbox"
                 checked={edit.featured === true}
@@ -675,7 +689,7 @@ export default function AdminPanel({ initialLogged = false }: { initialLogged?: 
                 <strong>Destacar na página inicial</strong>
                 <small>Exibe este produto na seção de destaques.</small>
               </span>
-            </label>
+            </label> : <p className="filament-shared-note">O destaque é definido para o modelo inteiro em Gerenciar produto, incluindo suas cores disponíveis.</p>}
             <button className="admin-form-submit" type="submit">
               {isFilament(edit) ? "Salvar cor do filamento" : "Confirmar e publicar"}
             </button>

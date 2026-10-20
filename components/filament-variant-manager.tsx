@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Product } from "../lib/products";
 import { productTitle } from "../lib/product-variants";
 
@@ -19,13 +19,19 @@ export default function FilamentVariantManager({ group, onClose, onEdit, onAdd, 
   const [featured, setFeatured] = useState(() => variants.some((variant) => variant.featured));
   const [updatingFeatured, setUpdatingFeatured] = useState(false);
 
+  const [error, setError] = useState("");
+  useEffect(() => { setFeatured((group.variants || []).some(v => v.featured)); }, [group]);
   async function toggleFeatured() {
     if (!onToggleFeatured || updatingFeatured) return;
     setUpdatingFeatured(true);
     const nextValue = !featured;
-    const saved = await onToggleFeatured(group, nextValue);
-    if (saved) setFeatured(nextValue);
-    setUpdatingFeatured(false);
+    setError("");
+    try {
+      const saved = await onToggleFeatured(group, nextValue);
+      if (saved) setFeatured(nextValue);
+      else setError("Não foi possível salvar o destaque. Confira a mensagem no painel.");
+    } catch { setError("Falha de conexão. Tente novamente."); }
+    finally { setUpdatingFeatured(false); }
   }
 
   return (
@@ -44,8 +50,9 @@ export default function FilamentVariantManager({ group, onClose, onEdit, onAdd, 
         <button type="button" className={featured ? "active" : ""} aria-pressed={featured} disabled={updatingFeatured} onClick={toggleFeatured}>
           {updatingFeatured ? "Salvando..." : featured ? "✓ Em destaque na loja" : "Destacar na loja"}
         </button>
-        <small>Use para exibir este filamento entre os destaques da página inicial.</small>
+        <small>O modelo ocupa um único destaque, com todas as cores visíveis. É necessário ter pelo menos uma cor com estoque.</small>
       </section> : null}
+      {error ? <p role="alert">{error}</p> : null}
       <button className="add-filament-color" type="button" onClick={() => onAdd(group)}>+ Adicionar nova cor</button>
       <div className="filament-variant-list">
         {variants.map((variant) => (
