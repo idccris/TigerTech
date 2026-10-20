@@ -80,7 +80,7 @@ export const getCachedHomeData = unstable_cache(
       }),
     };
   },
-  ["public-home-variants-v2"],
+  ["public-home-models-20261020"],
   { revalidate: 3600, tags: ["catalog-products", "site-design"] },
 );
 
@@ -89,7 +89,7 @@ export const getCachedPublicProducts = unstable_cache(
     process.env.DATABASE_URL
       ? (await listProducts(false)).map(publicProduct)
       : [],
-  ["public-products-variants-v2"],
+  ["public-products-20261020"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
@@ -98,7 +98,7 @@ export const getCachedPublicCatalogProducts = unstable_cache(
     process.env.DATABASE_URL
       ? publicCatalogProducts(await listProducts(false))
       : [],
-  ["public-catalog-products-v1"],
+  ["public-catalog-products-20261020"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
@@ -112,7 +112,7 @@ export const getCachedPublicProduct = unstable_cache(
       variants: product.variants?.map(publicVariant),
     };
   },
-  ["public-product-groups-v2"],
+  ["public-product-groups-20261020"],
   { revalidate: 3600, tags: ["catalog-products"] },
 );
 
