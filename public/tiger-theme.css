@@ -5,6 +5,10 @@ html[data-theme="dark"] { color-scheme:dark; --ink:#f3f3f3; --paper:#111; --surf
 .theme-toggle:focus-visible { outline:3px solid var(--acid); outline-offset:3px; }
 .site-header > .theme-toggle { margin-left:auto; }
 .site-header .nav { margin-left:16px; }
+.floating-theme-toggle { position:fixed; right:31px; bottom:91px; z-index:20; }
+.floating-theme-toggle .theme-toggle { width:41px; min-width:41px; height:41px; min-height:41px; padding:0; border-radius:50%; box-shadow:0 8px 20px rgba(0,0,0,.16); }
+.floating-theme-toggle .theme-toggle > span:first-child { font-size:19px; }
+.floating-theme-toggle .theme-toggle-label { display:none; }
 .admin-display-filters { width:min(1320px, 100%); display:flex; flex-wrap:wrap; gap:16px; margin:20px auto; padding:20px; border:1px solid var(--line); border-radius:16px; background:var(--surface); }
 .admin-display-filters label { display:grid; gap:8px; flex:1 1 200px; font-size:12px; font-weight:700; }
 .admin-display-filters input,.admin-display-filters select { width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font:inherit; }

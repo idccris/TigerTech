@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CartButton } from "./cart-provider";
-import ThemeToggle from "./theme-toggle";
 import BrandLogo from "./brand-logo";
 
 export const whatsapp =
@@ -17,7 +16,6 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
         <BrandLogo priority />
         <span>TIGER TECH</span>
       </Link>
-      <ThemeToggle />
       <button
         className="menu-button"
         onClick={() => setMenuOpen(!menuOpen)}

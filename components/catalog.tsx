@@ -7,6 +7,7 @@ import type { Product } from "../lib/products";
 import { groupProducts, productGroupKey, productMatches } from "../lib/product-variants";
 import ProductCard from "./product-card";
 import SiteHeader, { whatsapp } from "./site-header";
+import ThemeToggle from "./theme-toggle";
 import { defaultHomeContent, type HomeContent } from "../lib/site-content";
 import { defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
 import SiteFooter from "./site-footer";
@@ -409,6 +410,9 @@ export default function Catalog({
         }).replace(/</g, "\\u003c") }} />
       </section> : null}
       <SiteFooter />
+      <div className="floating-theme-toggle">
+        <ThemeToggle />
+      </div>
       <a
         className="whatsapp-float"
         href={whatsapp}
