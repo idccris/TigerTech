@@ -34,7 +34,9 @@
 
 .entry{border:1px solid #ddd;border-radius:18px;background:var(--surface,#fff);color:var(--ink);overflow:hidden}
 .entry .layout{max-height:none}
+.entry .content{overflow:visible;overscroll-behavior:auto;min-height:auto}
 .entry .list{margin-top:16px}
+.entry .item{content-visibility:auto;contain-intrinsic-size:auto 74px}
 .catalogChoice{display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:pointer}
 .individual{flex-shrink:0;padding:10px;border:1px solid #f65a0a;border-radius:8px;background:var(--surface,#fff);color:#b64000;cursor:pointer;min-height:44px}
 .fieldset>label{display:flex;flex-direction:column;gap:8px;font-size:13px}
