@@ -227,7 +227,7 @@ export default function AdminDesign({ initialImage, initialContent, initialHeroS
     {message ? <div className="design-toast" role="status">{message}</div> : null}
 
     {activeSection === "home" ? <form className="design-home-workspace" onSubmit={save}>
-      <section className="design-panel">
+      <section className="design-panel design-hero-panel">
         <div className="slideshow-admin-intro">
           <div><span>CAPA DA PÁGINA INICIAL</span><h2>Banner principal</h2><p>Cadastre imagens e títulos exclusivos para o topo do site.</p></div>
           <button type="button" className="design-add-button" disabled={heroSlideshow.slides.length >= 10} onClick={addHeroSlide}>+ Adicionar banner</button>
