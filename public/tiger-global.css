@@ -4776,3 +4776,17 @@ footer > a:last-child {
   .user-modal select { min-height: 48px; font-size: 16px; }
   .user-modal form > button { width: 100%; min-height: 48px; }
 }
+
+
+/* Tarja animada configurável da página inicial */
+.home-ticker{width:100%;overflow:hidden;background:var(--acid);color:#121212;border-top:1px solid rgba(0,0,0,.12);border-bottom:1px solid rgba(0,0,0,.12)}
+.home-ticker-track{display:flex;width:max-content;animation:home-ticker-scroll 28s linear infinite;will-change:transform}
+.home-ticker-copy{display:flex;flex-shrink:0;align-items:center}
+.home-ticker-copy span{display:inline-flex;align-items:center;gap:32px;padding:16px 32px;white-space:nowrap;font:800 13px/1 var(--font-display);letter-spacing:.11em;text-transform:uppercase}
+.home-ticker-copy i{font-style:normal;color:var(--violet)}
+@keyframes home-ticker-scroll{to{transform:translateX(-50%)}}
+.design-toggle-row{display:flex!important;align-items:center;justify-content:space-between;gap:24px;padding:18px 20px;border:1px solid var(--line);border-radius:14px}
+.design-toggle-row>span{display:grid;gap:4px}.design-toggle-row small{color:var(--muted);font-weight:500}
+.design-toggle-row input[type="checkbox"]{width:48px;height:26px;accent-color:var(--violet);flex:0 0 auto}
+@media (prefers-reduced-motion:reduce){.home-ticker-track{animation:none}}
+@media (max-width:700px){.home-ticker-copy span{padding:14px 24px;gap:24px;font-size:11px}.design-toggle-row{align-items:flex-start}}
