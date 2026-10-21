@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "../lib/products";
@@ -175,32 +174,29 @@ export default function Catalog({
       <SiteHeader solid />
 
       <section
-        className={`hero ${heroImage ? "has-cover" : ""}`}
+        className={`hero hero-slideshow ${slideshowImages[ctaSlide] || heroImage ? "has-cover" : ""}`}
         id="inicio"
-        style={
-          heroImage
-            ? {
-                backgroundImage: `url(${heroImage})`,
-              }
-            : undefined
-        }
+        style={(slideshowImages[ctaSlide] || heroImage) ? { backgroundImage: `url(${slideshowImages[ctaSlide] || heroImage})` } : undefined}
+        aria-roledescription="carousel"
+        aria-label="Banner principal"
+        onPointerDown={startCtaSwipe}
+        onPointerUp={finishCtaSwipe}
+        onPointerCancel={() => { ctaSwipeRef.current = null; setCtaPaused(false); }}
+        onMouseEnter={() => setCtaPaused(true)}
+        onMouseLeave={() => setCtaPaused(false)}
+        onFocusCapture={() => setCtaPaused(true)}
+        onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setCtaPaused(false); }}
       >
         <div className="hero-copy">
           <div className="eyebrow">
-            <span /> {homeContent.eyebrow}
+            <span /> {slideshow.slides[ctaSlide]?.eyebrow || homeContent.eyebrow}
           </div>
-          <h1>
-            {homeContent.title}
-            <br />
-            <em>{homeContent.highlight}</em>
-          </h1>
-          <p>
-            {homeContent.description}
-          </p>
+          <h1>{slideshow.slides[ctaSlide]?.title || homeContent.title}</h1>
+          <p>{slideshow.slides[ctaSlide]?.description || homeContent.description}</p>
           <div className="hero-actions">
-            <a className="primary-button" href="#produtos">
-              {homeContent.primaryButton} <span>↓</span>
-            </a>
+            <Link className="primary-button" href={slideshow.slides[ctaSlide]?.href || "#produtos"}>
+              {slideshow.slides[ctaSlide]?.buttonLabel || homeContent.primaryButton} <span>↗</span>
+            </Link>
             <a
               className="text-link"
               href={whatsapp}
@@ -224,6 +220,11 @@ export default function Catalog({
               <span>{homeContent.statThreeText}</span>
             </div>
           </div>
+        </div>
+        <div className="hero-slide-controls" aria-label="Controles do banner">
+          <button type="button" onClick={() => setCtaSlide((current) => (current - 1 + slideshow.slides.length) % slideshow.slides.length)} aria-label="Banner anterior">←</button>
+          {slideshow.slides.map((item, index) => <button type="button" key={item.id} className={ctaSlide === index ? "active" : ""} onClick={() => setCtaSlide(index)} aria-label={`Mostrar banner ${index + 1}`} aria-current={ctaSlide === index ? "true" : undefined} />)}
+          <button type="button" onClick={() => setCtaSlide((current) => (current + 1) % slideshow.slides.length)} aria-label="Próximo banner">→</button>
         </div>
         <div className="hero-art">
           <span className="floating-label label-one">
@@ -319,78 +320,6 @@ export default function Catalog({
         </div>
       </section>
 
-      <section
-        className="cta-slider"
-        aria-roledescription="carousel"
-        aria-label="Destaques Tiger Tech"
-        onPointerDown={startCtaSwipe}
-        onPointerUp={finishCtaSwipe}
-        onPointerCancel={() => {
-          ctaSwipeRef.current = null;
-          setCtaPaused(false);
-        }}
-        onMouseEnter={() => setCtaPaused(true)}
-        onMouseLeave={() => setCtaPaused(false)}
-        onFocusCapture={() => setCtaPaused(true)}
-        onBlurCapture={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget))
-            setCtaPaused(false);
-        }}
-      >
-        <div className="cta-slides" aria-live="polite">
-          {slideshow.slides.map((slide, index) => <article
-            className={`cta-slide cta-product-slide ${index === 0 ? "cta-slide-snapmaker" : "cta-slide-a1"} ${ctaSlide === index ? "active" : ""}`}
-            aria-hidden={ctaSlide !== index}
-            key={slide.id}
-          >
-            {slideshowImages[index] || slide.defaultImage ? <Image
-              className={`cta-slide-background ${index === 1 ? "cta-a1-background" : ""}`}
-              src={slideshowImages[index] || slide.defaultImage}
-              alt=""
-              fill
-              sizes="100vw"
-              unoptimized
-              aria-hidden="true"
-            /> : null}
-            <div className="cta-slide-shade" aria-hidden="true" />
-            <div className="cta-slide-content">
-              <span className="section-kicker">{slide.eyebrow}</span>
-              <h2>{slide.title}</h2>
-              <p>{slide.description}</p>
-              <Link className="primary-button" href={slide.href} tabIndex={ctaSlide === index ? 0 : -1}>
-                {slide.buttonLabel} <span>↗</span>
-              </Link>
-            </div>
-          </article>)}
-        </div>
-
-        <div className="cta-slider-controls" aria-label="Controles do slideshow">
-          <button
-            type="button"
-            onClick={() => setCtaSlide((current) => (current - 1 + slideshow.slides.length) % slideshow.slides.length)}
-            aria-label="Destaque anterior"
-          >
-            ←
-          </button>
-          {slideshow.slides.map((item, slide) => (
-            <button
-              type="button"
-              key={item.id}
-              className={ctaSlide === slide ? "active" : ""}
-              onClick={() => setCtaSlide(slide)}
-              aria-label={`Mostrar destaque ${slide + 1}`}
-              aria-current={ctaSlide === slide ? "true" : undefined}
-            />
-          ))}
-          <button
-            type="button"
-            onClick={() => setCtaSlide((current) => (current + 1) % slideshow.slides.length)}
-            aria-label="Próximo destaque"
-          >
-            →
-          </button>
-        </div>
-      </section>
       {homeContent.faqs.length > 0 ? <section className="home-faq" id="perguntas-frequentes">
         <div className="home-faq-intro">
           <span className="section-kicker">{homeContent.faqEyebrow}</span>

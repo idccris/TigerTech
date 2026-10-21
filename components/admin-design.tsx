@@ -143,7 +143,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
       setMessage((await response.json()).error || "Não foi possível publicar.");
       return;
     }
-    setMessage(activeSection === "slideshow" ? "Slideshow publicado com sucesso." : "Design publicado com sucesso.");
+    setMessage(activeSection === "slideshow" ? "Banner principal publicado com sucesso." : "Design publicado com sucesso.");
     if (activeSection === "slideshow") {
       setSlideshowImageUpdates(slideshow.slides.map(() => null));
       setDeletedSlideIds([]);
@@ -174,7 +174,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         <b>02</b><span><strong>Filamentos</strong><small>{filamentContents.length} tipos com conteúdo compartilhado</small></span>
       </button>
       <button type="button" className={activeSection === "slideshow" ? "active" : ""} aria-pressed={activeSection === "slideshow"} onClick={() => { setActiveSection("slideshow"); setMessage(""); }}>
-        <b>03</b><span><strong>Slideshow</strong><small>{slideshow.slides.length} banners na página inicial</small></span>
+        <b>03</b><span><strong>Banner principal</strong><small>{slideshow.slides.length} slides com imagem e título</small></span>
       </button>
       <button type="button" className={activeSection === "snapmaker" ? "active" : ""} aria-pressed={activeSection === "snapmaker"} onClick={() => { setActiveSection("snapmaker"); setMessage(""); }}>
         <b>04</b><span><strong>Landing Page</strong><small>Crie e edite páginas de campanha</small></span>
@@ -284,13 +284,13 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
     {activeSection === "slideshow" ? <form className="slideshow-admin-workspace" onSubmit={save}>
       <header className="slideshow-admin-intro">
-        <div><span>DESTAQUES DA PÁGINA INICIAL</span><h2>Slideshow</h2><p>Adicione, edite ou remova as campanhas que alternam automaticamente no site.</p></div>
-        <button type="button" className="design-add-button" disabled={slideshow.slides.length >= 10} onClick={addSlide}>+ Adicionar slideshow</button>
+        <div><span>CAPA DA PÁGINA INICIAL</span><h2>Banner principal</h2><p>Adicione imagens e títulos que alternam automaticamente no topo do site.</p></div>
+        <button type="button" className="design-add-button" disabled={slideshow.slides.length >= 10} onClick={addSlide}>+ Adicionar slide</button>
       </header>
 
       <div className="slideshow-admin-grid">
         {slideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={slide.id}>
-          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Destaque {index + 1} do slideshow</p></div><button type="button" className="slideshow-delete" disabled={slideshow.slides.length <= 1} onClick={() => removeSlide(index)}>Excluir</button></div>
+          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Slide {index + 1} do banner principal</p></div><button type="button" className="slideshow-delete" disabled={slideshow.slides.length <= 1} onClick={() => removeSlide(index)}>Excluir</button></div>
           <label className="slideshow-image-field">
             <span className="slideshow-image-preview" style={{ backgroundImage: slideshowImages[index] ? `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${slideshowImages[index]})` : "linear-gradient(135deg,#222,#555)" }}>
               <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickSlideshowImage(index, event.target.files?.[0])} />
@@ -314,7 +314,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         </section>)}
       </div>
 
-      <div className="design-publish-bar"><span><strong>Slideshow da página inicial</strong><small>As alterações atualizam os dois banners públicos.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
+      <div className="design-publish-bar"><span><strong>Banner principal da página inicial</strong><small>Imagem, título e texto mudam juntos em cada slide.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
     </form> : null}
     {activeSection === "snapmaker" ? <AdminSnapmakerDesign initialContent={initialSnapmakerContent} initialLandingPages={initialLandingPages} /> : null}
   </main>;

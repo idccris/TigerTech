@@ -802,6 +802,42 @@ p {
   font-size: 11px;
   margin-top: 4px;
 }
+.hero-slideshow {
+  transition: background-image .35s ease;
+}
+.hero-slide-controls {
+  position: absolute;
+  z-index: 4;
+  left: 5vw;
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.hero-slide-controls button {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: 1px solid rgba(16,16,20,.45);
+  border-radius: 50%;
+  background: rgba(255,255,255,.7);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0;
+}
+.hero-slide-controls button:first-child,
+.hero-slide-controls button:last-child {
+  width: 34px;
+  height: 34px;
+  font-size: 16px;
+  background: rgba(255,255,255,.9);
+}
+.hero-slide-controls button.active {
+  width: 28px;
+  border-radius: 10px;
+  background: var(--acid);
+  border-color: var(--acid);
+}
 .hero-art {
   position: relative;
   min-height: 540px;
