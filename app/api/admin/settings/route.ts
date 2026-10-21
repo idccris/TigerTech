@@ -51,11 +51,12 @@ export async function POST(req: Request) {
     return Response.json({ error: error instanceof Error ? error.message : "Imagem inválida." }, { status: 413 });
   }
   await ensureDb();
-  const textKeys = Object.keys(defaultHomeContent).filter((key) => key !== "faqs");
+  const textKeys = Object.keys(defaultHomeContent).filter((key) => key !== "faqs" && key !== "tickerEnabled");
   const safeContent = homeContent === undefined ? null : {
     ...Object.fromEntries(
-      textKeys.map((key) => [key, String(homeContent?.[key] ?? defaultHomeContent[key as keyof typeof defaultHomeContent]).slice(0, key === "description" || key === "faqDescription" ? 240 : 80)]),
+      textKeys.map((key) => [key, String(homeContent?.[key] ?? defaultHomeContent[key as keyof typeof defaultHomeContent]).slice(0, key === "tickerText" ? 300 : key === "description" || key === "faqDescription" ? 240 : 80)]),
     ),
+    tickerEnabled: homeContent?.tickerEnabled === true,
     faqs: (Array.isArray(homeContent?.faqs) ? homeContent.faqs : defaultHomeContent.faqs)
       .slice(0, 10)
       .map((item: { question?: unknown; answer?: unknown }) => ({
