@@ -14,6 +14,8 @@ export type HomeContent = {
   faqEyebrow: string;
   faqTitle: string;
   faqDescription: string;
+  tickerEnabled: boolean;
+  tickerText: string;
   faqs: Array<{ question: string; answer: string }>;
 };
 
@@ -33,6 +35,8 @@ export const defaultHomeContent: HomeContent = {
   faqEyebrow: "PERGUNTAS FREQUENTES",
   faqTitle: "Ficou com alguma dúvida?",
   faqDescription: "Encontre respostas rápidas sobre produtos, atendimento, pagamento e entrega.",
+  tickerEnabled: false,
+  tickerText: "TECNOLOGIA • CRIATIVIDADE • IMPRESSÃO 3D • FILAMENTOS • SUPORTE ESPECIALIZADO",
   faqs: [
     { question: "Como escolher a impressora 3D ideal?", answer: "Nosso time ajuda a identificar a solução mais adequada ao seu tipo de projeto, experiência e volume de produção." },
     { question: "A Tiger Tech oferece suporte após a compra?", answer: "Sim. Você conta com orientação especializada antes, durante e depois da compra." },
@@ -47,6 +51,8 @@ export function parseHomeContent(value: string): HomeContent {
     return {
       ...defaultHomeContent,
       ...parsed,
+      tickerEnabled: parsed.tickerEnabled === true || parsed.tickerEnabled === "true",
+      tickerText: String(parsed.tickerText || defaultHomeContent.tickerText),
       faqs: Array.isArray(parsed.faqs)
         ? parsed.faqs
             .map((item: unknown) => {
