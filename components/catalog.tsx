@@ -273,19 +273,22 @@ export default function Catalog({
           {heroSlideshow.slides.map((item, index) => <button type="button" key={item.id} className={heroSlide === index ? "active" : ""} onClick={() => setHeroSlide(index)} aria-label={`Mostrar banner ${index + 1}`} aria-current={heroSlide === index ? "true" : undefined} />)}
           <button type="button" onClick={() => setHeroSlide((current) => (current + 1) % heroSlideshow.slides.length)} aria-label="Próximo banner">→</button>
         </div>
-        <div className="hero-art">
-          <span className="floating-label label-one">
-            Precisão
-            <br />
-            <b>profissional</b>
-          </span>
-          <span className="floating-label label-two">
-            Pronta para
-            <br />
-            <b>suas ideias</b>
-          </span>
-        </div>
+        <div className="hero-art" aria-hidden="true" />
       </section>
+
+      {homeContent.tickerEnabled && homeContent.tickerText.trim() ? (
+        <aside className="home-ticker" aria-label="Avisos da Tiger Tech">
+          <div className="home-ticker-track">
+            {[0, 1].map((copy) => (
+              <div className="home-ticker-copy" aria-hidden={copy === 1} key={copy}>
+                {Array.from({ length: 4 }, (_, index) => (
+                  <span key={index}>{homeContent.tickerText}<i aria-hidden="true">✦</i></span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </aside>
+      ) : null}
 
       <section className="catalog-section" id="produtos">
         <div className="section-heading">
