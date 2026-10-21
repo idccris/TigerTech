@@ -30,7 +30,7 @@ export default function AdminDesign({ initialImage, initialContent, initialHeroS
   const [deletedSlideIds, setDeletedSlideIds] = useState<string[]>([]);
   const [activeSection, setActiveSection] = useState<"home" | "filaments" | "slideshow" | "snapmaker">("home");
   const selectedContent = filamentContents.find((item) => item.typeName === selectedFilament);
-  type TextKey = Exclude<keyof HomeContent, "faqs">;
+  type TextKey = Exclude<keyof HomeContent, "faqs" | "tickerEnabled">;
 
   function updateFilament(patch: Partial<FilamentContent>) {
     setFilamentContents((current) => current.map((item) => item.typeName === selectedFilament ? { ...item, ...patch } : item));
@@ -246,15 +246,24 @@ export default function AdminDesign({ initialImage, initialContent, initialHeroS
           </section>)}
         </div>
       </section>
+      <section className="design-panel design-ticker-panel">
+        <div className="design-panel-heading"><span>02</span><div><h2>Tarja animada</h2><p>Configure a mensagem que passa entre o banner principal e os produtos.</p></div></div>
+        <label className="design-toggle-row">
+          <span><strong>Exibir tarja na página inicial</strong><small>Você pode desativar a tarja sem apagar o texto.</small></span>
+          <input type="checkbox" checked={content.tickerEnabled} onChange={(event) => setContent({ ...content, tickerEnabled: event.target.checked })} />
+        </label>
+        <label>Texto da tarja<textarea maxLength={300} rows={3} value={content.tickerText} onChange={(event) => setContent({ ...content, tickerText: event.target.value })} placeholder="Ex.: Frete para todo o Brasil • Suporte especializado" /><small>{content.tickerText.length}/300 caracteres</small></label>
+      </section>
+
       <section className="design-panel design-copy-panel">
-        <div className="design-panel-heading"><span>02</span><div><h2>Textos compartilhados</h2><p>Descrição, botões e informações exibidos em todos os banners.</p></div></div>
+        <div className="design-panel-heading"><span>03</span><div><h2>Textos compartilhados</h2><p>Descrição, botões e informações exibidos em todos os banners.</p></div></div>
         {field("eyebrow", "Texto superior")}
                 <label>Descrição<textarea maxLength={240} rows={4} value={content.description} onChange={(event) => setContent({ ...content, description: event.target.value })} /><small>{content.description.length}/240 caracteres</small></label>
         <div className="design-row">{field("primaryButton", "Botão principal")}{field("secondaryButton", "Botão secundário")}</div>
       </section>
 
       <section className="design-panel design-stats-panel">
-        <div className="design-panel-heading"><span>03</span><div><h2>Destaques inferiores</h2><p>Três informações rápidas exibidas abaixo da chamada principal.</p></div></div>
+        <div className="design-panel-heading"><span>04</span><div><h2>Destaques inferiores</h2><p>Três informações rápidas exibidas abaixo da chamada principal.</p></div></div>
         <div className="design-stats">
           <div><b>DESTAQUE 1</b>{field("statOneTitle", "Título")}{field("statOneText", "Descrição")}</div>
           <div><b>DESTAQUE 2</b>{field("statTwoTitle", "Título")}{field("statTwoText", "Descrição")}</div>
