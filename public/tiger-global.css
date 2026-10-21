@@ -4790,3 +4790,18 @@ footer > a:last-child {
 .design-toggle-row input[type="checkbox"]{width:48px;height:26px;accent-color:var(--violet);flex:0 0 auto}
 @media (prefers-reduced-motion:reduce){.home-ticker-track{animation:none}}
 @media (max-width:700px){.home-ticker-copy span{padding:14px 24px;gap:24px;font-size:11px}.design-toggle-row{align-items:flex-start}}
+
+
+/* Alinhamento dos cards da página inicial no editor */
+.design-hero-panel{grid-column:1/-1}
+.design-ticker-panel,.design-copy-panel{min-width:0;align-self:stretch}
+.design-ticker-panel>label:not(.design-toggle-row){display:block;margin-top:18px;font-size:9px;font-weight:800}
+.design-ticker-panel textarea{display:block;width:100%;min-height:104px;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:9px;background:#fbfbfa;resize:vertical;transition:.18s}
+.design-ticker-panel textarea:focus{outline:0;border-color:var(--acid);box-shadow:0 0 0 3px rgba(255,90,0,.1);background:#fff}
+.design-ticker-panel label>small{display:block;margin-top:5px;color:var(--muted);font-size:8px;font-weight:500}
+.design-hero-panel .slideshow-admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:850px){
+  .design-home-workspace{grid-template-columns:1fr}
+  .design-hero-panel,.design-ticker-panel,.design-copy-panel,.design-stats-panel,.faq-editor-section,.design-publish-bar{grid-column:1}
+  .design-hero-panel .slideshow-admin-grid{grid-template-columns:1fr}
+}
