@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { HomeContent } from "../lib/site-content";
 import { defaultFilamentBenefits, type FilamentContent } from "../lib/filament-content";
 import { blankSlideshowSlide, defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
+import { blankHeroSlide, type HeroSlideshowContent } from "../lib/hero-slideshow-content";
 import type { SnapmakerU1Content } from "../lib/snapmaker-content";
 import type { LandingPageRecord } from "../lib/landing-pages";
 import AdminNavbar from "./admin-navbar";
@@ -11,9 +12,13 @@ import AdminSnapmakerDesign from "./admin-snapmaker-design";
 
 const filamentIcons = ["✦", "⚡", "✓", "★", "◆", "●", "◉", "♢", "↗", "∞", "☘", "⬢"];
 
-export default function AdminDesign({ initialImage, initialContent, initialFilamentContents, initialSlideshow, initialSlideshowImages, initialSnapmakerContent, initialLandingPages }: { initialImage: string; initialContent: HomeContent; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[]; initialSnapmakerContent: SnapmakerU1Content; initialLandingPages: LandingPageRecord[] }) {
+export default function AdminDesign({ initialImage, initialContent, initialHeroSlideshow, initialHeroSlideshowImages, initialFilamentContents, initialSlideshow, initialSlideshowImages, initialSnapmakerContent, initialLandingPages }: { initialImage: string; initialContent: HomeContent; initialHeroSlideshow: HeroSlideshowContent; initialHeroSlideshowImages: string[]; initialFilamentContents: FilamentContent[]; initialSlideshow: SlideshowContent; initialSlideshowImages: string[]; initialSnapmakerContent: SnapmakerU1Content; initialLandingPages: LandingPageRecord[] }) {
   const [heroImage, setHeroImage] = useState(initialImage);
   const [content, setContent] = useState(initialContent);
+  const [heroSlideshow, setHeroSlideshow] = useState(initialHeroSlideshow);
+  const [heroSlideshowImages, setHeroSlideshowImages] = useState(() => initialHeroSlideshow.slides.map((_, index) => initialHeroSlideshowImages[index] || ""));
+  const [heroSlideshowImageUpdates, setHeroSlideshowImageUpdates] = useState<(string | null)[]>(() => initialHeroSlideshow.slides.map(() => null));
+  const [deletedHeroSlideIds, setDeletedHeroSlideIds] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [filamentContents, setFilamentContents] = useState(initialFilamentContents);
@@ -52,6 +57,27 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
     const faqs = [...content.faqs];
     [faqs[index], faqs[target]] = [faqs[target], faqs[index]];
     setContent({ ...content, faqs });
+  }
+
+
+  function updateHeroSlide(index: number, patch: Partial<HeroSlideshowContent["slides"][number]>) {
+    setHeroSlideshow((current) => ({ slides: current.slides.map((slide, slideIndex) => slideIndex === index ? { ...slide, ...patch } : slide) }));
+  }
+
+  function addHeroSlide() {
+    if (heroSlideshow.slides.length >= 10) return;
+    const slide = blankHeroSlide(heroSlideshow.slides.length);
+    setHeroSlideshow((current) => ({ slides: [...current.slides, slide] }));
+    setHeroSlideshowImages((current) => [...current, ""]);
+    setHeroSlideshowImageUpdates((current) => [...current, ""]);
+  }
+
+  function removeHeroSlide(index: number) {
+    if (heroSlideshow.slides.length <= 1) return;
+    setDeletedHeroSlideIds((current) => [...current, heroSlideshow.slides[index].id]);
+    setHeroSlideshow((current) => ({ slides: current.slides.filter((_, slideIndex) => slideIndex !== index) }));
+    setHeroSlideshowImages((current) => current.filter((_, slideIndex) => slideIndex !== index));
+    setHeroSlideshowImageUpdates((current) => current.filter((_, slideIndex) => slideIndex !== index));
   }
 
   function updateSlide(index: number, patch: Partial<SlideshowContent["slides"][number]>) {
@@ -113,6 +139,19 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
     }
   }
 
+
+  async function pickHeroSlideshowImage(index: number, file?: File) {
+    if (!file) return;
+    try {
+      const optimized = await optimizeImage(file, 2560, 1_800_000);
+      setHeroSlideshowImages((current) => current.map((image, imageIndex) => imageIndex === index ? optimized : image));
+      setHeroSlideshowImageUpdates((current) => current.map((image, imageIndex) => imageIndex === index ? optimized : image));
+      setMessage("");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Não foi possível processar esta imagem.");
+    }
+  }
+
   async function pickSlideshowImage(index: number, file?: File) {
     if (!file) return;
     try {
@@ -133,7 +172,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(activeSection === "home"
-        ? { heroImage, homeContent: content }
+        ? { heroImage, homeContent: content, heroSlideshowContent: heroSlideshow, heroSlideshowImages: heroSlideshowImageUpdates, deletedHeroSlideIds }
         : activeSection === "filaments"
           ? { filamentContents }
           : { slideshowContent: slideshow, slideshowImages: slideshowImageUpdates, deletedSlideIds }),
@@ -143,7 +182,11 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
       setMessage((await response.json()).error || "Não foi possível publicar.");
       return;
     }
-    setMessage(activeSection === "slideshow" ? "Banner principal publicado com sucesso." : "Design publicado com sucesso.");
+    setMessage(activeSection === "slideshow" ? "Destaques de máquinas publicados com sucesso." : "Design publicado com sucesso.");
+    if (activeSection === "home") {
+      setHeroSlideshowImageUpdates(heroSlideshow.slides.map(() => null));
+      setDeletedHeroSlideIds([]);
+    }
     if (activeSection === "slideshow") {
       setSlideshowImageUpdates(slideshow.slides.map(() => null));
       setDeletedSlideIds([]);
@@ -174,7 +217,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         <b>02</b><span><strong>Filamentos</strong><small>{filamentContents.length} tipos com conteúdo compartilhado</small></span>
       </button>
       <button type="button" className={activeSection === "slideshow" ? "active" : ""} aria-pressed={activeSection === "slideshow"} onClick={() => { setActiveSection("slideshow"); setMessage(""); }}>
-        <b>03</b><span><strong>Banner principal</strong><small>{slideshow.slides.length} slides com imagem e título</small></span>
+        <b>03</b><span><strong>Destaques de máquinas</strong><small>{slideshow.slides.length} banners independentes da capa</small></span>
       </button>
       <button type="button" className={activeSection === "snapmaker" ? "active" : ""} aria-pressed={activeSection === "snapmaker"} onClick={() => { setActiveSection("snapmaker"); setMessage(""); }}>
         <b>04</b><span><strong>Landing Page</strong><small>Crie e edite páginas de campanha</small></span>
@@ -184,22 +227,29 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
     {message ? <div className="design-toast" role="status">{message}</div> : null}
 
     {activeSection === "home" ? <form className="design-home-workspace" onSubmit={save}>
-      <section className="design-panel design-cover-panel">
-        <div className="design-panel-heading"><span>01</span><div><h2>Capa principal</h2><p>Imagem exibida no topo da página inicial.</p></div></div>
-        <label className="design-cover-field">
-          <span className={`design-cover-preview ${heroImage ? "has-image" : ""}`} style={heroImage ? { backgroundImage: `url(${heroImage})` } : undefined}>
-            <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickImage(event.target.files?.[0])} />
-            <span className="design-cover-action"><b>{heroImage ? "Trocar imagem" : "+ Adicionar capa"}</b><small>1920 × 900 px recomendado · máximo 20 MB</small></span>
-          </span>
-        </label>
-        {heroImage ? <button type="button" className="design-text-button danger" onClick={() => setHeroImage("")}>Remover imagem atual</button> : null}
+      <section className="design-panel">
+        <div className="slideshow-admin-intro">
+          <div><span>CAPA DA PÁGINA INICIAL</span><h2>Banner principal</h2><p>Cadastre imagens e títulos exclusivos para o topo do site.</p></div>
+          <button type="button" className="design-add-button" disabled={heroSlideshow.slides.length >= 10} onClick={addHeroSlide}>+ Adicionar banner</button>
+        </div>
+        <div className="slideshow-admin-grid">
+          {heroSlideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={slide.id}>
+            <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.title || `Banner ${index + 1}`}</h3><p>Banner exclusivo do topo</p></div><button type="button" className="slideshow-delete" disabled={heroSlideshow.slides.length <= 1} onClick={() => removeHeroSlide(index)}>Excluir</button></div>
+            <label className="slideshow-image-field"><span className="slideshow-image-preview" style={{ backgroundImage: heroSlideshowImages[index] ? `linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url(${heroSlideshowImages[index]})` : "linear-gradient(135deg,#222,#555)" }}>
+              <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickHeroSlideshowImage(index, event.target.files?.[0])} />
+              <span><strong>{heroSlideshowImages[index] ? "Trocar imagem" : "+ Adicionar imagem"}</strong><small>1920 × 900 px recomendado</small></span>
+            </span></label>
+            <div className="slideshow-fields">
+              <label>Título<input maxLength={100} value={slide.title} onChange={(event) => updateHeroSlide(index, { title: event.target.value })} /></label>
+              <label>Texto em destaque<input maxLength={100} value={slide.highlight} onChange={(event) => updateHeroSlide(index, { highlight: event.target.value })} /></label>
+            </div>
+          </section>)}
+        </div>
       </section>
-
       <section className="design-panel design-copy-panel">
-        <div className="design-panel-heading"><span>02</span><div><h2>Mensagem principal</h2><p>Textos e chamadas apresentados sobre a capa.</p></div></div>
+        <div className="design-panel-heading"><span>02</span><div><h2>Textos compartilhados</h2><p>Descrição, botões e informações exibidos em todos os banners.</p></div></div>
         {field("eyebrow", "Texto superior")}
-        <div className="design-row">{field("title", "Título")}{field("highlight", "Palavra em destaque")}</div>
-        <label>Descrição<textarea maxLength={240} rows={4} value={content.description} onChange={(event) => setContent({ ...content, description: event.target.value })} /><small>{content.description.length}/240 caracteres</small></label>
+                <label>Descrição<textarea maxLength={240} rows={4} value={content.description} onChange={(event) => setContent({ ...content, description: event.target.value })} /><small>{content.description.length}/240 caracteres</small></label>
         <div className="design-row">{field("primaryButton", "Botão principal")}{field("secondaryButton", "Botão secundário")}</div>
       </section>
 
@@ -284,13 +334,13 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
 
     {activeSection === "slideshow" ? <form className="slideshow-admin-workspace" onSubmit={save}>
       <header className="slideshow-admin-intro">
-        <div><span>CAPA DA PÁGINA INICIAL</span><h2>Banner principal</h2><p>Adicione imagens e títulos que alternam automaticamente no topo do site.</p></div>
-        <button type="button" className="design-add-button" disabled={slideshow.slides.length >= 10} onClick={addSlide}>+ Adicionar slide</button>
+        <div><span>DESTAQUES DE MÁQUINAS</span><h2>Slideshow de máquinas</h2><p>Adicione, edite ou remova máquinas destacadas no banner inferior da página.</p></div>
+        <button type="button" className="design-add-button" disabled={slideshow.slides.length >= 10} onClick={addSlide}>+ Adicionar destaque</button>
       </header>
 
       <div className="slideshow-admin-grid">
         {slideshow.slides.map((slide, index) => <section className="slideshow-edit-card" key={slide.id}>
-          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Slide {index + 1} do banner principal</p></div><button type="button" className="slideshow-delete" disabled={slideshow.slides.length <= 1} onClick={() => removeSlide(index)}>Excluir</button></div>
+          <div className="slideshow-edit-heading"><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{slide.eyebrow || `Banner ${index + 1}`}</h3><p>Destaque {index + 1} de máquinas</p></div><button type="button" className="slideshow-delete" disabled={slideshow.slides.length <= 1} onClick={() => removeSlide(index)}>Excluir</button></div>
           <label className="slideshow-image-field">
             <span className="slideshow-image-preview" style={{ backgroundImage: slideshowImages[index] ? `linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url(${slideshowImages[index]})` : "linear-gradient(135deg,#222,#555)" }}>
               <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => pickSlideshowImage(index, event.target.files?.[0])} />
@@ -314,7 +364,7 @@ export default function AdminDesign({ initialImage, initialContent, initialFilam
         </section>)}
       </div>
 
-      <div className="design-publish-bar"><span><strong>Banner principal da página inicial</strong><small>Imagem, título e texto mudam juntos em cada slide.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
+      <div className="design-publish-bar"><span><strong>Destaques de máquinas</strong><small>Este slideshow fica abaixo dos produtos e é independente do banner principal.</small></span><button disabled={saving}>{saving ? "Publicando..." : "Publicar slideshow"}</button></div>
     </form> : null}
     {activeSection === "snapmaker" ? <AdminSnapmakerDesign initialContent={initialSnapmakerContent} initialLandingPages={initialLandingPages} /> : null}
   </main>;

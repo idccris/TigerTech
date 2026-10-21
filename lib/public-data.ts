@@ -8,6 +8,7 @@ import {
 } from "./db";
 import { defaultHomeContent, parseHomeContent } from "./site-content";
 import { defaultSlideshowContent, legacySlideshowImageKey, parseSlideshowContent, slideshowImageKey } from "./slideshow-content";
+import { defaultHeroSlideshowContent, heroSlideImageKey, parseHeroSlideshowContent } from "./hero-slideshow-content";
 import { defaultSnapmakerU1Content, parseSnapmakerU1Content } from "./snapmaker-content";
 import { parseLandingPages } from "./landing-pages";
 import type { Product } from "./products";
@@ -49,16 +50,19 @@ export function publicCatalogProducts(products: Product[]) {
 export const getCachedHomeData = unstable_cache(
   async () => {
     if (!process.env.DATABASE_URL)
-      return { products: [], heroImage: "", homeContent: defaultHomeContent, slideshowContent: defaultSlideshowContent, slideshowImages: defaultSlideshowContent.slides.map((slide) => slide.defaultImage) };
-    const [products, heroMeta, rawContent, rawSlideshowContent] = await Promise.all([
+      return { products: [], heroImage: "", homeContent: defaultHomeContent, heroSlideshowContent: defaultHeroSlideshowContent, heroSlideshowImages: [""], slideshowContent: defaultSlideshowContent, slideshowImages: defaultSlideshowContent.slides.map((slide) => slide.defaultImage) };
+    const [products, heroMeta, rawContent, rawHeroSlideshowContent, rawSlideshowContent] = await Promise.all([
       listFeaturedProducts(),
       getSiteSettingMeta("hero_image"),
       getSiteSetting("home_content"),
+      getSiteSetting("hero_slideshow_content"),
       getSiteSetting("slideshow_content"),
     ]);
     const version = heroMeta?.updated_at
       ? new Date(heroMeta.updated_at).getTime()
       : 0;
+    const heroSlideshowContent = parseHeroSlideshowContent(rawHeroSlideshowContent);
+    const heroSlideshowMetas = await Promise.all(heroSlideshowContent.slides.map((slide) => getSiteSettingMeta(heroSlideImageKey(slide.id))));
     const slideshowContent = parseSlideshowContent(rawSlideshowContent);
     const slideshowMetas = await Promise.all(slideshowContent.slides.map(async (slide) => {
       const meta = await getSiteSettingMeta(slideshowImageKey(slide.id));
@@ -72,6 +76,8 @@ export const getCachedHomeData = unstable_cache(
           ? `/api/settings/hero?v=${version}`
           : "",
       homeContent: parseHomeContent(rawContent),
+      heroSlideshowContent,
+      heroSlideshowImages: heroSlideshowMetas.map((meta, index) => Number(meta?.size || 0) > 0 ? `/api/settings/hero-slideshow/${heroSlideshowContent.slides[index].id}?v=${meta?.updated_at ? new Date(meta.updated_at).getTime() : 0}` : (index === 0 ? (Number(heroMeta?.size || 0) > 0 ? `/api/settings/hero?v=${version}` : "") : "")),
       slideshowContent,
       slideshowImages: slideshowMetas.map((meta, index) => {
         if (Number(meta?.size || 0) <= 0) return slideshowContent.slides[index].defaultImage;

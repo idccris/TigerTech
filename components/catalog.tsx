@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "../lib/products";
@@ -9,6 +10,7 @@ import SiteHeader, { whatsapp } from "./site-header";
 import ThemeToggle from "./theme-toggle";
 import { defaultHomeContent, type HomeContent } from "../lib/site-content";
 import { defaultSlideshowContent, type SlideshowContent } from "../lib/slideshow-content";
+import { defaultHeroSlideshowContent, type HeroSlideshowContent } from "../lib/hero-slideshow-content";
 import SiteFooter from "./site-footer";
 
 const categories = [
@@ -24,18 +26,26 @@ export default function Catalog({
   initialProducts,
   initialHeroImage,
   initialHomeContent,
+  initialHeroSlideshow,
+  initialHeroSlideshowImages,
   initialSlideshow,
   initialSlideshowImages,
 }: {
   initialProducts: Product[];
   initialHeroImage: string;
   initialHomeContent: HomeContent;
+  initialHeroSlideshow: HeroSlideshowContent;
+  initialHeroSlideshowImages: string[];
   initialSlideshow: SlideshowContent;
   initialSlideshowImages: string[];
 }) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [heroImage, setHeroImage] = useState(initialHeroImage);
   const [homeContent, setHomeContent] = useState<HomeContent>(initialHomeContent);
+  const [heroSlideshow, setHeroSlideshow] = useState<HeroSlideshowContent>(initialHeroSlideshow);
+  const [heroSlideshowImages, setHeroSlideshowImages] = useState(initialHeroSlideshowImages);
+  const [heroSlide, setHeroSlide] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
   const [slideshow, setSlideshow] = useState<SlideshowContent>(initialSlideshow);
   const [slideshowImages, setSlideshowImages] = useState(initialSlideshowImages);
   const [query, setQuery] = useState("");
@@ -45,6 +55,24 @@ export default function Catalog({
     useState<(typeof categories)[number]>("Todos");
   const featuredGridRef = useRef<HTMLDivElement>(null);
   const ctaSwipeRef = useRef<{ x: number; y: number } | null>(null);
+  const heroSwipeRef = useRef<{ x: number; y: number } | null>(null);
+
+  function startHeroSwipe(event: React.PointerEvent<HTMLElement>) {
+    if (event.pointerType === "mouse" || !window.matchMedia("(max-width: 700px)").matches) return;
+    heroSwipeRef.current = { x: event.clientX, y: event.clientY };
+    setHeroPaused(true);
+  }
+
+  function finishHeroSwipe(event: React.PointerEvent<HTMLElement>) {
+    const start = heroSwipeRef.current;
+    heroSwipeRef.current = null;
+    setHeroPaused(false);
+    if (!start) return;
+    const distanceX = event.clientX - start.x;
+    const distanceY = event.clientY - start.y;
+    if (Math.abs(distanceX) < 45 || Math.abs(distanceX) <= Math.abs(distanceY) * 1.2) return;
+    setHeroSlide((current) => distanceX < 0 ? (current + 1) % heroSlideshow.slides.length : (current - 1 + heroSlideshow.slides.length) % heroSlideshow.slides.length);
+  }
 
   function startCtaSwipe(event: React.PointerEvent<HTMLElement>) {
     if (event.pointerType === "mouse" || !window.matchMedia("(max-width: 700px)").matches) return;
@@ -140,9 +168,11 @@ export default function Catalog({
     const refreshCover = (bust = false) =>
       fetch(`/api/settings${bust ? `?t=${Date.now()}` : ""}`)
         .then((response) => (response.ok ? response.json() : {}))
-        .then((data: { heroImage?: string; homeContent?: HomeContent; slideshowContent?: SlideshowContent; slideshowImages?: string[] }) => {
+        .then((data: { heroImage?: string; homeContent?: HomeContent; heroSlideshowContent?: HeroSlideshowContent; heroSlideshowImages?: string[]; slideshowContent?: SlideshowContent; slideshowImages?: string[] }) => {
           setHeroImage(String(data.heroImage || ""));
           setHomeContent({ ...defaultHomeContent, ...(data.homeContent || {}) });
+          setHeroSlideshow(data.heroSlideshowContent || defaultHeroSlideshowContent);
+          setHeroSlideshowImages(Array.isArray(data.heroSlideshowImages) ? data.heroSlideshowImages : [""]);
           setSlideshow(data.slideshowContent || defaultSlideshowContent);
           setSlideshowImages(Array.isArray(data.slideshowImages) ? data.slideshowImages : defaultSlideshowContent.slides.map((slide) => slide.defaultImage));
         })
@@ -160,6 +190,11 @@ export default function Catalog({
     };
   }, []);
   useEffect(() => {
+    if (heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const interval = window.setInterval(() => setHeroSlide((current) => (current + 1) % heroSlideshow.slides.length), 6000);
+    return () => window.clearInterval(interval);
+  }, [heroPaused, heroSlideshow.slides.length]);
+  useEffect(() => {
     if (ctaPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       return;
     const interval = window.setInterval(
@@ -174,29 +209,41 @@ export default function Catalog({
       <SiteHeader solid />
 
       <section
-        className={`hero hero-slideshow ${slideshowImages[ctaSlide] || heroImage ? "has-cover" : ""}`}
+        className={`hero hero-slideshow ${heroSlideshowImages[heroSlide] || heroImage ? "has-cover" : ""}`}
         id="inicio"
-        style={(slideshowImages[ctaSlide] || heroImage) ? { backgroundImage: `url(${slideshowImages[ctaSlide] || heroImage})` } : undefined}
+        style={
+          heroSlideshowImages[heroSlide] || heroImage
+            ? {
+                backgroundImage: `url(${heroSlideshowImages[heroSlide] || heroImage})`,
+              }
+            : undefined
+        }
         aria-roledescription="carousel"
         aria-label="Banner principal"
-        onPointerDown={startCtaSwipe}
-        onPointerUp={finishCtaSwipe}
-        onPointerCancel={() => { ctaSwipeRef.current = null; setCtaPaused(false); }}
-        onMouseEnter={() => setCtaPaused(true)}
-        onMouseLeave={() => setCtaPaused(false)}
-        onFocusCapture={() => setCtaPaused(true)}
-        onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setCtaPaused(false); }}
+        onPointerDown={startHeroSwipe}
+        onPointerUp={finishHeroSwipe}
+        onPointerCancel={() => { heroSwipeRef.current = null; setHeroPaused(false); }}
+        onMouseEnter={() => setHeroPaused(true)}
+        onMouseLeave={() => setHeroPaused(false)}
+        onFocusCapture={() => setHeroPaused(true)}
+        onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setHeroPaused(false); }}
       >
-        <div className="hero-copy">
+        <div className="hero-copy" aria-live="polite">
           <div className="eyebrow">
-            <span /> {slideshow.slides[ctaSlide]?.eyebrow || homeContent.eyebrow}
+            <span /> {homeContent.eyebrow}
           </div>
-          <h1>{slideshow.slides[ctaSlide]?.title || homeContent.title}</h1>
-          <p>{slideshow.slides[ctaSlide]?.description || homeContent.description}</p>
+          <h1>
+            {heroSlideshow.slides[heroSlide]?.title || homeContent.title}
+            <br />
+            <em>{heroSlideshow.slides[heroSlide]?.highlight || homeContent.highlight}</em>
+          </h1>
+          <p>
+            {homeContent.description}
+          </p>
           <div className="hero-actions">
-            <Link className="primary-button" href={slideshow.slides[ctaSlide]?.href || "#produtos"}>
-              {slideshow.slides[ctaSlide]?.buttonLabel || homeContent.primaryButton} <span>↗</span>
-            </Link>
+            <a className="primary-button" href="#produtos">
+              {homeContent.primaryButton} <span>↓</span>
+            </a>
             <a
               className="text-link"
               href={whatsapp}
@@ -221,10 +268,10 @@ export default function Catalog({
             </div>
           </div>
         </div>
-        <div className="hero-slide-controls" aria-label="Controles do banner">
-          <button type="button" onClick={() => setCtaSlide((current) => (current - 1 + slideshow.slides.length) % slideshow.slides.length)} aria-label="Banner anterior">←</button>
-          {slideshow.slides.map((item, index) => <button type="button" key={item.id} className={ctaSlide === index ? "active" : ""} onClick={() => setCtaSlide(index)} aria-label={`Mostrar banner ${index + 1}`} aria-current={ctaSlide === index ? "true" : undefined} />)}
-          <button type="button" onClick={() => setCtaSlide((current) => (current + 1) % slideshow.slides.length)} aria-label="Próximo banner">→</button>
+        <div className="hero-slide-controls" aria-label="Controles do banner principal">
+          <button type="button" onClick={() => setHeroSlide((current) => (current - 1 + heroSlideshow.slides.length) % heroSlideshow.slides.length)} aria-label="Banner anterior">←</button>
+          {heroSlideshow.slides.map((item, index) => <button type="button" key={item.id} className={heroSlide === index ? "active" : ""} onClick={() => setHeroSlide(index)} aria-label={`Mostrar banner ${index + 1}`} aria-current={heroSlide === index ? "true" : undefined} />)}
+          <button type="button" onClick={() => setHeroSlide((current) => (current + 1) % heroSlideshow.slides.length)} aria-label="Próximo banner">→</button>
         </div>
         <div className="hero-art">
           <span className="floating-label label-one">
@@ -320,6 +367,78 @@ export default function Catalog({
         </div>
       </section>
 
+      <section
+        className="cta-slider"
+        aria-roledescription="carousel"
+        aria-label="Destaques Tiger Tech"
+        onPointerDown={startCtaSwipe}
+        onPointerUp={finishCtaSwipe}
+        onPointerCancel={() => {
+          ctaSwipeRef.current = null;
+          setCtaPaused(false);
+        }}
+        onMouseEnter={() => setCtaPaused(true)}
+        onMouseLeave={() => setCtaPaused(false)}
+        onFocusCapture={() => setCtaPaused(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget))
+            setCtaPaused(false);
+        }}
+      >
+        <div className="cta-slides" aria-live="polite">
+          {slideshow.slides.map((slide, index) => <article
+            className={`cta-slide cta-product-slide ${index === 0 ? "cta-slide-snapmaker" : "cta-slide-a1"} ${ctaSlide === index ? "active" : ""}`}
+            aria-hidden={ctaSlide !== index}
+            key={slide.id}
+          >
+            {slideshowImages[index] || slide.defaultImage ? <Image
+              className={`cta-slide-background ${index === 1 ? "cta-a1-background" : ""}`}
+              src={slideshowImages[index] || slide.defaultImage}
+              alt=""
+              fill
+              sizes="100vw"
+              unoptimized
+              aria-hidden="true"
+            /> : null}
+            <div className="cta-slide-shade" aria-hidden="true" />
+            <div className="cta-slide-content">
+              <span className="section-kicker">{slide.eyebrow}</span>
+              <h2>{slide.title}</h2>
+              <p>{slide.description}</p>
+              <Link className="primary-button" href={slide.href} tabIndex={ctaSlide === index ? 0 : -1}>
+                {slide.buttonLabel} <span>↗</span>
+              </Link>
+            </div>
+          </article>)}
+        </div>
+
+        <div className="cta-slider-controls" aria-label="Controles do slideshow">
+          <button
+            type="button"
+            onClick={() => setCtaSlide((current) => (current - 1 + slideshow.slides.length) % slideshow.slides.length)}
+            aria-label="Destaque anterior"
+          >
+            ←
+          </button>
+          {slideshow.slides.map((item, slide) => (
+            <button
+              type="button"
+              key={item.id}
+              className={ctaSlide === slide ? "active" : ""}
+              onClick={() => setCtaSlide(slide)}
+              aria-label={`Mostrar destaque ${slide + 1}`}
+              aria-current={ctaSlide === slide ? "true" : undefined}
+            />
+          ))}
+          <button
+            type="button"
+            onClick={() => setCtaSlide((current) => (current + 1) % slideshow.slides.length)}
+            aria-label="Próximo destaque"
+          >
+            →
+          </button>
+        </div>
+      </section>
       {homeContent.faqs.length > 0 ? <section className="home-faq" id="perguntas-frequentes">
         <div className="home-faq-intro">
           <span className="section-kicker">{homeContent.faqEyebrow}</span>
