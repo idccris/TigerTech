@@ -41,7 +41,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.dataset.theme=localStorage.getItem("tiger-theme")==="dark"?"dark":"light"}catch(e){}` }} />
-        <link rel="stylesheet" href="/tiger-global.css?v=20260912-2" />
+        <link rel="stylesheet" href="/tiger-global.css?v=20261021-1" />
         <link rel="stylesheet" href="/admin-product-visibility.css?v=20261002-1" />
         <link rel="stylesheet" href="/tiger-theme.css?v=20261020-1" />
       </head>
