@@ -35,7 +35,7 @@ export const defaultHomeContent: HomeContent = {
   faqEyebrow: "PERGUNTAS FREQUENTES",
   faqTitle: "Ficou com alguma dúvida?",
   faqDescription: "Encontre respostas rápidas sobre produtos, atendimento, pagamento e entrega.",
-  tickerEnabled: false,
+  tickerEnabled: true,
   tickerText: "TECNOLOGIA • CRIATIVIDADE • IMPRESSÃO 3D • FILAMENTOS • SUPORTE ESPECIALIZADO",
   faqs: [
     { question: "Como escolher a impressora 3D ideal?", answer: "Nosso time ajuda a identificar a solução mais adequada ao seu tipo de projeto, experiência e volume de produção." },
@@ -51,7 +51,7 @@ export function parseHomeContent(value: string): HomeContent {
     return {
       ...defaultHomeContent,
       ...parsed,
-      tickerEnabled: parsed.tickerEnabled === true || parsed.tickerEnabled === "true",
+      tickerEnabled: parsed.tickerEnabled === undefined ? defaultHomeContent.tickerEnabled : parsed.tickerEnabled === true || parsed.tickerEnabled === "true",
       tickerText: String(parsed.tickerText || defaultHomeContent.tickerText),
       faqs: Array.isArray(parsed.faqs)
         ? parsed.faqs
