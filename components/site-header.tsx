@@ -26,8 +26,6 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
       </button>
       <nav className={menuOpen ? "nav open" : "nav"}>
         <Link href="/produtos">Produtos</Link>
-        <Link href="/impressoras-3d">Impressoras 3D</Link>
-        <Link href="/filamentos">Filamentos</Link>
         <Link href="/conteudos">Conteúdos</Link>
         <Link href="/sobre">Sobre</Link>
         <CartButton />
