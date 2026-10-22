@@ -2425,7 +2425,8 @@ footer > a:last-child {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
-.whatsapp-float img {
+.whatsapp-float img,
+.whatsapp-float svg {
   width: 100%;
   height: 100%;
   object-fit: contain;
