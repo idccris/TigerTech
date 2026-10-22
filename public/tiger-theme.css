@@ -455,3 +455,21 @@ html[data-theme="dark"] .nav-cart { color:#080808; }
 html[data-theme="dark"] .nav-cart > span { background:#080808; color:#fff; }
 html[data-theme="dark"] .cart-head > button,
 html[data-theme="dark"] .quantity button { background:var(--surface-alt); color:var(--ink); }
+
+
+/* Keep CTA labels and slideshow arrows visible in dark mode */
+html[data-theme="dark"] .hero .primary-button {
+  background: #080808;
+  color: #fff;
+}
+html[data-theme="dark"] .cta-slide .primary-button {
+  background: #fff;
+  color: #080808;
+}
+html[data-theme="dark"] .hero-slide-controls button:first-child,
+html[data-theme="dark"] .hero-slide-controls button:last-child,
+html[data-theme="dark"] .cta-slider-controls button:first-child,
+html[data-theme="dark"] .cta-slider-controls button:last-child {
+  background: #fff;
+  color: #080808;
+}

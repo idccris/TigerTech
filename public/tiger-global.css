@@ -4823,3 +4823,36 @@ footer > a:last-child {
 .security-badges i svg { width:18px; height:18px; }
 .cart-head > button svg, .quantity button svg { width:17px; height:17px; }
 .cart-success > span svg { width:28px; height:28px; }
+
+
+/* Public navigation and slideshow contrast corrections */
+.nav-cart.nav-cart-empty {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  gap: 0;
+}
+.nav-cart.nav-cart-empty > svg {
+  width: 19px;
+  height: 19px;
+}
+.hero .primary-button {
+  background: #080808;
+  color: #fff;
+}
+.hero .primary-button span {
+  color: var(--acid);
+}
+.hero-slide-controls button:first-child,
+.hero-slide-controls button:last-child,
+.cta-slider-controls button:first-child,
+.cta-slider-controls button:last-child {
+  background: #fff;
+  color: #080808;
+}
+.cta-slide .primary-button {
+  background: #fff;
+  color: #080808;
+}

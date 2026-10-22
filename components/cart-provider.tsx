@@ -351,8 +351,13 @@ export function useCart() {
 export function CartButton() {
   const { count, open } = useCart();
   return (
-    <button className="nav-cart" onClick={open} aria-label={`Abrir carrinho com ${count} ${count === 1 ? "item" : "itens"}`}>
-      <ShoppingCart aria-hidden="true" /> Carrinho <span>{count}</span>
+    <button
+      className={count === 0 ? "nav-cart nav-cart-empty" : "nav-cart"}
+      onClick={open}
+      aria-label={count === 0 ? "Abrir carrinho vazio" : `Abrir carrinho com ${count} ${count === 1 ? "item" : "itens"}`}
+    >
+      <ShoppingCart aria-hidden="true" />
+      {count > 0 ? <>Carrinho <span>{count}</span></> : null}
     </button>
   );
 }
