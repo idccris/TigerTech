@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   useEffect(() => {
     const sync = () => setDark(document.documentElement.dataset.theme === "dark");
     sync();
