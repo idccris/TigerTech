@@ -78,6 +78,27 @@ function paragraph(lines: string[], x: number, top: number, size: number, leadin
   return lines.map((item, index) => text(item, x, top + index * leading, size, false, fill)).join("");
 }
 
+function hexRgb(value?: string): RGB {
+  const match = value?.trim().match(/^#?([\da-f]{6})$/i);
+  if (!match) return [0.48, 0.49, 0.52];
+  return [
+    Number.parseInt(match[1].slice(0, 2), 16) / 255,
+    Number.parseInt(match[1].slice(2, 4), 16) / 255,
+    Number.parseInt(match[1].slice(4, 6), 16) / 255,
+  ];
+}
+
+function circle(centerX: number, centerTop: number, radius: number, fill: RGB, stroke: RGB = [0.82, 0.83, 0.85]) {
+  const centerY = H - centerTop;
+  const k = radius * 0.5522847498;
+  return `${color(fill)} rg ${color(stroke)} RG 0.7 w `
+    + `${centerX + radius} ${centerY} m `
+    + `${centerX + radius} ${centerY + k} ${centerX + k} ${centerY + radius} ${centerX} ${centerY + radius} c `
+    + `${centerX - k} ${centerY + radius} ${centerX - radius} ${centerY + k} ${centerX - radius} ${centerY} c `
+    + `${centerX - radius} ${centerY - k} ${centerX - k} ${centerY - radius} ${centerX} ${centerY - radius} c `
+    + `${centerX + k} ${centerY - radius} ${centerX + radius} ${centerY - k} ${centerX + radius} ${centerY} c B\n`;
+}
+
 function paeth(a: number, b: number, c: number) {
   const p = a + b - c;
   const pa = Math.abs(p - a);
@@ -224,7 +245,7 @@ class Pdf {
 
 function availableVariants(product: Product) {
   const variants = product.variants?.length ? product.variants : [product];
-  return variants.filter((variant) => (variant.stock || 0) > 0);
+  return variants.filter((variant) => variant.visible !== false && (variant.stock || 0) > 0);
 }
 
 function byBrandAndName(a: Product, b: Product) {
@@ -332,7 +353,82 @@ export function buildCatalogPdf({
 
   if (curated) {
     const singleMachine = products.length === 1 && products[0].category === "Impressoras 3D";
-    if (!singleMachine) {
+    const singleFilament = products.length === 1 && products[0].category === "Filamentos";
+
+    if (singleFilament) {
+      const product = products[0];
+      const variants = availableVariants(product)
+        .filter((variant) => clean(variant.colorName || variant.name))
+        .sort((a, b) => clean(a.colorName || a.name).localeCompare(clean(b.colorName || b.name), "pt-BR"));
+      const title = product.filamentModel || product.name;
+      const description = product.longDescription || product.description || "Filamento desenvolvido para impressões consistentes e acabamento profissional.";
+      const highlights = (product.benefits || []).filter((item) => item.title || item.text).slice(0, 3);
+      const technical = [product.specificationsText || "", ...(product.specs || [])]
+        .flatMap((value) => value.split(/\r?\n/))
+        .map(clean)
+        .filter(Boolean);
+      const summarySpecs = (product.specs || []).map(clean).filter(Boolean).slice(0, 3);
+
+      let commands = header();
+      commands += rect(0, 38, W, 226, BLACK);
+      commands += text((product.brand || product.tag || "Tiger Tech").toLocaleUpperCase("pt-BR"), 44, 66, 9, true, ORANGE);
+      commands += paragraph(wrap(title, 25).slice(0, 2), 44, 87, 26, 30, [1, 1, 1]);
+      commands += paragraph(wrap(description, 53).slice(0, 4), 44, 157, 9.5, 13, [0.78, 0.79, 0.82]);
+      commands += productImage(product, 391, 57, 160, 188);
+
+      commands += text("INFORMAÇÕES PRINCIPAIS", 44, 288, 9, true, ORANGE);
+      const statFallback = ["Qualidade consistente", "Acabamento profissional", "Uso em impressão 3D"];
+      for (let index = 0; index < 3; index += 1) {
+        const x = 44 + index * 169;
+        commands += rect(x, 309, 157, 66, [0.975, 0.977, 0.98], [0.88, 0.89, 0.91]);
+        commands += text(String(index + 1).padStart(2, "0"), x + 12, 320, 7.5, true, ORANGE);
+        commands += paragraph(wrap(summarySpecs[index] || statFallback[index], 23).slice(0, 2), x + 12, 339, 9.2, 12, BLACK);
+      }
+
+      commands += text("POR QUE ESCOLHER", 44, 405, 9, true, ORANGE);
+      for (let index = 0; index < 3; index += 1) {
+        const x = 44 + index * 169;
+        const item = highlights[index];
+        commands += rect(x, 426, 157, 103, index === 0 ? [1, 0.965, 0.94] : [0.975, 0.977, 0.98], [0.88, 0.89, 0.91]);
+        commands += text(item?.title || ["Boa estabilidade", "Ótimo acabamento", "Aplicação versátil"][index], x + 12, 440, 9.5, true, index === 0 ? ORANGE : BLACK);
+        commands += paragraph(wrap(item?.text || ["Fluxo uniforme para resultados previsíveis.", "Superfícies limpas em diferentes projetos.", "Indicado para peças funcionais e criativas."][index], 25).slice(0, 4), x + 12, 461, 7.8, 10, GRAY);
+      }
+
+      commands += text("GUIA TÉCNICO", 44, 558, 9, true, ORANGE);
+      const guide = technical.length ? technical.slice(0, 4) : ["Consulte os parâmetros recomendados pelo fabricante."];
+      commands += rect(44, 579, 507, 58, BLACK);
+      commands += paragraph(wrap(guide.join("  |  "), 91).slice(0, 3), 58, 594, 7.8, 11, [0.88, 0.89, 0.91]);
+
+      commands += text("CORES DISPONÍVEIS NO MOMENTO DA GERAÇÃO", 44, 662, 9, true, ORANGE);
+      const pageColors = variants.slice(0, 24);
+      pageColors.forEach((variant, index) => {
+        const column = index % 6;
+        const row = Math.floor(index / 6);
+        const x = 51 + column * 84;
+        const top = 691 + row * 25;
+        commands += circle(x, top, 7, hexRgb(variant.colorHex));
+        commands += text(clean(variant.colorName || variant.name).slice(0, 18), x + 12, top - 5, 6.8, false, BLACK);
+      });
+      addPage(commands);
+
+      for (let offset = 24; offset < variants.length; offset += 36) {
+        let continuation = header();
+        continuation += text((product.brand || product.tag || "Tiger Tech").toLocaleUpperCase("pt-BR"), 44, 68, 9, true, ORANGE);
+        continuation += paragraph(wrap(title, 42).slice(0, 2), 44, 91, 22, 26, BLACK);
+        continuation += text("CORES DISPONÍVEIS NO MOMENTO DA GERAÇÃO", 44, 164, 9, true, ORANGE);
+        variants.slice(offset, offset + 36).forEach((variant, index) => {
+          const column = index % 4;
+          const row = Math.floor(index / 4);
+          const x = 56 + column * 126;
+          const top = 204 + row * 56;
+          continuation += circle(x, top, 10, hexRgb(variant.colorHex));
+          continuation += text(clean(variant.colorName || variant.name).slice(0, 18), x + 18, top - 6, 8, false, BLACK);
+        });
+        addPage(continuation);
+      }
+    }
+
+    if (!singleMachine && !singleFilament) {
       let intro = header() + rect(0, 38, W, 250, BLACK);
       intro += text("TIGER TECH", 48, 110, 38, true, [1, 1, 1]);
       intro += text("CATÁLOGO DE PRODUTOS", 48, 175, 23, true, ORANGE);
@@ -341,7 +437,7 @@ export function buildCatalogPdf({
       intro += text("Conheça os produtos nas próximas páginas.", 48, 465, 11, false, GRAY);
       addPage(intro);
     }
-    if (!singleMachine) {
+    if (!singleMachine && !singleFilament) {
       const categories = [...new Set(products.map(product => product.category))];
       const compactLines = (value: string, width: number, limit: number) => {
         const lines = wrap(value, width);

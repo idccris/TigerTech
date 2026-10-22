@@ -8,7 +8,7 @@ require.extensions[".ts"] = (module, filename) => module._compile(ts.transpileMo
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true }, fileName: filename },
 ).outputText, filename);
 
-const { filamentCatalogOptions, selectFilamentCatalogs } = require("../lib/filament-catalogs.ts");
+const { filamentCatalogOptions, selectFilamentCatalogs, unavailableFilamentCatalogIds } = require("../lib/filament-catalogs.ts");
 
 const base = {
   category: "Filamentos", tag: "Bambu Lab", brand: "Bambu Lab", filamentModel: "PLA Silk",
@@ -33,4 +33,13 @@ test("filament catalog selection rejects duplicates and unknown groups", () => {
   assert.deepEqual(selectFilamentCatalogs([options[0].id], options), options);
   assert.equal(selectFilamentCatalogs([options[0].id, options[0].id], options), null);
   assert.equal(selectFilamentCatalogs(["unknown"], options), null);
+});
+
+
+test("sold-out filament groups are identified so generation can be blocked with a clear message", () => {
+  const unavailable = unavailableFilamentCatalogIds([
+    { ...base, slug: "silk-blue", colorName: "Azul", stock: 0 },
+    { ...base, slug: "silk-hidden", colorName: "Oculta", stock: 8, visible: false },
+  ]);
+  assert.equal(unavailable.has(base.groupSlug), true);
 });

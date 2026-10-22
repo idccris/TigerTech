@@ -1,5 +1,5 @@
 import type { Product } from "./products";
-import { groupProducts } from "./product-variants";
+import { groupProducts, groupProductsForAdmin } from "./product-variants";
 
 export type FilamentCatalogOption = {
   id: string;
@@ -26,6 +26,17 @@ export function filamentCatalogOptions(products: Product[]): FilamentCatalogOpti
     ).length;
     return { id, model, brand, colorCount, name: `${model} ${brand}`, file: `${id}.pdf` };
   });
+}
+
+export function unavailableFilamentCatalogIds(products: Product[]) {
+  return new Set(
+    groupProductsForAdmin(products)
+      .filter((product) => product.category === "Filamentos")
+      .filter((product) => !(product.variants || [product]).some(
+        (variant) => variant.visible !== false && (variant.stock || 0) > 0,
+      ))
+      .map((product) => product.groupSlug || product.slug),
+  );
 }
 
 export function selectFilamentCatalogs(value: unknown, options: FilamentCatalogOption[]) {

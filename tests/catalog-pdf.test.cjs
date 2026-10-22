@@ -35,10 +35,18 @@ test('selection includes accessories and sold-out products without disclosing th
   assert.ok(text.includes('Segunda máquina'));
   assert.ok(!text.includes(machine.longDescription));
 });
-test('filament has one model and color names without separate variant pages', () => {
-  const pdf = build([{ ...machine, category: 'Filamentos', filamentModel: 'PLA Basic', variants: [{ colorName: 'Azul', stock: 10 }, { colorName: 'Preto', stock: 0 }] }]);
-  assert.ok(pdfText(pdf).includes('Azul, Preto'));
-  assert.equal((pdf.toString('latin1').match(/\/Type \/Page\b/g) || []).length, 2);
+test('filament uses the approved one-page layout and only includes visible in-stock colors', () => {
+  const pdf = build([{ ...machine, category: 'Filamentos', filamentModel: 'PLA Basic',
+    variants: [{ colorName: 'Azul', colorHex: '#2563eb', stock: 10, visible: true },
+      { colorName: 'Preto', colorHex: '#111111', stock: 0, visible: true },
+      { colorName: 'Oculta', colorHex: '#ff0000', stock: 5, visible: false }] }]);
+  const content = pdfText(pdf);
+  assert.ok(content.includes('CORES DISPONÍVEIS NO MOMENTO DA GERAÇÃO'));
+  assert.ok(content.includes('Azul'));
+  assert.ok(!content.includes('Preto'));
+  assert.ok(!content.includes('Oculta'));
+  assert.ok(!content.includes('CATÁLOGO DE PRODUTOS'));
+  assert.equal((pdf.toString('latin1').match(/\/Type \/Page\b/g) || []).length, 1);
 });
 test('public catalog retains stock filtering', () => {
   const text = pdfText(build([{ ...machine, stock: 0 }], { curated: false }));

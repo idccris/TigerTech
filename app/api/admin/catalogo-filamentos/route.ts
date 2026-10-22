@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { requireUser, isTrustedMutation, consumeRateLimit, hashToken } from "../../../../lib/admin-auth";
 import { listCatalogExportProducts } from "../../../../lib/catalog-export-products";
-import { filamentCatalogOptions, filamentCatalogProducts, selectFilamentCatalogs } from "../../../../lib/filament-catalogs";
+import { filamentCatalogOptions, filamentCatalogProducts, selectFilamentCatalogs, unavailableFilamentCatalogIds } from "../../../../lib/filament-catalogs";
 import { loadCatalogImages } from "../../../../lib/catalog-pdf-images";
 import { buildCatalogPdf } from "../../../../lib/catalog-pdf";
 import { buildCatalogZip } from "../../../../lib/catalog-zip";
@@ -23,8 +23,15 @@ export async function POST(request: Request) {
   try {
     const products = await listCatalogExportProducts();
     const options = filamentCatalogOptions(products);
-    const selected = selectFilamentCatalogs((body as { ids?: unknown } | null)?.ids, options);
-    if (!selected) return Response.json({ error: "Selecione entre 1 e 100 catálogos de filamentos, sem repetições." }, { status: 400 });
+    const requestedIds = (body as { ids?: unknown } | null)?.ids;
+    const selected = selectFilamentCatalogs(requestedIds, options);
+    if (!selected) {
+      const unavailable = unavailableFilamentCatalogIds(products);
+      if (Array.isArray(requestedIds) && requestedIds.some((id) => typeof id === "string" && unavailable.has(id))) {
+        return Response.json({ error: "Nenhuma cor disponível em estoque para este produto." }, { status: 409 });
+      }
+      return Response.json({ error: "Selecione entre 1 e 100 catálogos de filamentos, sem repetições." }, { status: 400 });
+    }
     if (!(await consumeRateLimit(hashToken(`filament-catalog-pdf:${user.username}`), 20, 5)))
       return Response.json({ error: "Muitos downloads em sequência. Aguarde alguns minutos." }, { status: 429, headers: { "Retry-After": "300" } });
 
