@@ -476,6 +476,7 @@ export default function Catalog({
           alt=""
           width={55}
           height={55}
+          unoptimized
           aria-hidden="true"
         />
       </a>
