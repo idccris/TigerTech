@@ -4856,3 +4856,27 @@ footer > a:last-child {
   background: #fff;
   color: #080808;
 }
+
+
+/* Official vector payment marks */
+.payment-grid > .payment-card.vector-payment {
+  display: grid;
+  place-items: center;
+  background: #fff;
+  padding: 7px 9px;
+}
+.payment-card.vector-payment svg {
+  display: block;
+  width: 78%;
+  max-width: 42px;
+  height: 28px;
+}
+.payment-card.vector-payment.bradesco svg {
+  width: 100%;
+  max-width: 58px;
+  height: auto;
+}
+.payment-card.vector-payment.pix svg {
+  width: 32px;
+  height: 32px;
+}
