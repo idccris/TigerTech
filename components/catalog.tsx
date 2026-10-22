@@ -471,7 +471,13 @@ export default function Catalog({
         rel="noreferrer"
         aria-label="Falar no WhatsApp"
       >
-        ✆
+        <Image
+          src="/whatsapp-app-icon.png"
+          alt=""
+          width={55}
+          height={55}
+          aria-hidden="true"
+        />
       </a>
     </main>
   );

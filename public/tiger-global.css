@@ -2417,12 +2417,19 @@ footer > a:last-child {
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  background: #21c763;
+  background: transparent;
   color: white;
   display: grid;
   place-items: center;
   font-size: 25px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+.whatsapp-float img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 .cart-overlay {
   position: fixed;
