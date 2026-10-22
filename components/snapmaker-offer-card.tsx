@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import type { Product } from "../lib/products";
 import { useCart } from "./cart-provider";
 import styles from "../app/snapmaker-u1/page.module.css";
@@ -53,7 +54,7 @@ export default function SnapmakerOfferCard({ product, copy }: { product: Product
               ) : (
                 <a href="https://wa.me/5541992133804?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20o%20valor%20da%20Snapmaker%20U1" target="_blank" rel="noreferrer">Consultar pelo WhatsApp</a>
               )}
-              <Link href={`/produto/${product.slug}`}>Ver ficha completa <span>↗</span></Link>
+              <Link href={`/produto/${product.slug}`}>Ver ficha completa <ExternalLink aria-hidden="true" /></Link>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { ExternalLink, Menu, X } from "lucide-react";
 import { CartButton } from "./cart-provider";
 import BrandLogo from "./brand-logo";
 
@@ -21,7 +22,7 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Abrir menu"
       >
-        {menuOpen ? "×" : "☰"}
+        {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
       </button>
       <nav className={menuOpen ? "nav open" : "nav"}>
         <Link href="/produtos">Produtos</Link>
@@ -31,7 +32,7 @@ export default function SiteHeader({ solid = false }: { solid?: boolean }) {
         <Link href="/sobre">Sobre</Link>
         <CartButton />
         <a className="nav-cta" href={whatsapp} target="_blank" rel="noreferrer">
-          Fale conosco <span>↗</span>
+          Fale conosco <ExternalLink aria-hidden="true" />
         </a>
       </nav>
     </header>

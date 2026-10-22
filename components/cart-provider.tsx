@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { CheckCircle2, Minus, Plus, ShoppingCart, X } from "lucide-react";
 import type { Product } from "../lib/products";
 import { cartProductName } from "../lib/product-variants";
 
@@ -187,11 +188,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                   {value.count} {value.count === 1 ? "item" : "itens"}
                 </h2>
               </div>
-              <button onClick={() => setIsOpen(false)}>×</button>
+              <button onClick={() => setIsOpen(false)} aria-label="Fechar carrinho"><X aria-hidden="true" /></button>
             </div>
             {orderSuccess ? (
               <div className="cart-success">
-                <span>✓</span>
+                <span><CheckCircle2 aria-hidden="true" /></span>
                 <strong>Pedido recebido!</strong>
                 <p>Seu pedido foi registrado com o número:</p>
                 <b>{orderSuccess}</b>
@@ -231,16 +232,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                             onClick={() =>
                               value.change(item.slug, item.quantity - 1)
                             }
-                          >
-                            −
+                           aria-label={`Diminuir quantidade de ${item.name}`}>
+                            <Minus aria-hidden="true" />
                           </button>
                           <b>{item.quantity}</b>
                           <button
                             onClick={() =>
                               value.change(item.slug, item.quantity + 1)
                             }
-                          >
-                            +
+                           aria-label={`Aumentar quantidade de ${item.name}`}>
+                            <Plus aria-hidden="true" />
                           </button>
                         </div>
                         <small className="cart-item-price">
@@ -350,8 +351,8 @@ export function useCart() {
 export function CartButton() {
   const { count, open } = useCart();
   return (
-    <button className="nav-cart" onClick={open}>
-      Carrinho <span>{count}</span>
+    <button className="nav-cart" onClick={open} aria-label={`Abrir carrinho com ${count} ${count === 1 ? "item" : "itens"}`}>
+      <ShoppingCart aria-hidden="true" /> Carrinho <span>{count}</span>
     </button>
   );
 }

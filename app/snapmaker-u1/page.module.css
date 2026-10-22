@@ -785,3 +785,26 @@
     transition: none;
   }
 }
+
+/* Dark mode */
+:global(html[data-theme="dark"]) .page { background:var(--paper); color:var(--ink); }
+:global(html[data-theme="dark"]) .highlightGrid article { background:var(--surface); border-color:var(--line); }
+:global(html[data-theme="dark"]) .highlightGrid p,
+:global(html[data-theme="dark"]) .precisionBody > p { color:var(--muted); }
+:global(html[data-theme="dark"]) .materials span { background:var(--surface); border-color:var(--line); }
+:global(html[data-theme="dark"]) .offerSection { background:var(--paper); color:var(--ink); }
+:global(html[data-theme="dark"]) .offerIntro p,
+:global(html[data-theme="dark"]) .offerContent > p,
+:global(html[data-theme="dark"]) .offerPrices small { color:var(--muted); }
+:global(html[data-theme="dark"]) .offerCard { background:var(--surface); border-color:var(--line); box-shadow:0 24px 70px rgba(0,0,0,.3); }
+:global(html[data-theme="dark"]) .offerImage { background:var(--surface-alt); }
+:global(html[data-theme="dark"]) .offerImage > span,
+:global(html[data-theme="dark"]) .offerActions > a:last-child { color:var(--ink); }
+:global(html[data-theme="dark"]) .offerHighlights span { background:var(--surface-alt); }
+:global(html[data-theme="dark"]) .offerPurchase { border-color:var(--line); }
+:global(html[data-theme="dark"]) .offerActions button,
+:global(html[data-theme="dark"]) .offerActions > a:first-child { border-color:var(--u1-orange); background:var(--u1-orange); color:#080808; }
+.offerActions > a:last-child { display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+.offerActions > a:last-child svg,
+.heroActions svg,
+.finalCta svg { width:15px; height:15px; }

@@ -449,3 +449,9 @@ html[data-theme="dark"] .payment-options label.selected { background:#332319; }
 
 html[data-theme="dark"] .hero:not(.has-cover) { background:radial-gradient(circle at 12% 20%,#332219 0,transparent 36%),var(--paper); }
 html[data-theme="dark"] .nav-cart span { color:#fff; }
+
+/* Dark theme contrast corrections */
+html[data-theme="dark"] .nav-cart { color:#080808; }
+html[data-theme="dark"] .nav-cart > span { background:#080808; color:#fff; }
+html[data-theme="dark"] .cart-head > button,
+html[data-theme="dark"] .quantity button { background:var(--surface-alt); color:var(--ink); }

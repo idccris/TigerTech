@@ -4805,3 +4805,14 @@ footer > a:last-child {
   .design-hero-panel,.design-ticker-panel,.design-copy-panel,.design-stats-panel,.faq-editor-section,.design-publish-bar{grid-column:1}
   .design-hero-panel .slideshow-admin-grid{grid-template-columns:1fr}
 }
+
+/* Lucide icon alignment */
+.nav-cart { display:inline-flex; align-items:center; justify-content:center; gap:7px; }
+.nav-cart > svg { width:17px; height:17px; stroke-width:2.2; }
+.menu-button svg { width:27px; height:27px; }
+.nav-cta { display:inline-flex; align-items:center; gap:7px; }
+.nav-cta > svg { width:15px; height:15px; color:var(--acid); }
+.footer-social svg { width:18px; height:18px; }
+.security-badges i svg { width:18px; height:18px; }
+.cart-head > button svg, .quantity button svg { width:17px; height:17px; }
+.cart-success > span svg { width:28px; height:28px; }

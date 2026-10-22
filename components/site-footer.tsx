@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BrandLogo from "./brand-logo";
+import { Facebook, Instagram, LockKeyhole, MessageCircle, ShieldCheck } from "lucide-react";
 
 const whatsapp = "https://wa.me/5541992133804";
 
@@ -22,9 +23,9 @@ export default function SiteFooter() {
           </Link>
           <p>Transforme projetos em realidade com impressão 3D, máquinas selecionadas e filamentos profissionais.</p>
           <div className="footer-social" aria-label="Redes sociais">
-            <span aria-label="Instagram">◎</span>
-            <span aria-label="Facebook">f</span>
-            <a href={whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp">◉</a>
+            <span role="img" aria-label="Instagram"><Instagram aria-hidden="true" /></span>
+            <span role="img" aria-label="Facebook"><Facebook aria-hidden="true" /></span>
+            <a href={whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle aria-hidden="true" /></a>
           </div>
         </section>
 
@@ -60,8 +61,8 @@ export default function SiteFooter() {
           </div>
           <span className="footer-label security-title">SEGURANÇA</span>
           <div className="security-badges">
-            <span><i>✓</i><b>Ambiente protegido</b></span>
-            <span><i>◆</i><b>Compra segura</b></span>
+            <span><i><ShieldCheck aria-hidden="true" /></i><b>Ambiente protegido</b></span>
+            <span><i><LockKeyhole aria-hidden="true" /></i><b>Compra segura</b></span>
           </div>
         </section>
       </div>

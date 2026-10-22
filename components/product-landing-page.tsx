@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import SiteFooter from "./site-footer";
 import SiteHeader from "./site-header";
 import SnapmakerOfferCard from "./snapmaker-offer-card";
@@ -19,7 +20,7 @@ export default function ProductLandingPage({ content, product, canonicalPath }: 
     <main>
       <section className={styles.hero}>
         <div className={styles.heroGlow} aria-hidden="true" />
-        <div className={styles.heroCopy}><span className={styles.eyebrow}>{content.heroEyebrow}</span><h1>{content.heroTitle}<br /><em>{content.heroHighlight}</em></h1><p>{content.heroDescription}</p><div className={styles.heroActions}><a href="#tecnologia">{content.heroPrimaryButton}</a>{content.whatsappUrl ? <a href={content.whatsappUrl} target="_blank" rel="noreferrer">{content.heroSecondaryButton} <span>↗</span></a> : null}</div></div>
+        <div className={styles.heroCopy}><span className={styles.eyebrow}>{content.heroEyebrow}</span><h1>{content.heroTitle}<br /><em>{content.heroHighlight}</em></h1><p>{content.heroDescription}</p><div className={styles.heroActions}><a href="#tecnologia">{content.heroPrimaryButton}</a>{content.whatsappUrl ? <a href={content.whatsappUrl} target="_blank" rel="noreferrer">{content.heroSecondaryButton} <span><ExternalLink aria-hidden="true" /></span></a> : null}</div></div>
         <div className={styles.heroVisual}><span className={styles.u1Backdrop} aria-hidden="true">U1</span><Image src={heroImage} alt={product?.name || content.heroEyebrow || "Produto"} priority sizes="(max-width: 760px) 92vw, 52vw" /></div>
         <div className={styles.heroStats}><div><strong>{content.statOneValue}</strong><span>{content.statOneLabel}</span></div><div><strong>{content.statTwoValue}</strong><span>{content.statTwoLabel}</span></div><div><strong>{content.statThreeValue}</strong><span>{content.statThreeLabel}</span></div></div>
       </section>
@@ -28,7 +29,7 @@ export default function ProductLandingPage({ content, product, canonicalPath }: 
       <section className={styles.precisionSection}><div className={styles.precisionIntro}><span>{content.precisionEyebrow}</span><h2>{content.precisionTitle}</h2></div><div className={styles.precisionBody}><p>{content.precisionDescription}</p><div className={styles.materials} aria-label="Materiais compatíveis">{content.materials.map((material) => <span key={material}>{material}</span>)}</div></div></section>
       <section className={styles.detectionSection}><div className={styles.detectionVisual}><Image src={detectionImage} alt={`Sensores de ${product?.name || "produto"}`} sizes="(max-width: 900px) 100vw, 58vw" /></div><div className={styles.detectionCopy}><span className={styles.eyebrow}>{content.detectionEyebrow}</span><h2>{content.detectionTitle}</h2><p>{content.detectionDescription}</p><ul>{content.detectionItems.map((item) => <li key={item}>{item}</li>)}</ul></div></section>
       {product ? <SnapmakerOfferCard product={product} copy={content} /> : null}
-      <section className={styles.finalCta}><span>{content.finalEyebrow}</span><h2>{content.finalTitle}</h2><p>{content.finalDescription}</p>{content.whatsappUrl ? <a href={content.whatsappUrl} target="_blank" rel="noreferrer">{content.finalButton} <span>↗</span></a> : null}</section>
+      <section className={styles.finalCta}><span>{content.finalEyebrow}</span><h2>{content.finalTitle}</h2><p>{content.finalDescription}</p>{content.whatsappUrl ? <a href={content.whatsappUrl} target="_blank" rel="noreferrer">{content.finalButton} <span><ExternalLink aria-hidden="true" /></span></a> : null}</section>
     </main>
     <SiteFooter />
   </div>;
